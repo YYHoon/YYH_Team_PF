@@ -5,7 +5,7 @@
 #include "EnemySchoolMan.h"
 #include <vector>
 
-class TestTest;
+class Player;
 
 enum ENEMYTYPE
 {
@@ -17,7 +17,7 @@ enum ENEMYTYPE
 struct TagEnemySpawn
 {
 	ENEMYTYPE EmType;
-	POINTFLOAT pt;
+	POINTFLOAT XY;
 };
 
 
@@ -32,7 +32,7 @@ private:
 	vSchoolMan	 _vSchoolMan;
 	vSchoolGirl  _vSchoolGirl;
 
-	TestTest* _Player;
+	Player* _Player;
 
 	float _CLAngle;
 	float _CLDistance;
@@ -53,11 +53,11 @@ public:
 	void Updata();
 	void Render();
 
+	void Collision();
+
 	vector<EnemyCheerLeader*> GetEnemyCheerLeader() { return _vCheerLeader; }
 	vector<EnemySchoolMan*>   GetEnemySchoolMan()   { return _vSchoolMan; }
 	vector<EnemySchoolGirl*>  GetEnemySchoolGirl()	{ return _vSchoolGirl; }
 
-
-	void SetPlayerLink(TestTest* p) { _Player = p; }
-
+	void SetPlayerLink(Player* p) { _Player = p; }
 };

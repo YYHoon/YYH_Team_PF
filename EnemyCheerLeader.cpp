@@ -140,13 +140,12 @@ void EnemyCheerLeader::Update()
 		_EnemyAttackExploration.MYRectMakeCenter(_Enemy.left, _EnemyY, 200, 200);
 	}
 ////////////////////////////////////////////////////////////////////////////////////
-	KEYANIMANAGER->update();
 }
 
 void EnemyCheerLeader::Render()
 {
 	//_EnemyAttackExploration.render(getMemDC());
-	_EnemyShadowImage->render(getMemDC(), _EnemyShadow.left, _EnemyShadow.top);
+	_EnemyShadowImage->alphaRender(getMemDC(), _EnemyShadow.left, _EnemyShadow.top, 170);
 	_EnemyImage->aniRender(getMemDC(), _Enemy.left, _Enemy.top, _CLAni);
 	_EnemyAttack.render(getMemDC());
 	//_EnemyShadow.render(getMemDC());
@@ -594,7 +593,18 @@ void EnemyCheerLeader::State()
 }
 
 
-void EnemyCheerLeader::hitHP(float damge)
+
+void EnemyCheerLeader::SetCenterX(float x)
+{
+	_ClCenterX += x;
+}	
+
+void EnemyCheerLeader::SetCenterY(float y)
+{
+	_ClCenterY += y;
+}
+
+void EnemyCheerLeader::SetDamge(float damge)
 {
 	_Hp -= damge;
 }

@@ -1,7 +1,6 @@
 #pragma once
 #include "gameNode.h"
-
-
+#include "Player.h"
 
 enum SMSTATE
 {
@@ -28,10 +27,8 @@ class EnemySchoolMan : public gameNode
 {
 private:
 	SMSTATE _SmState;
-
 	animation* _SmAni;
-
-	
+	Player* _ply;
 
 	image* _SmShadowImage;
 	image* _SmImage;
@@ -43,7 +40,7 @@ private:
 
 	float _SmCenterX, _SmCenterY;
 
-	float _ShadowX, _ShadowY; //그림자의 중점 (EnemyCore에 사용)
+	float _SmShadowX, _SmShadowY; //그림자의 중점 (EnemyCore에 사용)
 
 	float _EnemyX, _EnemyY; //캐릭터의 중점
 
@@ -53,9 +50,10 @@ private:
 	int _Time;
 
 	float _Speed;
-	float _Hp;
+	int _Hp;
 
 	bool _IsRight; //왼쪽오른쪽
+	bool _IsLeft;
 
 public:
 	virtual HRESULT init();
@@ -81,12 +79,11 @@ public:
 
 	POINTFLOAT GetSmPt() { POINTFLOAT temp; temp.x = _SmCenterX; temp.y = _SmCenterY; return temp; }
 
-	void SetSmCenterX(float x) { _SmCenterX	= x;}
-	void SetSmCenterY(float y) { _SmCenterY = y;}
-
+	int GetHP() { return _Hp; }
 	void SmHitHP(float damge);
 
-	float setHP() { return _Hp; }
+	void SetSmCenterX(float x);
+	void SetSmCenterY(float y);
 
-
+	void SetPlayer(Player* _p) { _ply = _p; }
 };

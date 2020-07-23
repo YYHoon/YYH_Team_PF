@@ -5,7 +5,7 @@
 #include "ParentStage.h"
 #include "StageManager.h"
 #include "pixelCollsion.h"
-#include "EnemySchoolGirl.h"
+#include "EnemyManager.h"
 #include "AllUI.h"
 #include <iostream>
 #pragma comment(linker, "/entry:WinMainCRTStartup /subsystem:console")
@@ -24,7 +24,8 @@ private:
 	Boss* b;
 	StageManager* _SM;
 	pixelCollsion* _pixel;
-	EnemySchoolGirl* _en;
+	EnemyManager* _EnM;
+	vector<TagEnemySpawn> _spawn;
 
 public:
 	playGround();
@@ -37,5 +38,6 @@ public:
 
 	void imginit();
 	void soundinit();
+	void SetEnemy();
 };
 

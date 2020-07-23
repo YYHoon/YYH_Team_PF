@@ -10,9 +10,8 @@ HRESULT EnemySchoolGirl::init()
 HRESULT EnemySchoolGirl::Init(POINTFLOAT pt)
 {
 	_IsRight = true;
-
+	_IsLeft = false;
 	SgAniInit();
-	//SgAniSet(SgIdle);
 	SgState();
 
 	_SgState = SgIdle;
@@ -33,14 +32,11 @@ HRESULT EnemySchoolGirl::Init(POINTFLOAT pt)
 	_EnemyX = (_SgHit.left + _SgHit.right) / 2;
 	_EnemyY = (_SgHit.top + _SgHit.bottom) / 2;
 
-	_SgAttackExploration.MYRectMakeCenter(_EnemyX, _EnemyY, 200, 200);
-
-	_Hp = 10.f;
+	_Hp = 10;
 	_Speed = 3.0f;
 	_ChaseAngle = 0;
 	_Distance = 0;
 	_Time = 0;
-
 
 	return S_OK;
 }
@@ -52,59 +48,42 @@ void EnemySchoolGirl::Release()
 
 void EnemySchoolGirl::Update()
 {
-	//if (KEYMANAGER->isStayKeyDown('W')) _Hp -= 1;
-	//_Jump->jumping(&_EnemyX, &_EnemyY, 7.0f, 0.3f);
-
 	_Time++;
 
-	cout << _Time << endl;
+	_Distance = getDistance(_SgCenterX, _SgCenterY, _pl->GetShadowCenterX(), _pl->GetShadowCenterY());
+	_ChaseAngle = getAngle(_SgCenterX, _SgCenterY, _pl->GetShadowCenterX(), _pl->GetShadowCenterY());
 
-	//_Distance = getDistance(_EnemyX, _EnemyY, _Test->GetCnetX(), _Test->GetCnetY());
-	//_ChaseAngle = getAngle(_EnemyX, _EnemyY, _Test->GetCnetX(), _Test->GetCnetY());
-	//
-	//if (_SgCenterX > _Test->GetCnetX())
-	//{
-	//	_IsRight = false;
-	//}
-	//else if (_SgCenterX < _Test->GetCnetX())
-	//{
-	//	_IsRight = true;
-	//}
-
-		//if (KEYMANAGER->isOnceKeyDown('Q')) SgAniSet(SgDazed);
-		//if (KEYMANAGER->isOnceKeyDown('W')) SgAniSet(SgWeaponSwing);
-		//if (KEYMANAGER->isOnceKeyDown('E')) SgAniSet(SgKnockdown);
-		//if (KEYMANAGER->isOnceKeyDown('R')) SgAniSet(SgHoldrelrase);
-
-	if (_IsRight)
+	if (_SgCenterX < _pl->GetShadowCenterX())
 	{
-		/*if (_StunGage <= 100)
-		{
-			if (_SgState != SgDazed) SgAniSet(SgDazed);
+		_IsRight = true;
+		_IsLeft = false;
+	}
+	if (_SgCenterX >= _pl->GetShadowCenterX())
+	{
+		_IsRight = false;
+		_IsLeft = true;
+	}
 
-			_StunTime++;
-		}
-		if (_StunTime <= 300)
-		{
-			if (_SgState == SgDazed) SgAniSet(SgIdle);
-			_StunTime = 0;
-		}*/
-
+	if (_IsRight && !_IsLeft)
+	{
 		if (_Distance > 75 && _Distance < 300)
 		{
 			if (_SgState != SgWalk) SgAniSet(SgWalk);
 			_SgCenterX += cosf(_ChaseAngle) * _Speed;
 			_SgCenterY += -sinf(_ChaseAngle) * _Speed;
 		}
-
 		if (_Distance < 600 && _Distance > 300)
 		{
 			if (_SgState != SgRun)  SgAniSet(SgRun);
-			_SgCenterX += cosf(_ChaseAngle) * _Speed * 2.f;
-			_SgCenterY += -sinf(_ChaseAngle) * _Speed * 2.f;
+			_SgCenterX += cosf(_ChaseAngle) * _Speed * 1.5f;
+			_SgCenterY += -sinf(_ChaseAngle) * _Speed * 1.5f;
+		}
+		if (_Distance > 600)
+		{
+			if (_SgState != SgIdle) SgAniSet(SgIdle);
 		}
 
-		if (_SgState != SgKick)
+		if (_Time < 130)
 		{
 			if (_Distance <= 75)
 			{
@@ -115,7 +94,17 @@ void EnemySchoolGirl::Update()
 				}
 			}
 		}
-
+		if (_Time <= 100 && _Time >= 150)
+		{
+			if (_Distance <= 75)
+			{
+				if (_SgState != SgJumpKnee)
+				{
+					SgAniSet(SgJumpKnee);
+					_SgAttack.MYRectMakeCenter(_EnemyX - 50, _EnemyY, 80, 150);
+				}
+			}
+		}
 		if (_SgState != SgWalk && _SgState != SgRun && _Time > 150)
 		{
 			if (_Distance <= 75)
@@ -125,12 +114,12 @@ void EnemySchoolGirl::Update()
 					SgAniSet(SgKick);
 					_SgAttack.MYRectMakeCenter(_EnemyX, _EnemyY, 200, 50);
 				}
-				_Time = 0;
+				if (_Time > 200) _Time = 0;
 			}
 		}
-
+		//여학생 달리기모션 왼쪽 이미지순서 고치기
 	}
-	else
+	if (!_IsRight && _IsLeft)
 	{
 		if (_Distance > 75 && _Distance < 300)
 		{
@@ -146,59 +135,65 @@ void EnemySchoolGirl::Update()
 			_SgCenterX += cosf(_ChaseAngle) * _Speed * 2.f;
 			_SgCenterY += -sinf(_ChaseAngle) * _Speed * 2.f;
 		}
-	
-		if (_Distance <= 75)
-		{
-			if (_SgState != SgJab)
-			{
-				SgAniSet(SgJab);
-				_SgAttack.MYRectMakeCenter(_EnemyX - 50, _EnemyY, 80, 150);
-			}
-		}	
 
-		if (_Distance <= 75 && _Time > 100)
+		if (_Time < 100)
 		{
-			if (_SgState != SgKick)
+			if (_Distance <= 75)
 			{
-				SgAniSet(SgKick);
-				_SgAttack.MYRectMakeCenter(_EnemyX, _EnemyY, 200, 50);
-			}		
-			_Time = 0;
+				if (_SgState != SgJab)
+				{
+					SgAniSet(SgJab);
+					_SgAttack.MYRectMakeCenter(_EnemyX - 50, _EnemyY, 80, 150);
+				}
+			}
+		}
+		if (_Time <= 100 && _Time >= 150)
+		{
+			if (_Distance <= 75)
+			{
+				if (_SgState != SgJumpKnee) 
+				{
+					SgAniSet(SgJumpKnee);
+					_SgAttack.MYRectMakeCenter(_EnemyX - 50, _EnemyY, 80, 150);
+				}
+			}
+		}
+		if (_SgState != SgWalk && _SgState != SgRun && _Time > 150)
+		{
+			if (_Distance <= 75)
+			{
+				if (_SgState != SgKick)
+				{
+					SgAniSet(SgKick);
+					_SgAttack.MYRectMakeCenter(_EnemyX, _EnemyY, 200, 50);
+				}
+
+			}
 		}
 
 	}
-		
+	if (_Time > 200) _Time = 0;
 
 	//if (_Hp <= 2) SgAniSet(SgBegging);
-
-
 	//	switch (_SgState)
 	//	{
 	//	case SgBegging:
 	//		if (_Hp <= 2)
 	//			SgAniSet(SgBegging);
 	//		break;
-
 	//	case SgBlownback:
-
 	//		break;
 	//	case SgDazed:
-
 	//		break;
 	//	case SgGethit:
-
 	//		break;
 	//	case SgHold:
-
 	//		break;
 	//	case SgHoldhit:
-
 	//		break;
 	//	case SgHoldrelrase:
-
 	//		break;
 	//	case SgIdle:
-
 	//		break;
 	//	case SgJumpKnee:
 	//		//이것이 2타
@@ -209,7 +204,6 @@ void EnemySchoolGirl::Update()
 	//	case SgKnockdown:
 	//		break;
 	//	case SgRun:
-
 	//		if (_Distance < 600 && _Distance > 300)
 	//		{
 	//			_SgCenterX += cosf(_ChaseAngle) * _Speed * 2.f;
@@ -238,93 +232,6 @@ void EnemySchoolGirl::Update()
 	//		break;
 	//	}
 
-
-////////////////////////////////////////////////////////////////////////////////////////////////
-
-	/*switch (_SgState)
-	{
-	case SgBegging:
-		_SgImage = IMAGEMANAGER->findImage("SgBegging");
-		_SgAni = KEYANIMANAGER->findAnimation("SgRBegging");
-		_SgAni->start();
-		break;
-	case SgBlownback:
-		_SgImage = IMAGEMANAGER->findImage("SgBlowback");
-		_SgAni = KEYANIMANAGER->findAnimation("SgRBlowback");
-		_SgAni->start();
-		break;
-	case SgDazed:
-		_SgImage = IMAGEMANAGER->findImage("SgDazed");
-		_SgAni = KEYANIMANAGER->findAnimation("SgRDazed");
-		_SgAni->start();
-		break;
-	case SgGethit:
-		_SgImage = IMAGEMANAGER->findImage("SgGethit");
-		_SgAni = KEYANIMANAGER->findAnimation("SgRGethit");
-		_SgAni->start();
-		break;
-	case SgHold:
-		_SgImage = IMAGEMANAGER->findImage("SgHold");
-		_SgAni = KEYANIMANAGER->findAnimation("SgRHold");
-		_SgAni->start();
-		break;
-	case SgHoldhit:
-		_SgImage = IMAGEMANAGER->findImage("SgHold");
-		_SgAni = KEYANIMANAGER->findAnimation("SgRHoldhit");
-		_SgAni->start();
-		break;
-	case SgHoldrelrase:
-		_SgImage = IMAGEMANAGER->findImage("SgHold");
-		_SgAni = KEYANIMANAGER->findAnimation("SgRHoldrelrase");
-		_SgAni->start();
-		break;
-	case SgIdle:
-		_SgImage = IMAGEMANAGER->findImage("SgIdle");
-		_SgAni = KEYANIMANAGER->findAnimation("SgRIdle");
-		_SgAni->start();
-		break;
-	case SgJumpKnee:
-		_SgImage = IMAGEMANAGER->findImage("SgJumpKnee");
-		_SgAni = KEYANIMANAGER->findAnimation("SgRJumpKnee");
-		_SgAni->start();
-		break;
-	case SgKick:
-		_SgImage = IMAGEMANAGER->findImage("SgKick");
-		_SgAni = KEYANIMANAGER->findAnimation("SgRKick");
-		_SgAni->start();
-		break;
-	case SgKnockdown:
-		_SgImage = IMAGEMANAGER->findImage("SgKnockdown");
-		_SgAni = KEYANIMANAGER->findAnimation("SgRKnockdown");
-		_SgAni->start();
-		break;
-	case SgRun:
-		_SgImage = IMAGEMANAGER->findImage("SgRun");
-		_SgAni = KEYANIMANAGER->findAnimation("SgRRun");
-		_SgAni->start();
-		break;
-	case SgJab:
-		_SgImage = IMAGEMANAGER->findImage("SgJab");
-		_SgAni = KEYANIMANAGER->findAnimation("SgRJab");
-		_SgAni->start();
-		break;
-	case SgTaunt:
-		_SgImage = IMAGEMANAGER->findImage("SgTaunt");
-		_SgAni = KEYANIMANAGER->findAnimation("SgRTaunt");
-		_SgAni->start();
-		break;
-	case SgWalk:
-		_SgImage = IMAGEMANAGER->findImage("SgWalk");
-		_SgAni = KEYANIMANAGER->findAnimation("SgRWalk");
-		_SgAni->start();
-		break;
-	case SgWeaponSwing:
-		_SgImage = IMAGEMANAGER->findImage("SgWeaponSwing");
-		_SgAni = KEYANIMANAGER->findAnimation("SgRWeaponSwing");
-		_SgAni->start();
-		break;
-	}*/
-
 ////////////////////////////////////////////////////////////////////////////////////////////////
 	_SgShadow.MYRectMakeCenter(_SgCenterX, _SgCenterY, _SgShadowImage->getWidth(), _SgShadowImage->getHeight());
 
@@ -335,30 +242,17 @@ void EnemySchoolGirl::Update()
 	_EnemyX = (_SgHit.left + _SgHit.right) / 2;
 	_EnemyY = (_SgHit.top + _SgHit.bottom) / 2;
 
-	if (_IsRight)
-	{
-		_SgAttackExploration.MYRectMakeCenter(_SgHit.right, _EnemyY, 200, 200);
-	}
-	else
-	{
-		_SgAttackExploration.MYRectMakeCenter(_SgHit.left, _EnemyY, 200, 200);
-	}
-
 ///////////////////////////////////////////////////////////////////////////////////////////////
-	KEYANIMANAGER->update();
 }
 
 void EnemySchoolGirl::Render()
 {
-	_SgAttackExploration.render(getMemDC());
-	//_SgShadow.render(getMemDC());
-	_SgShadowImage->render(getMemDC(), _SgShadow.left, _SgShadow.top);
-	//_SgHit.render(getMemDC());
+	_SgShadowImage->alphaRender(getMemDC(), _SgShadow.left, _SgShadow.top, 170);
 	_SgImage->aniRender(getMemDC(), _SgHit.left, _SgHit.top, _SgAni);
-	if (_SgState == SgJab || _SgState == SgKick)
-	{
-		_SgAttack.render(getMemDC());
-	}
+	//if (_SgState == SgJab || _SgState == SgKick)
+	//{
+	//	_SgAttack.render(getMemDC());
+	//}
 }
 
 void EnemySchoolGirl::SgState()
@@ -496,6 +390,16 @@ void EnemySchoolGirl::SetStunGage(float damge)
 	_StunGage += damge;
 }
 
+void EnemySchoolGirl::SetCenterX(float x)
+{
+	_SgCenterX += x;
+}	
+
+void EnemySchoolGirl::SetCenterY(float y)
+{
+	_SgCenterY += y;
+}
+
 void EnemySchoolGirl::SgAniInit()
 {
 	//여학생 항복
@@ -625,7 +529,7 @@ void EnemySchoolGirl::SgAniInit()
 
 void EnemySchoolGirl::SgAniSet(SGSTATE state)
 {
-	if (_IsRight)
+	if (_IsRight && !_IsLeft)
 	{
 		switch (state)
 		{
@@ -727,7 +631,7 @@ void EnemySchoolGirl::SgAniSet(SGSTATE state)
 			break;
 		}
 	}
-	else
+	if (!_IsRight && _IsLeft)
 	{
 		switch (state)
 		{
