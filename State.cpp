@@ -32,7 +32,7 @@ void State::Update()
 		_Center.x+(_PlayerImg->getFrameWidth()*0.5f),
 		_Center.y);
 	KEYANIMANAGER->update();
-	
+	ZORDER->ZOrderPush(getMemDC(), RenderType::ANIRENDER, _PlayerImg, _PlayerRc.left, _PlayerRc.top, _PlayerAni, _PlayerRc.bottom);
 
 }
 

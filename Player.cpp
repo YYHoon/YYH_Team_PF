@@ -245,6 +245,7 @@ void Player::Update()
 	HitUpdate();
 	DownUpdate();
 	StandUpUpdate();
+	
 }
 
 void Player::Release()

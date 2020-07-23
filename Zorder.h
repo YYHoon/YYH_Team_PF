@@ -15,6 +15,7 @@ struct TagZOrder
 	HDC Hdc;
 	RenderType RenderType;
 	image* Img;
+	animation* ani;
 	//MYRECT Rect;
 	string KeyName;
 	float DextX, DextY;
@@ -31,7 +32,9 @@ private:
 public:
 	static Zorder* GetInstance();
 	void ZOrderPush(HDC hdc, RenderType type, image* img, float DestX, float DestY,float ShadowZ);
-	void ZOrderPush(HDC hdc, RenderType type, image* img, float DestX, float DestY,int FrameX,int FrameY, float ShadowZ);
+	void ZOrderPush(HDC hdc, RenderType type, image* img, float DestX, float DestY, int FrameX, int FrameY, float ShadowZ);
+	void ZOrderPush(HDC hdc, RenderType type, image* img, float DestX, float DestY,animation* ani, float ShadowZ);
+	void ZOrderPush(HDC hdc, RenderType type, image* img, float DestX, float DestY, animation* ani,string KeyName, float ShadowZ);
 	void MergeZOrder(vector<TagZOrder>& vMerge, int left, int right);
 	void MergeSortZOrder(vector<TagZOrder>& vMerge,int left,int right, int mid);
 	void ZOrderRender();
