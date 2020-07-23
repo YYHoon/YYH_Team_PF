@@ -6,7 +6,7 @@
 #include "StageManager.h"
 #include "pixelCollsion.h"
 #include "EnemySchoolGirl.h"
-//#include "AllUI.h"
+#include "AllUI.h"
 #include <iostream>
 #pragma comment(linker, "/entry:WinMainCRTStartup /subsystem:console")
 using namespace std;

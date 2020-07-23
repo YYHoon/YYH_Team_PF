@@ -34,13 +34,13 @@ HRESULT playGround::init()
 	//_en->Init(PointFloatMake(500,500));
 	
 
-	//SCENEMANAGER->addScene("LoadingScene", new LoadingScene);					//1
-	//SCENEMANAGER->addScene("VideoScene", new VideoScene);						//2
-	//SCENEMANAGER->addScene("IntroMenuScene", new IntroMenuScene);				//3
-	//SCENEMANAGER->addScene("SelectMenuScene", new SelectMenuScene);				//4
-	//SCENEMANAGER->addScene("CharacterSelectScene", new CharacterSelectScene);	//5
-	//
-	//SCENEMANAGER->changeScene("LoadingScene");
+	SCENEMANAGER->addScene("LoadingScene", new LoadingScene);					//1
+	SCENEMANAGER->addScene("VideoScene", new VideoScene);						//2
+	SCENEMANAGER->addScene("IntroMenuScene", new IntroMenuScene);				//3
+	SCENEMANAGER->addScene("SelectMenuScene", new SelectMenuScene);				//4
+	SCENEMANAGER->addScene("CharacterSelectScene", new CharacterSelectScene);	//5
+	
+	SCENEMANAGER->changeScene("LoadingScene");
 
 
 	return S_OK;
