@@ -31,7 +31,7 @@ void State::Update()
 		_Center.y-_PlayerImg->getFrameHeight(),
 		_Center.x+(_PlayerImg->getFrameWidth()*0.5f),
 		_Center.y);
-	KEYANIMANAGER->update();
+
 	
 
 }
@@ -157,7 +157,7 @@ void PlayLeftIdle::Attack1(Player* player)
 	
 	if (_PlayerAni->isPlay())
 	{
-		_AttackRc.set(_PlayerRc.left, _PlayerRc.top + 50, _PlayerRc.left + 50, _PlayerRc.top + 200);
+		_AttackRc.set(_PlayerRc.left, _PlayerRc.top + 50, _PlayerRc.left + 50, _PlayerRc.bottom);
 	}
 	
 }
@@ -175,7 +175,7 @@ void PlayLeftIdle::Attack2(Player* player)
 
 	if (_PlayerAni->isPlay())
 	{
-		_AttackRc.set(_PlayerRc.left, _PlayerRc.top + 50, _PlayerRc.left + 50, _PlayerRc.top + 200);
+		_AttackRc.set(_PlayerRc.left, _PlayerRc.top + 50, _PlayerRc.left + 50, _PlayerRc.bottom);
 	}
 }
 
@@ -191,7 +191,7 @@ void PlayLeftIdle::Attack3(Player* player)
 
 	if (_PlayerAni->isPlay())
 	{
-		_AttackRc.set(_PlayerRc.left, _PlayerRc.top + 50, _PlayerRc.left + 50, _PlayerRc.top + 200);
+		_AttackRc.set(_PlayerRc.left, _PlayerRc.top + 50, _PlayerRc.left + 50, _PlayerRc.bottom);
 	}
 }
 
@@ -291,7 +291,7 @@ void PlayRightIdle::Attack1(Player* player)
 	
 	if (_PlayerAni->isPlay())
 	{
-		_AttackRc.set(_PlayerRc.right, _PlayerRc.top + 50, _PlayerRc.right - 50, _PlayerRc.top + 200);
+		_AttackRc.set(_PlayerRc.right, _PlayerRc.top + 50, _PlayerRc.right - 50, _PlayerRc.bottom);
 	}
 }
 
@@ -307,7 +307,7 @@ void PlayRightIdle::Attack2(Player* player)
 
 	if (_PlayerAni->isPlay())
 	{
-		_AttackRc.set(_PlayerRc.right, _PlayerRc.top + 50, _PlayerRc.right - 50, _PlayerRc.top + 200);
+		_AttackRc.set(_PlayerRc.right, _PlayerRc.top + 50, _PlayerRc.right - 50, _PlayerRc.bottom);
 	}
 }
 
@@ -323,7 +323,7 @@ void PlayRightIdle::Attack3(Player* player)
 
 	if (_PlayerAni->isPlay())
 	{
-		_AttackRc.set(_PlayerRc.right, _PlayerRc.top + 50, _PlayerRc.right - 50, _PlayerRc.top + 200);
+		_AttackRc.set(_PlayerRc.right, _PlayerRc.top + 50, _PlayerRc.right - 50, _PlayerRc.bottom);
 	}
 }
 
