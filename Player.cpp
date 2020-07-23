@@ -2,6 +2,8 @@
 #include "player.h"
 #include "State.h"
 #include "Boss.h"
+#include "EnemyManager.h"
+
 Player::Player()
 {
 	
