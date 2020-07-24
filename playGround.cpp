@@ -61,6 +61,7 @@ void playGround::update()
 	_SM->update();
 	_pixel->update();
 	_en->Update();
+	KEYANIMANAGER->update();
 	//SCENEMANAGER->update();
 }
 

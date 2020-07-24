@@ -247,12 +247,10 @@ void Player::Update()
 	HitUpdate();
 	DownUpdate();
 	StandUpUpdate();
-<<<<<<< HEAD
+
 	DashUpdate();
 	DashAttUpdate();
-=======
-	
->>>>>>> de44bf775df43725c50ffd0e62aad39639f8724f
+
 }
 
 void Player::Release()
