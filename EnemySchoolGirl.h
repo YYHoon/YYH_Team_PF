@@ -14,16 +14,18 @@ enum SGSTATE
 	SgHold,
 	SgHoldhit,
 	SgHoldrelrase,
-	SgJumpKnee,
-	SgKick,
+	SgAttack1,
+	SgAttack2,
+	SgAttack3,
 	SgKnockdown,
 	SgRun,
-	SgJab,
 	SgTaunt,
 	SgWalk,
 	SgWeaponSwing,
 	SgDown,
-	SgUp
+	SgUp,
+	SgJump,
+	SgJumpAttack
 };
 
 class EnemySchoolGirl : public gameNode
@@ -37,11 +39,12 @@ private:
 	image* _SgShadowImage;
 	image* _SgImage;
 
-	MYRECT _SgShadow;				//적 그림자
-	MYRECT _SgHit;					//적 캐릭터 및 충돌처리용 사각형
-	MYRECT _SgAttack;				//적이 공격시 충돌처리용
-	MYRECT _SgLAttack;
+	MYRECT _SgShadow;		//적 그림자
+	MYRECT _SgImageRect;	//적 이미지 렉트
+	MYRECT _SgHit;			//적 캐릭터 및 충돌처리용 사각형
 
+	MYRECT _SgAttack;		//적이 공격시 충돌처리용
+	
 	float _ShadowX, _ShadowY;  //그림자의 중점(캐릭터그릴떄 사용)
 	float _EnemyX, _EnemyY;    //캐릭터의 중점(공격 영역및 공격시 사용)
 
@@ -62,6 +65,8 @@ private:
 	bool _IsRight; //왼쪽오른쪽
 	bool _IsLeft;
 
+	bool _IsJump; //좜프~
+
 public:
 	virtual HRESULT init();
 	virtual HRESULT Init(POINTFLOAT pt);
@@ -78,20 +83,23 @@ public:
 
 	float GetSchoolGirlCenterX() { return _SgCenterX; } //중점	
 	float GetSchoolGirlCenterY() { return _SgCenterY; } //중점	
-
 	float GetSchoolGirlX() { return _EnemyX; }
 	float GetSchoolGirlY() { return _EnemyY; }
-
 	float GetChaseAngle() { return _ChaseAngle; }
-	MYRECT GetSchoolGirlHit() { return _SgHit; }	//피격영역
-	MYRECT GetSchoolGirlAttack() { return _SgAttack; } //공격시 영역
 
+	MYRECT GetSchoolGirlHit() { return _SgHit; }	//적 피격영역
+	MYRECT GetSchoolGirlRightAttack1() { return _SgAttack; } //적 공격시 영역
+	
 	POINTFLOAT GetPt() { POINTFLOAT temp; temp.x = _SgCenterX; temp.y = _SgCenterY; return temp; }
 
 	float GetHP() { return _Hp; }
 
-	SGSTATE GetSgState() { return _SgState; }
-	animation* GetSgAni() { return _SgAni;}
+	SGSTATE GetSgState() { return _SgState; } //적 상태
+	animation* GetSgAni() { return _SgAni;} //적 애니메이션 상태
+
+	bool GetIsRight() { return _IsRight; }
+	bool GetIsLeft() { return _IsLeft; }
+
 
 	void SmHitHP(float damge);
 	void SetStunGage(float damge);
@@ -99,19 +107,18 @@ public:
 	void SetCenterX(float x);
 	void SetCenterY(float y);
 
-
 	void SetSgImage(image* Sgim) { _SgImage = Sgim; }
 	void SetPlayer(Player* _p) { _pl = _p; }
 	void SetSgState(SGSTATE stat) { _SgState = stat; }
 	void SetSgAni(animation* ani) { _SgAni = ani; }
 
+	static void RightTherr(void* obj);
 	static void RightBlownback(void* obj);
 	static void RightDown(void* obj);
 	static void RightUp(void* obj);
 
+	static void LeftTherr(void* obj);
 	static void LeftBlownback(void* obj);
 	static void LeftDown(void* obj);
 	static void LeftUp(void* obj);
-	void LeftTherr(void* obj);
-	void RightTherr(void* obj);
 };
