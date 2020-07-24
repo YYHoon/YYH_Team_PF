@@ -50,9 +50,9 @@ void Player::PlayerImageAniStting()
 
 	//´Þ¸®±â
 	int lRun[] = { 15,14,13,12,11,10,9,8,7,6,5,4,3,2,1,0 };
-	KEYANIMANAGER->addArrayFrameAnimation("PlayerLeftRun", "PlayerRun", lRun, 16, 6, true);
+	KEYANIMANAGER->addArrayFrameAnimation("PlayerLeftRun", "PlayerRun", lRun, 16, 15, true);
 	int rRun[] = { 16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31 };
-	KEYANIMANAGER->addArrayFrameAnimation("PlayerRightRun", "PlayerRun", rRun, 16, 6, true);
+	KEYANIMANAGER->addArrayFrameAnimation("PlayerRightRun", "PlayerRun", rRun, 16, 15, true);
 
 	//ÆòÅ¸1
 	int lAttack1[] = { 5,4,3,2,1,0 };
@@ -92,9 +92,9 @@ void Player::PlayerImageAniStting()
 
 	//´ÙÀÌºù°ø°Ý
 	int lDive[] = { 20,19,18,17,16,15,14,13,12,11,10,9,8,7,6,5,4,3,2,1,0 };
-	KEYANIMANAGER->addArrayFrameAnimation("PlayerLeftDiveAttack", "PlayerDiveAttack", lDive, 21, 6, false);
+	KEYANIMANAGER->addArrayFrameAnimation("PlayerLeftDiveAttack", "PlayerDiveAttack", lDive, 21, 15, false);
 	int rDive[] = { 21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41 };
-	KEYANIMANAGER->addArrayFrameAnimation("PlayerRightDiveAttack", "PlayerDiveAttack", rDive, 21, 6, false);
+	KEYANIMANAGER->addArrayFrameAnimation("PlayerRightDiveAttack", "PlayerDiveAttack", rDive, 21, 15, false);
 
 	//°ÔÀÓ¿À¹ö
 	int lGameOver[] = { 25,24,23,22,21,20,19,18,17,16,15,14,13,12,11,10,9,8,7,6,5,4,3,2,1,0 };
@@ -193,8 +193,10 @@ void Player::Update()
 		PlayerKeyMove();
 	}
 	
-	if (_State != BattleStart::GetInstance() && !_State->GetAniIsPlay())Default();
-	
+	if (_State != BattleStart::GetInstance() && !_State->GetAniIsPlay())
+	{
+		if(_State != PlayLeftDown::GetInstance() && _State != PlayRightDown::GetInstance())Default();
+	}
 
 	if (_AttackCount < 0 || _AttackCount>2)_AttackCount = 0;
 	if (!KEYANIMANAGER->findAnimation("PlayerHurrKick")->isPlay())_AttackRcH.set(0, 0, 0, 0);
@@ -225,10 +227,9 @@ void Player::Update()
 		_State->GetPlayerRect().right-30, _State->GetPlayerRect().bottom);
 	JumpUpdate();
 
-	if (!_Jump && !_Fall )_State->SetCenterXY(_Center);
-	if (_Jump || _Fall )_State->SetCenterXY(_DummyCen);
+	
 	//if (_Hit)_State->SetCenterXY(_DummyCenHit);
-	_State->Update();
+	
 
 	if (KEYMANAGER->isOnceKeyDown('N'))_Hp = 0;
 	if (KEYMANAGER->isOnceKeyDown('V'))_DownDmg += 10;
@@ -245,7 +246,20 @@ void Player::Update()
 	HitUpdate();
 	DownUpdate();
 	StandUpUpdate();
-	
+	DashUpdate();
+	DashAttUpdate();
+
+	if (!_Jump && !_Fall)
+	{
+		_State->SetCenterXY(_Center);
+		
+	}
+	if (_Jump || _Fall)
+	{
+		_State->SetCenterXY(_DummyCen);
+	}
+	ZORDER->ZOrderPush(getMemDC(), RenderType::RENDER, _Shadow, _ShadowRc.left, _ShadowRc.top, _ShadowRc.top);
+	_State->Update();
 }
 
 void Player::Release()
@@ -255,8 +269,6 @@ void Player::Release()
 void Player::Render()
 {
 	if (KEYMANAGER->isStayKeyDown(VK_SPACE))DebugRender();
-	
-	_Shadow->render(getMemDC(),_ShadowRc.left,_ShadowRc.top);
 	_State->Render();
 
 
@@ -278,69 +290,97 @@ void Player::PlayerKeyMove()
 	if (!KEYANIMANAGER->findAnimation("PlayerLeftAttack1")->isPlay() && !KEYANIMANAGER->findAnimation("PlayerRightAttack1")->isPlay()&&
 		!KEYANIMANAGER->findAnimation("PlayerLeftAttack2")->isPlay() && !KEYANIMANAGER->findAnimation("PlayerRightAttack2")->isPlay()&&
 		!KEYANIMANAGER->findAnimation("PlayerLeftAttack3")->isPlay() && !KEYANIMANAGER->findAnimation("PlayerRightAttack3")->isPlay()&&
-		!_Jump&&!_Fall &&!_Hit&&!_Down&&!_StandUp
+		!_Jump&&!_Fall &&!_Hit&&!_Down&&!_StandUp&&!_DashAttbool
 		&& !KEYANIMANAGER->findAnimation("PlayerHurrKick")->isPlay() && !KEYANIMANAGER->findAnimation("PlayerLeftGuard")->isPlay()
 		&& !KEYANIMANAGER->findAnimation("PlayerRightGuard")->isPlay()&& !KEYANIMANAGER->findAnimation("PlayerLeftDap")->isPlay()
 		&& !KEYANIMANAGER->findAnimation("PlayerRightDap")->isPlay())
 	{
 		if (KEYMANAGER->isOnceKeyDown('A'))
 		{
-			_State = PlayLeftIdle::GetInstance();
-			_State->SetCenterXY(_Center);
-			Walk();
-			_Left=true;
-			_MoveLR = MOVELR::LEFT_WALK;
-			_LClickTime++;
+			if (_State != PlayLeftRun::GetInstance())
+			{
+				_State = PlayLeftIdle::GetInstance();
+				_State->SetCenterXY(_Center);
+				Walk();
+				_Left = true;
+				_MoveLR = MOVELR::LEFT_WALK;
+				_LRun = true;
+				_LClickTime++;
+			}
 		}
 		if (KEYMANAGER->isOnceKeyUp('A'))
 		{
-			_State = PlayLeftIdle::GetInstance();
+			if (_MoveLR == MOVELR::LEFT_RUN || _State == PlayLeftRun::GetInstance())
+			{
+				_State = PlayLeftIdle::GetInstance();
+			}
+			
 			_State->SetCenterXY(_Center);
-			Default();
 			_MoveLR = MOVELR::NON;
+			if (_MoveLR != MOVELR::LEFT_WALK && _MoveLR != MOVELR::RIGHT_WALK && _MoveUD != MOVEUD::UP_WALK && _MoveUD != MOVEUD::DOWN_WALK)Default();
+			
 			_LClickTime++;
 		}
 
 		if (KEYMANAGER->isOnceKeyDown('D'))
 		{
-			_State = PlayRightIdle::GetInstance();
-			_State->SetCenterXY(_Center);
-			Walk();
-			_Left=false;
-			_MoveLR = MOVELR::RIGHT_WALK;
-
+			if (_State != PlayRightRun::GetInstance())
+			{
+				_State = PlayRightIdle::GetInstance();
+				_State->SetCenterXY(_Center);
+				Walk();
+				_Left = false;
+				_MoveLR = MOVELR::RIGHT_WALK;
+				_RRun = true;
+				_RClickTime++; 
+			}
 		}
 		if (KEYMANAGER->isOnceKeyUp('D'))
 		{
-			Default();
+			if (_MoveLR == MOVELR::RIGHT_RUN || _State == PlayRightRun::GetInstance())
+			{
+				_State = PlayRightIdle::GetInstance();
+			}
+			_State->SetCenterXY(_Center);
 			_MoveLR = MOVELR::NON;
+			if (_MoveLR != MOVELR::LEFT_WALK && _MoveLR != MOVELR::RIGHT_WALK && _MoveUD != MOVEUD::UP_WALK && _MoveUD != MOVEUD::DOWN_WALK)Default();
+			_RClickTime++;
+
 		}
 
 		if (KEYMANAGER->isOnceKeyDown('W'))
 		{
-			if (_Left)_State = PlayLeftIdle::GetInstance();
-			if (!_Left)_State = PlayRightIdle::GetInstance();
+			if (_State != PlayRightRun::GetInstance() && _State != PlayLeftRun::GetInstance())
+			{
+				if (_Left)_State = PlayLeftIdle::GetInstance();
+				if (!_Left)_State = PlayRightIdle::GetInstance();
+			}
 			_State->SetCenterXY(_Center);
 			Walk();
 			_MoveUD = MOVEUD::UP_WALK;
 		}
 		if (KEYMANAGER->isOnceKeyUp('W'))
 		{
-			Default();
 			_MoveUD = MOVEUD::NON;
+			if (_MoveLR != MOVELR::LEFT_WALK && _MoveLR != MOVELR::RIGHT_WALK && _MoveUD != MOVEUD::UP_WALK && _MoveUD != MOVEUD::DOWN_WALK)Default();
+			
 		}
 		if (KEYMANAGER->isOnceKeyDown('S'))
 		{
-			if (_Left)_State = PlayLeftIdle::GetInstance();
-			if (!_Left)_State = PlayRightIdle::GetInstance();
+			if (_State != PlayRightRun::GetInstance() && _State != PlayLeftRun::GetInstance())
+			{
+				if (_Left)_State = PlayLeftIdle::GetInstance();
+				if (!_Left)_State = PlayRightIdle::GetInstance();
+			}
 			_State->SetCenterXY(_Center);
 			Walk();
 			_MoveUD = MOVEUD::DOWN_WALK;
 		}
 		if (KEYMANAGER->isOnceKeyUp('S'))
 		{
-			Default();
 			_MoveUD = MOVEUD::NON;
+			if (_MoveLR != MOVELR::LEFT_WALK && _MoveLR != MOVELR::RIGHT_WALK && _MoveUD != MOVEUD::UP_WALK && _MoveUD != MOVEUD::DOWN_WALK)Default();
+			
 		}
 		if (KEYMANAGER->isOnceKeyDown('Y'))
 		{
@@ -436,41 +476,53 @@ void Player::MoveUpdate()
 
 void Player::AttackUpdate()
 {
-	if (KEYMANAGER->isOnceKeyDown('H'))
+	if (KEYMANAGER->isOnceKeyDown('H')&&!_DashAttbool)
 	{
-		
-		if (_AttackCount == 0 && !KEYANIMANAGER->findAnimation("PlayerLeftAttack3")->isPlay() &&
-			!KEYANIMANAGER->findAnimation("PlayerRightAttack3")->isPlay())
+		if (_State == PlayRightRun::GetInstance())
 		{
-			Attack1();
-			//cout << _AttackCount << endl;
-			_AttackCount++;
-			_AttackRc1 = _State->GetAttRect();
-			//cout << _AttackRc1.left << endl;
-			_State->SetAttRect();
-			_AttackRc1.set(0, 0, 0, 0);
-			//cout << _AttackRc1.left << endl;
+			_DashAttbool = true;
+			DiveAttack();
 		}
-		else if (_AttackCount == 1&&_State->GetAniIndex()>4)
+		if (_State == PlayLeftRun::GetInstance())
 		{
-
-			Attack2();
-			
-			_AttackCount++;
-			_AttackRc2 = _State->GetAttRect();
-			_State->SetAttRect();
-			_AttackRc2.set(0, 0, 0, 0);
+			_DashAttbool = true;
+			DiveAttack();
 		}
-
-		else if (_AttackCount == 2 && _State->GetAniIndex() > 4)
+		if (_State != PlayRightRun::GetInstance() && _State != PlayLeftRun::GetInstance())
 		{
+			if (_AttackCount == 0 && !KEYANIMANAGER->findAnimation("PlayerLeftAttack3")->isPlay() &&
+				!KEYANIMANAGER->findAnimation("PlayerRightAttack3")->isPlay())
+			{
+				Attack1();
+				//cout << _AttackCount << endl;
+				_AttackCount++;
+				_AttackRc1 = _State->GetAttRect();
+				//cout << _AttackRc1.left << endl;
+				_State->SetAttRect();
+				_AttackRc1.set(0, 0, 0, 0);
+				//cout << _AttackRc1.left << endl;
+			}
+			else if (_AttackCount == 1 && _State->GetAniIndex() > 4)
+			{
 
-			Attack3();
-			
-			_AttackCount++;
-			_AttackRc3 = _State->GetAttRect();
-			_State->SetAttRect();
-			_AttackRc3.set(0, 0, 0, 0);
+				Attack2();
+
+				_AttackCount++;
+				_AttackRc2 = _State->GetAttRect();
+				_State->SetAttRect();
+				_AttackRc2.set(0, 0, 0, 0);
+			}
+
+			else if (_AttackCount == 2 && _State->GetAniIndex() > 4)
+			{
+
+				Attack3();
+
+				_AttackCount++;
+				_AttackRc3 = _State->GetAttRect();
+				_State->SetAttRect();
+				_AttackRc3.set(0, 0, 0, 0);
+			}
 		}
 		_MoveUD = MOVEUD::NON;
 		_MoveLR = MOVELR::NON;
@@ -481,6 +533,85 @@ void Player::AttackUpdate()
 
 void Player::DashUpdate()
 {
+	if (_RRun)
+	{
+		_RTime++;
+		if (_RTime < 10 && _RClickTime >= 3)
+		{
+			SetState(PlayRightRun::GetInstance());
+			_State->SetCenterXY(_Center);
+			Default();
+			_MoveLR = MOVELR::RIGHT_RUN;
+		
+			_RClickTime = 0;
+			_RTime = 0;
+			_RRun = false;
+		}
+		if (_RTime == 10)
+		{
+			_RClickTime = 0;
+			_RTime = 0;
+			_RRun = false;
+		}
+	}
+	if (_LRun)
+	{
+		_LTime++;
+		if (_LTime < 10 && _LClickTime >= 3)
+		{
+			SetState(PlayLeftRun::GetInstance());
+			_State->SetCenterXY(_Center);
+			Default();
+			_MoveLR = MOVELR::LEFT_RUN;
+		
+			_LClickTime = 0;
+			_LTime = 0;
+			_LRun = false;
+		}
+		if (_LTime == 10)
+		{
+			_LClickTime = 0;
+			_LTime = 0;
+			_LRun = false;
+		}
+	}
+}
+
+void Player::DashAttUpdate()
+{
+	if (_DashAttbool)
+	{
+		if (_State == PlayRightRun::GetInstance())
+		{
+			if (KEYANIMANAGER->findAnimation("PlayerRightDiveAttack")->getNowAniIndex() < 10)
+			{
+				_DashAtt.set(_PlayerHitRc.right, _PlayerHitRc.top, _PlayerHitRc.right + 20, _PlayerHitRc.bottom);
+				_Center.x += 7;
+			}
+			if (!KEYANIMANAGER->findAnimation("PlayerRightDiveAttack")->isPlay())
+			{
+				_State = PlayRightIdle::GetInstance();
+				_State->SetCenterXY(_Center);
+				_DashAttbool = false;
+				_DashAtt.set(0, 0, 0, 0);
+			}
+		}
+		if (_State == PlayLeftRun::GetInstance())
+		{
+			if (KEYANIMANAGER->findAnimation("PlayerLeftDiveAttack")->getNowAniIndex() < 10)
+			{
+				_DashAtt.set(_PlayerHitRc.left, _PlayerHitRc.top, _PlayerHitRc.left - 20, _PlayerHitRc.bottom);
+				_Center.x -= 7;
+			}
+			if (!KEYANIMANAGER->findAnimation("PlayerLeftDiveAttack")->isPlay())
+			{
+				_State = PlayLeftIdle::GetInstance();
+				_State->SetCenterXY(_Center);
+				_DashAttbool = false;
+				_DashAtt.set(0, 0, 0, 0);
+			}
+		}
+	}
 }
 
 
@@ -632,7 +763,7 @@ void Player::HitUpdate()
 
 void Player::DownReaction()
 {
-	if (_Jump || _Fall || _DownDmg > 20)
+	if (_Jump || _Fall || _DownDmg > 20 && !_Down)
 	{
 		_State->SetCenterXY(_DummyCen);
 		if (_Left)
@@ -676,18 +807,21 @@ void Player::DownUpdate()
 				}
 				else
 				{
-					StandUp();
+
+					cout << "¾¾»¡" << endl;
 					_Down = false;
 					_HitStack = 0;
-
 					_StandUp = true;
 					_Jump = false;
 					_Fall = false;
 					_JumpStack = 0;
+					StandUp();
 				}
 			}
 		}
-		else
+		
+
+		if(!_Left)
 		{
 			if (KEYANIMANAGER->findAnimation("PlayerRightDown")->getNowAniIndex() < 15)_Center.x -= 3;
 			if (_Jump || _Fall)
@@ -695,6 +829,7 @@ void Player::DownUpdate()
 				_DummyCen.x = _Center.x;
 				if (_DummyCen.y <= _Center.y)_DummyCen.y += 2;
 			}
+
 			if (!KEYANIMANAGER->findAnimation("PlayerRightDown")->isPlay())
 			{
 				if (_Hp <= 0)
@@ -703,18 +838,21 @@ void Player::DownUpdate()
 				}
 				else
 				{
-					_StandUp = true;
-					StandUp();
+
+					cout << "¾¾»¡" << endl;
 					_Down = false;
 					_HitStack = 0;
+					_StandUp = true;
 					_Jump = false;
 					_Fall = false;
 					_JumpStack = 0;
+					StandUp();
 				}
 			}
 		}
+	
 	}
-
+	
 	
 }
 
@@ -731,7 +869,7 @@ void Player::StandUpUpdate()
 			Default();
 			_StandUp = false;
 		}
-
+	
 		if (!_Left && !KEYANIMANAGER->findAnimation("PlayerRightStandUp")->isPlay())
 		{
 			_State = PlayRightIdle::GetInstance();
@@ -739,7 +877,7 @@ void Player::StandUpUpdate()
 			Default();
 			_StandUp = false;
 		}
-
+	
 	}
 
 
