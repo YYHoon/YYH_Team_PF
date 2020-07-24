@@ -19,28 +19,28 @@ HRESULT playGround::init()
 	imginit(); // 모든 이미지를 여기다 넣도록
 	soundinit(); // 사운드도 따로 뺐습니다.
 
-	//p = new Player;
-	//b = new Boss;
-	//b->SetPlayerAddressLink(p);
-	//p->SetAddressBoss(b);
-	//p->PlayerImageAniStting();
-	//p->Init();
-	//_SM = new StageManager;
-	//_SM->init();
-	//_pixel = new pixelCollsion;
-	//_pixel->init();
-	//b->init();
-	//_en = new EnemySchoolGirl;
-	//_en->Init(PointFloatMake(500,500));
+	p = new Player;
+	b = new Boss;
+	b->SetPlayerAddressLink(p);
+	p->SetAddressBoss(b);
+	p->PlayerImageAniStting();
+	p->Init();
+	_SM = new StageManager;
+	_SM->init();
+	_pixel = new pixelCollsion;
+	_pixel->init();
+	b->init();
+	_en = new EnemySchoolGirl;
+	_en->Init(PointFloatMake(500,500));
 	
 
-	SCENEMANAGER->addScene("LoadingScene", new LoadingScene);					//1
-	SCENEMANAGER->addScene("VideoScene", new VideoScene);						//2
-	SCENEMANAGER->addScene("IntroMenuScene", new IntroMenuScene);				//3
-	SCENEMANAGER->addScene("SelectMenuScene", new SelectMenuScene);				//4
-	SCENEMANAGER->addScene("CharacterSelectScene", new CharacterSelectScene);	//5
-	
-	SCENEMANAGER->changeScene("LoadingScene");
+	//SCENEMANAGER->addScene("LoadingScene", new LoadingScene);					//1
+	//SCENEMANAGER->addScene("VideoScene", new VideoScene);						//2
+	//SCENEMANAGER->addScene("IntroMenuScene", new IntroMenuScene);				//3
+	//SCENEMANAGER->addScene("SelectMenuScene", new SelectMenuScene);				//4
+	//SCENEMANAGER->addScene("CharacterSelectScene", new CharacterSelectScene);	//5
+	//
+	//SCENEMANAGER->changeScene("LoadingScene");
 
 
 	return S_OK;
@@ -56,12 +56,12 @@ void playGround::release()
 void playGround::update()
 {
 	gameNode::update();
-	//p->Update();
-	//b->update();
-	//_SM->update();
-	//_pixel->update();
-	//_en->Update();
-	SCENEMANAGER->update();
+	p->Update();
+	b->update();
+	_SM->update();
+	_pixel->update();
+	_en->Update();
+	//SCENEMANAGER->update();
 }
 
 //그리기 전용
@@ -69,12 +69,13 @@ void playGround::render()
 {	
 	PatBlt(getMemDC(), 0, 0, WINSIZEX, WINSIZEY, WHITENESS);
 	//=================================================
-	//_SM->render();
+	_SM->render();
 	//p->Render();
 	//b->render();
 	//_pixel->render();
-	//_en->Render();
-	SCENEMANAGER->render();
+	ZORDER->ZOrderRender();
+	_en->Render();
+	//SCENEMANAGER->render();
 	TIMEMANAGER->render(getMemDC());
 	//=============================================
 	_backBuffer->render(getHDC(), 0, 0);
