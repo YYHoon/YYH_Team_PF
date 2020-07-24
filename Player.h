@@ -16,12 +16,16 @@ enum class MOVEUD
 	DOWN_RUN,
 	NON
 };
+
 class State;
 class Boss;
+class EnemyManager;
+
 class Player : public gameNode
 {
 private:
 	
+	EnemyManager* _EM;
 
 	State* _State;//순가함 상태
 	Boss* _b;
@@ -151,4 +155,6 @@ public:
 	}
 	
 	void SetState(State* state);
+	
+	inline void SetEnemyMaLink(EnemyManager* EnM) { _EM = EnM; }
 };

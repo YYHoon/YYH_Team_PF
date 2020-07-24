@@ -53,11 +53,15 @@ void EnemyManager::Updata()
 		_CLDistance = getDistance(_vCheerLeader[i]->GetEnemyX(), _vCheerLeader[i]->GetEnemyY(),_Player->GetShadowCenterX(), _Player->GetShadowCenterY());
 		_CLAngle = getAngle(_vCheerLeader[i]->GetEnemyX(), _vCheerLeader[i]->GetEnemyY(), _Player->GetShadowCenterX(), _Player->GetShadowCenterY());
 
+		_CLDistance = getDistance(_vCheerLeader[i]->GetEnemyX(), _vCheerLeader[i]->GetEnemyY(),_Player->GetShadowCenterX(), _Player->GetShadowCenterY());
+		_CLAngle = getAngle(_vCheerLeader[i]->GetEnemyX(), _vCheerLeader[i]->GetEnemyY(), _Player->GetShadowCenterX(), _Player->GetShadowCenterY());
+
 		if (_CLDistance > 100)
 		{
 			_vCheerLeader[i]->SetCenterX(cosf(_CLAngle) * 3.0f);
 			_vCheerLeader[i]->SetCenterY(-sinf(_CLAngle) * 3.0f);
 		}*/
+
 	}
 
 	for (int j = 0; j < _vSchoolMan.size(); j++)
@@ -69,11 +73,15 @@ void EnemyManager::Updata()
 		_SmDistance = getDistance(_vSchoolMan[j]->GetSmCenterX(), _vSchoolMan[j]->GetSmCenterY(), _Player->GetShadowCenterX(), _Player->GetShadowCenterY());
 		_SmAngle = getAngle(_vSchoolMan[j]->GetSmCenterX(), _vSchoolMan[j]->GetSmCenterY(), _Player->GetShadowCenterX(), _Player->GetShadowCenterY());
 
+		_SmDistance = getDistance(_vSchoolMan[j]->GetSmCenterX(), _vSchoolMan[j]->GetSmCenterY(), _Player->GetShadowCenterX(), _Player->GetShadowCenterY());
+		_SmAngle = getAngle(_vSchoolMan[j]->GetSmCenterX(), _vSchoolMan[j]->GetSmCenterY(), _Player->GetShadowCenterX(), _Player->GetShadowCenterY());
+
 		if (_SmDistance > 100)
 		{
 			_vSchoolMan[j]->SetSmCenterX(cosf(_SmAngle) * 3.0f);
 			_vSchoolMan[j]->SetSmCenterY(-sinf(_SmAngle) * 3.0f);
 		}*/
+
 	}
 
 	for (int k = 0; k < _vSchoolGirl.size(); k++)
@@ -113,3 +121,4 @@ void EnemyManager::Render()
 		_vSchoolGirl[k]->Render();
 	}
 }
+

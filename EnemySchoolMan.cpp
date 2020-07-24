@@ -10,6 +10,7 @@ HRESULT EnemySchoolMan::init()
 HRESULT EnemySchoolMan::Init(POINTFLOAT pt)
 {
 	_IsRight = true;
+	_IsLeft = false;
 
 	_SmCenterX = pt.x;
 	_SmCenterY = pt.y; 
@@ -17,15 +18,17 @@ HRESULT EnemySchoolMan::Init(POINTFLOAT pt)
 	SmAniInit();
 	SmAniSet(SmIdle);
 
+	_SmState = SmIdle;
+
 	//적 그림자
 	_SmShadowImage = IMAGEMANAGER->addImage("Showdow", "image/enemy/Enemy_Shadow.bmp", 128, 38, true, RGB(255, 0, 255));
 
 	_SmShadow.MYRectMakeCenter(_SmCenterX, _SmCenterY, _SmShadowImage->getWidth(), _SmShadowImage->getHeight());
 
-	_ShadowX = (_SmShadow.left + _SmShadow.right) / 2;
-	_ShadowY = (_SmShadow.top + _SmShadow.bottom) / 2;
+	_SmShadowX = (_SmShadow.left + _SmShadow.right) / 2;
+	_SmShadowY = (_SmShadow.top + _SmShadow.bottom) / 2;
 
-	_SmHit.MYRectMakeCenter(_ShadowX, _ShadowY - _SmImage->getFrameHeight() / 2, _SmImage->getFrameWidth(), _SmImage->getFrameHeight());
+	_SmHit.MYRectMakeCenter(_SmShadowX, _SmShadowY - _SmImage->getFrameHeight() / 2, _SmImage->getFrameWidth(), _SmImage->getFrameHeight());
 
 	_EnemyX = (_SmHit.left + _SmHit.right) / 2;
 	_EnemyY = (_SmHit.top +  _SmHit.bottom) / 2;
@@ -36,6 +39,7 @@ HRESULT EnemySchoolMan::Init(POINTFLOAT pt)
 	_Speed = 3.0f;
 	_ChaseAngle = 0;
 	_Distance = 0;
+	_Time = 0;
 
     return S_OK;
 }
@@ -165,7 +169,7 @@ void EnemySchoolMan::SmAniInit()
 
 void EnemySchoolMan::SmAniSet(SMSTATE state)
 {
-	if (_IsRight)
+	if (_IsRight && !_IsLeft)
 	{
 		switch (state)
 		{
@@ -273,7 +277,7 @@ void EnemySchoolMan::SmAniSet(SMSTATE state)
 			break;	
 		}
 	}
-	else
+	if (!_IsRight && _IsLeft)
 	{
 		switch (state)
 		{
@@ -475,19 +479,21 @@ void EnemySchoolMan::Update()
 {
 	_Time++;
 
-	//_Distance = getDistance(_EnemyX, _EnemyY, _Test->GetCnetX(), _Test->GetCnetY());
-	//_ChaseAngle = getAngle(_EnemyX, _EnemyY, _Test->GetCnetX(), _Test->GetCnetY());
-	//
-	//if (_SmCenterX > _Test->GetCnetX())
-	//{
-	//	_IsRight = false;
-	//}
-	//else if (_SmCenterX < _Test->GetCnetX())
-	//{
-	//	_IsRight = true;
-	//}
+	_Distance = getDistance(_EnemyX, _EnemyY, _ply->GetShadowCenterX(), _ply->GetShadowCenterY());
+	_ChaseAngle = getAngle(_EnemyX, _EnemyY, _ply->GetShadowCenterX(), _ply->GetShadowCenterY());
 
-	if (_IsRight)
+	if (_SmCenterX > _ply->GetShadowCenterX())
+	{
+		_IsRight = false;
+		_IsLeft = true;
+	}
+	if (_SmCenterX <= _ply->GetShadowCenterX())
+	{
+		_IsRight = true;
+		_IsLeft = false;
+	}
+
+	if (_IsRight && !_IsLeft)
 	{
 		if (_Distance > 75 && _Distance < 300)
 		{
@@ -512,7 +518,7 @@ void EnemySchoolMan::Update()
 			}
 		}
 	}
-	else
+	if (!_IsRight && _IsLeft)
 	{
 		if (_Distance > 75 && _Distance < 300)
 		{
@@ -543,31 +549,22 @@ void EnemySchoolMan::Update()
 
 	_SmShadow.MYRectMakeCenter(_SmCenterX, _SmCenterY, _SmShadowImage->getWidth(), _SmShadowImage->getHeight());
 
-	_ShadowX = (_SmShadow.left + _SmShadow.right) / 2;
-	_ShadowY = (_SmShadow.top + _SmShadow.bottom) / 2;
+	_SmShadowX = (_SmShadow.left + _SmShadow.right) / 2;
+	_SmShadowY = (_SmShadow.top + _SmShadow.bottom) / 2;
 
-	_SmHit.MYRectMakeCenter(_ShadowX, _ShadowY - _SmImage->getFrameHeight() / 2, _SmImage->getFrameWidth(), _SmImage->getFrameHeight());
+	_SmHit.MYRectMakeCenter(_SmShadowX, _SmShadowY - _SmImage->getFrameHeight() / 2, _SmImage->getFrameWidth(), _SmImage->getFrameHeight());
 
 	_EnemyX = (_SmHit.left + _SmHit.right) / 2;
 	_EnemyY = (_SmHit.top + _SmHit.bottom) / 2;
 
-	if (_IsRight)
-	{
-		_SmAttackExploration.MYRectMakeCenter(_SmHit.right, _EnemyY, 200, 200);
-	}
-	else
-	{
-		_SmAttackExploration.MYRectMakeCenter(_SmHit.left, _EnemyY, 200, 200);
-	}
 ///////////////////////////////////////////////////////////////////////////
-	KEYANIMANAGER->update();
 }
 
 
 void EnemySchoolMan::Render()
 {
 	//_SmAttackExploration.render(getMemDC());
-	_SmShadowImage->render(getMemDC(), _SmShadow.left, _SmShadow.top);
+	_SmShadowImage->alphaRender(getMemDC(), _SmShadow.left, _SmShadow.top, 170);
 	_SmAttack.render(getMemDC());
 	_SmImage->aniRender(getMemDC(), _SmHit.left, _SmHit.top, _SmAni);
 }
@@ -575,4 +572,14 @@ void EnemySchoolMan::Render()
 void EnemySchoolMan::SmHitHP(float damge)
 {
 	_Hp -= damge;
+}
+
+void EnemySchoolMan::SetSmCenterX(float x)
+{
+	_SmCenterX += x;
+}	
+
+void EnemySchoolMan::SetSmCenterY(float y)
+{
+	_SmCenterY += y;
 }

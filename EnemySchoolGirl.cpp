@@ -94,6 +94,7 @@ void EnemySchoolGirl::Update()
 				if (_SgState != SgJumpKnee) SgAniSet(SgJumpKnee);
 			}
 		}
+
 		if (_SgState != SgWalk && _SgState != SgRun && _Time > 150)
 		{
 			if (_Distance <= 75 && _SgState != SgBegging && _SgState != SgGetOnehit)
@@ -192,7 +193,6 @@ void EnemySchoolGirl::Update()
 			_SgCenterX += -cosf(_ChaseAngle) * 50;
 
 		}
-
 		if (isCollision(_SgHit, _pl->GetAttackRCDAP()))
 		{
 			_SgCenterX += -cosf(_ChaseAngle) * 50;
@@ -219,217 +219,10 @@ void EnemySchoolGirl::Update()
 		SgAniSet(SgDown);
 	}
 		
-	if (_IsRight && !_IsLeft)
-	{
-		switch (_SgState)
-		{
-		case SgBegging:
-			_SgAttack.MYRectMakeCenter(0, 0, 0, 0);
-			setY = 0;
-			break;
-		case SgBlownback:
-			_SgAttack.MYRectMakeCenter(0, 0, 0, 0);
-			_SgCenterX += -cosf(_ChaseAngle) * _Speed;
-			setY = 0;
-			break;
-		case SgDazed:
-			_SgAttack.MYRectMakeCenter(0, 0, 0, 0);
-			setY = 0;
-			//기절
-			break;
-		case SgGetOnehit:
-			_SgAttack.MYRectMakeCenter(0, 0, 0, 0);
-			_Hp -= 1;
-			setY = 0;
-			break;
-		case SgGetTwohit:
-			_SgAttack.MYRectMakeCenter(0, 0, 0, 0);
-			_Hp -= 1;
-			setY = 0;
-			break;
-		case SgGetThreehit:
-			_SgAttack.MYRectMakeCenter(0, 0, 0, 0);
-			_Hp -= 3;
-			setY = 0;
-			break;
-		case SgKnockdown:
-			_SgAttack.MYRectMakeCenter(0, 0, 0, 0);
-			setY = 0;
-			//3타 전부 맞았을때나 강공격 맞았을때
-			break;
-		case SgHold:
-			_SgAttack.MYRectMakeCenter(0, 0, 0, 0);
-			setY = 0;
-			//잡혔다
-			break;
-		case SgHoldhit:
-			_SgAttack.MYRectMakeCenter(0, 0, 0, 0);
-			setY = 0;
-			//잡히고 맞았다
-			break;
-		case SgHoldrelrase:
-			_SgAttack.MYRectMakeCenter(0, 0, 0, 0);
-			setY = 0;
-			//잡기회복
-			break;
-		case SgIdle:
-			_SgAttack.MYRectMakeCenter(0, 0, 0, 0);
-			setY = 0;
-			break;
-		case SgJumpKnee:
-			//이것이 2타
-			_SgAttack.MYRectMakeCenter(_EnemyX + 50, _EnemyY, 80, 200);
-			setY = 0;
-			break;
-		case SgKick:	
-			//이것이 3타
-			_SgAttack.MYRectMakeCenter(_EnemyX, _EnemyY + 60, 200, 150);
-			setY = 0;
-			break;
-		case SgJab:
-			_SgAttack.MYRectMakeCenter(_EnemyX + 50, _EnemyY, 80, 200);
-			setY = 0;
-			break;
-		case SgRun:
-			_SgAttack.MYRectMakeCenter(0, 0, 0, 0);
-			_SgCenterX += cosf(_ChaseAngle) * _Speed * 2.0f;
-			_SgCenterY += -sinf(_ChaseAngle) * _Speed * 2.0f;	
-			setY = 0;
-			break;
-		case SgTaunt:
-			_SgAttack.MYRectMakeCenter(0, 0, 0, 0);
-			setY = 0;
-			break;
-		case SgWalk:
-			_SgAttack.MYRectMakeCenter(0, 0, 0, 0);
-			_SgCenterX += cosf(_ChaseAngle) * _Speed;
-			_SgCenterY += -sinf(_ChaseAngle) * _Speed;
-			setY = 0;
-			break;
-		case SgWeaponSwing:
-			_SgAttack.MYRectMakeCenter(0, 0, 0, 0);
-			setY = 0;
-			break;
-		case SgDown:
-			_SgAttack.MYRectMakeCenter(0, 0, 0, 0);
-			setY = 60;
-			break;
-		case SgUp:
-			_SgAttack.MYRectMakeCenter(0, 0, 0, 0);
-			setY = 50;
-			break;
-		}
-	}
-
-	if (!_IsRight && _IsLeft)
-	{
-		switch (_SgState)
-		{
-		case SgBegging:
-			setY = 0;
-			_SgAttack.MYRectMakeCenter(0, 0, 0, 0);
-			break;
-		case SgBlownback:
-			_SgCenterX += -cosf(_ChaseAngle) * _Speed;
-			_SgAttack.MYRectMakeCenter(0, 0, 0, 0);
-			setY = 0;
-			break;
-		case SgDazed:
-			_SgAttack.MYRectMakeCenter(0, 0, 0, 0);
-			setY = 0;
-			break;
-		case SgGetOnehit:
-			_SgAttack.MYRectMakeCenter(0, 0, 0, 0);
-			_Hp -= 1;
-			setY = 0;
-			break;
-		case SgGetTwohit:
-			_SgAttack.MYRectMakeCenter(0, 0, 0, 0);
-			_Hp -= 1;
-			setY = 0;
-			break;
-		case SgGetThreehit:
-			_SgAttack.MYRectMakeCenter(0, 0, 0, 0);
-			_Hp -= 3;
-			setY = 0;
-			break;
-		case SgHold:
-			_SgAttack.MYRectMakeCenter(0, 0, 0, 0);
-			setY = 0;
-			break;
-		case SgHoldhit:
-			_SgAttack.MYRectMakeCenter(0, 0, 0, 0);
-			setY = 0;
-			break;
-		case SgHoldrelrase:
-			_SgAttack.MYRectMakeCenter(0, 0, 0, 0);
-			setY = 0;
-			break;
-		case SgIdle:
-			_SgAttack.MYRectMakeCenter(0, 0, 0, 0);
-			setY = 0;
-			break;
-		case SgJab:
-			_SgAttack.MYRectMakeCenter(_EnemyX - 50, _EnemyY, 80, 200);
-			setY = 0;
-			break;
-		case SgJumpKnee:
-			_SgAttack.MYRectMakeCenter(_EnemyX - 50, _EnemyY, 80, 200);
-			setY = 0;
-			//이것이 2타
-			break;
-		case SgKick:
-			_SgAttack.MYRectMakeCenter(_EnemyX, _EnemyY + 60, 200, 150);
-			setY = 0;
-			//이것이 3타
-			break;
-		case SgKnockdown:
-			_SgAttack.MYRectMakeCenter(0, 0, 0, 0);
-			setY = 0;
-			break;
-		case SgRun:
-			_SgAttack.MYRectMakeCenter(0, 0, 0, 0);
-			_SgCenterX += cosf(_ChaseAngle) * _Speed * 2.f;
-			_SgCenterY += -sinf(_ChaseAngle) * _Speed * 2.f;
-			setY = 0;
-			break;
-		case SgTaunt:
-			_SgAttack.MYRectMakeCenter(0, 0, 0, 0);
-			setY = 0;
-			break;
-		case SgWalk:
-			_SgAttack.MYRectMakeCenter(0, 0, 0, 0);
-			_SgCenterX += cosf(_ChaseAngle) * _Speed;
-			_SgCenterY += -sinf(_ChaseAngle) * _Speed;	
-			setY = 0;
-			break;
-		case SgWeaponSwing:
-			_SgAttack.MYRectMakeCenter(0, 0, 0, 0);
-			setY = 0;
-			break;
-		case SgDown:
-			_SgAttack.MYRectMakeCenter(0, 0, 0, 0);
-			setY = 60;
-			break;
-		case SgUp:
-			_SgAttack.MYRectMakeCenter(0, 0, 0, 0);
-			setY = 50;
-			break;
-		}
-	}
-
-////////////////////////////////////////////////////////////////////////////////////////////////
-	_SgShadow.MYRectMakeCenter(_SgCenterX, _SgCenterY, _SgShadowImage->getWidth(), _SgShadowImage->getHeight());
-
-	_ShadowX = (_SgShadow.left + _SgShadow.right) / 2;
-	_ShadowY = (_SgShadow.top + _SgShadow.bottom) / 2;
-	_SgHit.MYRectMakeCenter(_ShadowX, _ShadowY - _SgImage->getFrameHeight() / 2, _SgImage->getFrameWidth(), _SgImage->getFrameHeight());
-
-	_EnemyX = (_SgHit.left + _SgHit.right) / 2;
-	_EnemyY = (_SgHit.top + _SgHit.bottom) / 2;
-
-///////////////////////////////////////////////////////////////////////////////////////////////
+	
 }
+
+
 
 void EnemySchoolGirl::Render()
 {
@@ -524,6 +317,7 @@ void EnemySchoolGirl::LeftUp(void* obj)
 	JK->SetSgAni(KEYANIMANAGER->findAnimation("SgLIdle"));
 	JK->GetSgAni()->start();
 }
+
 
 void EnemySchoolGirl::SgAniInit()
 {

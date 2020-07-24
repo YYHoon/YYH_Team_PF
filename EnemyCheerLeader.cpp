@@ -591,6 +591,9 @@ void EnemyCheerLeader::SetCenterY(float y)
 	_ClCenterY += y;
 }
 
+
+
+
 void EnemyCheerLeader::SetDamge(float damge)
 {
 	_Hp -= damge;

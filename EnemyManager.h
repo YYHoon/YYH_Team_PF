@@ -53,6 +53,8 @@ public:
 	void Updata();
 	void Render();
 
+	void Collision();
+
 	vector<EnemyCheerLeader*> GetEnemyCheerLeader() { return _vCheerLeader; }
 	vector<EnemySchoolMan*>   GetEnemySchoolMan()   { return _vSchoolMan; }
 	vector<EnemySchoolGirl*>  GetEnemySchoolGirl()	{ return _vSchoolGirl; }

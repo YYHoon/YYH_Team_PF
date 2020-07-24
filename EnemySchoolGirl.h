@@ -75,6 +75,7 @@ public:
 
 	float _SgCenterX, _SgCenterY;
 
+
 	float GetSchoolGirlCenterX() { return _SgCenterX; } //중점	
 	float GetSchoolGirlCenterY() { return _SgCenterY; } //중점	
 
@@ -98,6 +99,7 @@ public:
 	void SetCenterX(float x);
 	void SetCenterY(float y);
 
+
 	void SetSgImage(image* Sgim) { _SgImage = Sgim; }
 	void SetPlayer(Player* _p) { _pl = _p; }
 	void SetSgState(SGSTATE stat) { _SgState = stat; }
@@ -110,4 +112,6 @@ public:
 	static void LeftBlownback(void* obj);
 	static void LeftDown(void* obj);
 	static void LeftUp(void* obj);
+	void LeftTherr(void* obj);
+	void RightTherr(void* obj);
 };
