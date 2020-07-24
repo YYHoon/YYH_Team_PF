@@ -40,7 +40,6 @@ private:
 	MYRECT _AttackRc3;
 	MYRECT _AttackRcH;
 	MYRECT _DAP;
-	MYRECT _DashAtt;
 
 	float _Money;
 	float _DownDmg = 0;
@@ -68,7 +67,6 @@ private:
 	int _HitStack = 0;
 	bool _Down = false;
 	bool _StandUp = false;
-	bool _DashAttbool = false;
 
 	bool _Guard = false;
 	bool _Left=false;
@@ -91,7 +89,6 @@ public:
 	virtual void MoveUpdate();
 	virtual void AttackUpdate();
 	virtual void DashUpdate();
-	virtual void DashAttUpdate();
 	virtual void JumpUpdate();
 	virtual void HitReaction();
 	virtual void HitUpdate();
@@ -128,7 +125,6 @@ public:
 	inline MYRECT GetAttackRC3() { return _AttackRc3; }//콤보평타3번렉트
 	inline MYRECT GetAttackRCH() { return _AttackRcH; }//허리케인킥렉트
 	inline MYRECT GetAttackRCDAP() { return _DAP; }//댑렉트
-	inline MYRECT GetAttackRCDash() { return _DashAtt; }//댑렉트
 	inline int GetPlayerLevel() { return _Level; }//플레이어레벨
 	inline float GetPlayerMoney() { return _Money; }//플레이어소지금
 	inline float GetPlayerHp() { return _Hp; }//플레이어체력
