@@ -48,7 +48,9 @@ private:
 	MYRECT _Shadow;
 	MYRECT _Rc; // 공격렉트
 	MYRECT _Attack;
+	MYRECT _AttackLeft;
 	POINT_FLOAT _Center;
+	POINT_FLOAT _PLCenter;
 	BOSS_STATE _Bs;
 	BOSS_STATE _ExBs;//이전 상태
 	PHAZE _Pz;
@@ -58,6 +60,7 @@ private:
 	float _Jump;
 	int _Hp;
 	int _Time;//기술 쿨타임
+	int _AttackNum;
 	int _HitNum;
 	bool _IsLookLeft;
 	

@@ -143,7 +143,9 @@ public:
 	inline void SetPlayerExp(float exp) { _Exp = exp; }//플레이어경험치
 	inline void SetAttackCount(int count) { _AttackCount += count; }
 	inline void SetCenterX(float x) { _Center.x += x; }
+	inline void SetCenterX1(float x) { _Center.x = x; }
 	inline void SetCenterY(float y) { _Center.y += y; }
+	inline void SetCenterY1(float y) { _Center.y = y; }
 	inline void SetAddressBoss(Boss* b) { _b = b; }
 	inline void SetShadowCenterX(POINTFLOAT XY) {
 		_Center.x = XY.x;

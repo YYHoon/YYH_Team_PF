@@ -50,6 +50,7 @@ public:
 	void frameRender(HDC hdc, image* img, float destX, float destY, int frameX, int frameY);
 	void AniRender(HDC hdc, image* img, float destX, float destY, animation* ani);
 	void KeyAniRender(HDC hdc, image* img, string KeyName, float destX, float destY, animation* ani);
+	void KeyAnialphaRender(HDC hdc, image* img, float destX, float destY, animation* ani,int alpha);
 	float getSpeed() { return _speed; }
 	void setSpeed(float s) { _speed = s; }
 

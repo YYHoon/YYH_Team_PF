@@ -6,7 +6,7 @@ class Stage1_Boss : public ParentStage
 {
 private:
 	Boss* _Boss;
-
+	MYRECT _Test;
 public:
 	void update()override;
 	HRESULT init()override;

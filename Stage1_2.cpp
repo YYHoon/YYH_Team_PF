@@ -31,7 +31,6 @@ void Stage1_2::render()
 	{
 		_WaveCount++;
 	}
-	cout << _IsEventPlay << endl;
 	EventScript();
 	CAMERAMANAGER->render(getMemDC(), _Img, 0, -000);
 	

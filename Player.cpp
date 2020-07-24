@@ -181,6 +181,9 @@ HRESULT Player::Init()
 
 void Player::Update()
 {
+	_AttackRc1.set(0, 0, 0, 0);
+	_AttackRc2.set(0, 0, 0, 0);
+	_AttackRc3.set(0, 0, 0, 0);
 	if (_State == BattleStart::GetInstance() && !_State->GetAniIsPlay())
 	{
 		_State = PlayRightIdle::GetInstance();
@@ -189,8 +192,8 @@ void Player::Update()
 	}
 	if (_State != BattleStart::GetInstance())
 	{
-		AttackUpdate();
 		PlayerKeyMove();
+		AttackUpdate();
 	}
 	
 	if (_State != BattleStart::GetInstance() && !_State->GetAniIsPlay())
@@ -233,7 +236,6 @@ void Player::Update()
 
 	if (KEYMANAGER->isOnceKeyDown('N'))_Hp = 0;
 	if (KEYMANAGER->isOnceKeyDown('V'))_DownDmg += 10;
-	cout << _DownDmg << endl;
 
 	if (!_Down)
 	{
@@ -287,6 +289,7 @@ void Player::DebugRender()
 
 void Player::PlayerKeyMove()
 {
+	
 	if (!KEYANIMANAGER->findAnimation("PlayerLeftAttack1")->isPlay() && !KEYANIMANAGER->findAnimation("PlayerRightAttack1")->isPlay()&&
 		!KEYANIMANAGER->findAnimation("PlayerLeftAttack2")->isPlay() && !KEYANIMANAGER->findAnimation("PlayerRightAttack2")->isPlay()&&
 		!KEYANIMANAGER->findAnimation("PlayerLeftAttack3")->isPlay() && !KEYANIMANAGER->findAnimation("PlayerRightAttack3")->isPlay()&&
@@ -389,7 +392,6 @@ void Player::PlayerKeyMove()
 			_State->SetCenterXY(_Center);
 			Skill1();
 			//_AttackRcH = _State->GetAttRect();
-			//cout << _AttackRcH.left << endl;
 			_MoveUD = MOVEUD::NON;
 			_MoveLR = MOVELR::NON;
 		}
@@ -494,13 +496,12 @@ void Player::AttackUpdate()
 				!KEYANIMANAGER->findAnimation("PlayerRightAttack3")->isPlay())
 			{
 				Attack1();
-				//cout << _AttackCount << endl;
 				_AttackCount++;
 				_AttackRc1 = _State->GetAttRect();
-				//cout << _AttackRc1.left << endl;
+				cout << _AttackRc1.top << endl;
+				cout << _AttackRc1.bottom << endl;
 				_State->SetAttRect();
-				_AttackRc1.set(0, 0, 0, 0);
-				//cout << _AttackRc1.left << endl;
+				
 			}
 			else if (_AttackCount == 1 && _State->GetAniIndex() > 4)
 			{
@@ -510,7 +511,7 @@ void Player::AttackUpdate()
 				_AttackCount++;
 				_AttackRc2 = _State->GetAttRect();
 				_State->SetAttRect();
-				_AttackRc2.set(0, 0, 0, 0);
+				
 			}
 
 			else if (_AttackCount == 2 && _State->GetAniIndex() > 4)
@@ -521,7 +522,7 @@ void Player::AttackUpdate()
 				_AttackCount++;
 				_AttackRc3 = _State->GetAttRect();
 				_State->SetAttRect();
-				_AttackRc3.set(0, 0, 0, 0);
+				
 			}
 		}
 		_MoveUD = MOVEUD::NON;
@@ -808,7 +809,6 @@ void Player::DownUpdate()
 				else
 				{
 
-					cout << "¾¾»¡" << endl;
 					_Down = false;
 					_HitStack = 0;
 					_StandUp = true;
@@ -839,7 +839,6 @@ void Player::DownUpdate()
 				else
 				{
 
-					cout << "¾¾»¡" << endl;
 					_Down = false;
 					_HitStack = 0;
 					_StandUp = true;

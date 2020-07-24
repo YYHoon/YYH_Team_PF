@@ -24,6 +24,8 @@ void Stage1_Boss::update()
 	EventScript();
 	_Boss->update();
 
+	_Test.set(_Player->GetAttackRC1().left, _Player->GetAttackRC1().top, _Player->GetAttackRC1().right, _Player->GetAttackRC1().bottom);
+
 	CAMERAMANAGER->setX(_Player->GetShadowCenterX());
 	CAMERAMANAGER->setY(_Player->GetShadowCenterY() - 200);
 	if (KEYMANAGER->isOnceKeyDown('3'))
@@ -43,13 +45,16 @@ void Stage1_Boss::update()
 }
 void Stage1_Boss::render()
 {
-	
 	CAMERAMANAGER->render(getMemDC(), _Img, 0, 0);
 	for (int i = 0; i < _vObstacle.size(); i++)
 	{
 		CAMERAMANAGER->render(getMemDC(), _vObstacle[i]->GetImg(), _vObstacle[i]->GetCollision().left, _vObstacle[i]->GetCollision().top);
 	}
 	_Boss->render();
+	CAMERAMANAGER->rectangle(getMemDC(), _Player->GetAttackRC1());
 	ZORDER->ZOrderRender();
-	cout << _vObstacle.size() << endl;
+	CAMERAMANAGER->rectangle(getMemDC(), _Test);
+
 }
+
+

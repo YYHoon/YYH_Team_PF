@@ -110,6 +110,7 @@ public:
 
 	//애니메이션 렌더링용
 	void aniRender(HDC hdc, int destX, int destY, animation* ani);
+	void alphaAniRedRender(HDC hdc, int destX, int destY, animation* ani, BYTE alpha);
 
 
 	inline HDC getMemDC() { return _imageInfo->hMemDC; }

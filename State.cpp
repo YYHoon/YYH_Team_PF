@@ -38,7 +38,7 @@ void State::Update()
 
 void State::Render()
 {
-	
+	CAMERAMANAGER->rectangle(getMemDC(), _PlayerRc);
 	_PlayerImg->aniRender(getMemDC(), _PlayerRc.left, _PlayerRc.top, _PlayerAni);
 }
 
