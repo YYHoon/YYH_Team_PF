@@ -15,16 +15,16 @@ playGround::~playGround()
 HRESULT playGround::init()
 {
 	gameNode::init(true);
-
+	CAMERAMANAGER->setConfig(0, 0, WINSIZEX, WINSIZEY, 0, 0, 0, 0);
 	imginit(); // 모든 이미지를 여기다 넣도록
 	soundinit(); // 사운드도 따로 뺐습니다.
 
-	//p = new Player;
+	p = new Player;
 	//b = new Boss;
 	//b->SetPlayerAddressLink(p);
 	//p->SetAddressBoss(b);
-	//p->PlayerImageAniStting();
-	//p->Init();
+	p->PlayerImageAniStting();
+	p->Init();
 	//_SM = new StageManager;
 	//_SM->init();
 	//_pixel = new pixelCollsion;
@@ -34,14 +34,14 @@ HRESULT playGround::init()
 	//_en->Init(PointFloatMake(500,500));
 	
 
-	SCENEMANAGER->addScene("LoadingScene", new LoadingScene);					//1
-	SCENEMANAGER->addScene("VideoScene", new VideoScene);						//2
-	SCENEMANAGER->addScene("IntroMenuScene", new IntroMenuScene);				//3
-	SCENEMANAGER->addScene("SelectMenuScene", new SelectMenuScene);				//4
-	SCENEMANAGER->addScene("CharacterSelectScene", new CharacterSelectScene);	//5
-	
-	SCENEMANAGER->changeScene("LoadingScene");
-
+	//EMANAGER->addScene("LoadingScene", new LoadingScene);					//1
+	//EMANAGER->addScene("VideoScene", new VideoScene);						//2
+	//EMANAGER->addScene("IntroMenuScene", new IntroMenuScene);				//3
+	//EMANAGER->addScene("SelectMenuScene", new SelectMenuScene);				//4
+	//EMANAGER->addScene("CharacterSelectScene", new CharacterSelectScene);	//5
+	//
+	//EMANAGER->changeScene("LoadingScene");
+	//
 
 	return S_OK;
 }
@@ -56,12 +56,13 @@ void playGround::release()
 void playGround::update()
 {
 	gameNode::update();
-	//p->Update();
+	p->Update();
 	//b->update();
 	//_SM->update();
 	//_pixel->update();
 	//_en->Update();
-	SCENEMANAGER->update();
+	//SCENEMANAGER->update();
+	KEYANIMANAGER->update();
 }
 
 //그리기 전용
@@ -74,8 +75,9 @@ void playGround::render()
 	//b->render();
 	//_pixel->render();
 	//_en->Render();
-	SCENEMANAGER->render();
-	TIMEMANAGER->render(getMemDC());
+	//SCENEMANAGER->render();
+	//TIMEMANAGER->render(getMemDC());
+	ZORDER->ZOrderRender();
 	//=============================================
 	_backBuffer->render(getHDC(), 0, 0);
 }

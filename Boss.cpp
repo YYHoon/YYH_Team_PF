@@ -698,7 +698,7 @@ void Boss::update()
     if (_Bs == BOSS_STATE::ATTACK)
     {
     }
-    KEYANIMANAGER->update();
+    ZORDER->ZOrderPush(getMemDC(), RenderType::ANIRENDER, _Img, _Center.x - (_Img->getFrameWidth() * 0.5), _Center.y - 240, _Ani, _Center.y);
 }
 
 void Boss::render()
@@ -724,11 +724,12 @@ void Boss::render()
             if (!_IsLookLeft)
             {
                 _Img->aniRender(getMemDC(), _Center.x - (_Img->getFrameWidth() * 0.5), _Center.y - 240, _Ani);
-
+               
             }
             else
             {
                 _Img->aniRender(getMemDC(), _Center.x - (_Img->getFrameWidth() * 0.5), _Center.y - 240, _Ani);
+
 
             }
             break;

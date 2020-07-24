@@ -227,10 +227,9 @@ void Player::Update()
 		_State->GetPlayerRect().right-30, _State->GetPlayerRect().bottom);
 	JumpUpdate();
 
-	if (!_Jump && !_Fall )_State->SetCenterXY(_Center);
-	if (_Jump || _Fall )_State->SetCenterXY(_DummyCen);
+	
 	//if (_Hit)_State->SetCenterXY(_DummyCenHit);
-	_State->Update();
+	
 
 	if (KEYMANAGER->isOnceKeyDown('N'))_Hp = 0;
 	if (KEYMANAGER->isOnceKeyDown('V'))_DownDmg += 10;
@@ -249,6 +248,18 @@ void Player::Update()
 	StandUpUpdate();
 	DashUpdate();
 	DashAttUpdate();
+
+	if (!_Jump && !_Fall)
+	{
+		_State->SetCenterXY(_Center);
+		
+	}
+	if (_Jump || _Fall)
+	{
+		_State->SetCenterXY(_DummyCen);
+	}
+	ZORDER->ZOrderPush(getMemDC(), RenderType::RENDER, _Shadow, _ShadowRc.left, _ShadowRc.top, _ShadowRc.top);
+	_State->Update();
 }
 
 void Player::Release()
@@ -258,8 +269,6 @@ void Player::Release()
 void Player::Render()
 {
 	if (KEYMANAGER->isStayKeyDown(VK_SPACE))DebugRender();
-	
-	_Shadow->render(getMemDC(),_ShadowRc.left,_ShadowRc.top);
 	_State->Render();
 
 
@@ -527,7 +536,7 @@ void Player::DashUpdate()
 	if (_RRun)
 	{
 		_RTime++;
-		if (_RTime < 20 && _RClickTime >= 3)
+		if (_RTime < 10 && _RClickTime >= 3)
 		{
 			SetState(PlayRightRun::GetInstance());
 			_State->SetCenterXY(_Center);
@@ -538,7 +547,7 @@ void Player::DashUpdate()
 			_RTime = 0;
 			_RRun = false;
 		}
-		if (_RTime == 20)
+		if (_RTime == 10)
 		{
 			_RClickTime = 0;
 			_RTime = 0;
@@ -548,7 +557,7 @@ void Player::DashUpdate()
 	if (_LRun)
 	{
 		_LTime++;
-		if (_LTime < 20 && _LClickTime >= 3)
+		if (_LTime < 10 && _LClickTime >= 3)
 		{
 			SetState(PlayLeftRun::GetInstance());
 			_State->SetCenterXY(_Center);
@@ -559,7 +568,7 @@ void Player::DashUpdate()
 			_LTime = 0;
 			_LRun = false;
 		}
-		if (_LTime == 20)
+		if (_LTime == 10)
 		{
 			_LClickTime = 0;
 			_LTime = 0;
