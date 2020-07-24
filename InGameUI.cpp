@@ -59,6 +59,31 @@ void InGameUI::update()
 
 void InGameUI::render()
 {
+	if (KEYMANAGER->isStayKeyDown(VK_NUMPAD5)) _StageToggle = false;
+	if (KEYMANAGER->isOnceKeyUp(VK_NUMPAD5))  _StageToggle = true;
+	if (!_StageToggle)
+	{
+		IMAGEMANAGER->findImage("UI_Screen_Lock_Chain")->alphaRender(getMemDC(), _ScreenLockAlphaValue);
+		if (_ScreenLockAlphaValue <= 255)
+		{
+			_ScreenLockAlphaValue += 50;
+			if (_ScreenLockAlphaValue > 255) _ScreenLockAlphaValue = 255;
+		}
+	}
+
+	if (_StageToggle)
+	{
+		if (KEYMANAGER->isOnceKeyDown(VK_NUMPAD5))
+		{
+			_StageToggle = false;
+		}
+		IMAGEMANAGER->findImage("UI_Screen_Lock_Chain")->alphaRender(getMemDC(), _ScreenLockAlphaValue);
+		if (_ScreenLockAlphaValue >= 0)
+		{
+			_ScreenLockAlphaValue -= 50;
+			if (_ScreenLockAlphaValue < 0) _ScreenLockAlphaValue = 0;
+		}
+	}
 
 	IMAGEMANAGER->findImage("UI_FrontEnd_FileSelect_002_LETTERBOX")->render(getMemDC());
 	IMAGEMANAGER->findImage("UI_HUD_player_BG")->render(getMemDC(), 310, 42);
@@ -91,7 +116,6 @@ void InGameUI::render()
 		IMAGEMANAGER->findImage("UI_FrontEnd_FileSelect_002_LETTERBOX")->render(getMemDC());
 		IMAGEMANAGER->findImage("UI_BOSS_Dialog_Alpha")->alphaRender(getMemDC(), 100);
 
-
 		if (KEYMANAGER->isOnceKeyDown(VK_NUMPAD8)) _IsSimulKeyPress = true;
 		if (KEYMANAGER->isOnceKeyUp(VK_NUMPAD8))_IsSimulKeyPress = false;
 
@@ -111,32 +135,6 @@ void InGameUI::render()
 		{
 			if (_BattleIntroAlphaValue > 0) _BattleIntroAlphaValue -= 40;
 			if (_BattleIntroAlphaValue <= 0) _BattleIntroAlphaValue = 0;
-		}
-	}
-
-	if (KEYMANAGER->isStayKeyDown(VK_NUMPAD5)) _StageToggle = false;
-	if (KEYMANAGER->isOnceKeyUp(VK_NUMPAD5))  _StageToggle = true;
-	if (!_StageToggle)
-	{
-		IMAGEMANAGER->findImage("UI_Screen_Lock_Chain")->alphaRender(getMemDC(), _ScreenLockAlphaValue);
-		if (_ScreenLockAlphaValue <= 255)
-		{
-			_ScreenLockAlphaValue += 50;
-			if (_ScreenLockAlphaValue > 255) _ScreenLockAlphaValue = 255;
-		}
-	}
-
-	if (_StageToggle)
-	{
-		if (KEYMANAGER->isOnceKeyDown(VK_NUMPAD5))
-		{
-			_StageToggle = false;
-		}
-		IMAGEMANAGER->findImage("UI_Screen_Lock_Chain")->alphaRender(getMemDC(), _ScreenLockAlphaValue);
-		if (_ScreenLockAlphaValue >= 0)
-		{
-			_ScreenLockAlphaValue -= 50;
-			if (_ScreenLockAlphaValue < 0) _ScreenLockAlphaValue = 0;
 		}
 	}
 

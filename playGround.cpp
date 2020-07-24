@@ -34,13 +34,13 @@ HRESULT playGround::init()
 	//_en->Init(PointFloatMake(500,500));
 	
 
-	SCENEMANAGER->addScene("LoadingScene", new LoadingScene);					//1
-	SCENEMANAGER->addScene("VideoScene", new VideoScene);						//2
-	SCENEMANAGER->addScene("IntroMenuScene", new IntroMenuScene);				//3
-	SCENEMANAGER->addScene("SelectMenuScene", new SelectMenuScene);				//4
-	SCENEMANAGER->addScene("CharacterSelectScene", new CharacterSelectScene);	//5
-	
-	SCENEMANAGER->changeScene("LoadingScene");
+	//SCENEMANAGER->addScene("LoadingScene", new LoadingScene);					//1
+	//SCENEMANAGER->addScene("VideoScene", new VideoScene);						//2
+	//SCENEMANAGER->addScene("IntroMenuScene", new IntroMenuScene);				//3
+	//SCENEMANAGER->addScene("SelectMenuScene", new SelectMenuScene);				//4
+	//SCENEMANAGER->addScene("CharacterSelectScene", new CharacterSelectScene);	//5
+	//
+	//SCENEMANAGER->changeScene("LoadingScene");
 
 	_InGameUI = new InGameUI;
 	_InGameUI->init();
@@ -64,9 +64,9 @@ void playGround::update()
 	//_SM->update();
 	//_pixel->update();
 	//_en->Update();
-	//_InGameUI->update();
+	_InGameUI->update();
 
-	SCENEMANAGER->update();
+	//SCENEMANAGER->update();
 }
 
 //그리기 전용
@@ -79,8 +79,8 @@ void playGround::render()
 	//b->render();
 	//_pixel->render();
 	//_en->Render();
-	//_InGameUI->render();
-	SCENEMANAGER->render();
+	_InGameUI->render();
+	//SCENEMANAGER->render();
 
 	TIMEMANAGER->render(getMemDC());
 	//=============================================

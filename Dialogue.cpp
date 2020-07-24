@@ -16,8 +16,8 @@ void Dialogue::release()
 
 void Dialogue::update()
 {
-    //string filePath = "dialogue/";
-    //string fileName;
+    string filePath = "dialogue/";
+    string fileName;
 
     //switch (_Stage)
     //{
