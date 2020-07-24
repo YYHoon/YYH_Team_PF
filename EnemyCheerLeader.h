@@ -1,7 +1,6 @@
 #pragma once
 #include "gameNode.h"
-
-
+#include "Player.h"
 
 enum CLSTATE
 {
@@ -26,19 +25,19 @@ enum CLSTATE
 class EnemyCheerLeader : public gameNode
 {
 private:
-
-
 	CLSTATE _ClState;
+
+	Player* _pla;
 
 	animation* _CLAni;
 
 	image* _EnemyShadowImage;	//그림자 이미지(중요함)
 	image* _EnemyImage;		//캐릭터 이미지 자주 달라진다
 
-	MYRECT _EnemyShadow;				//적 그림자
-	MYRECT _Enemy;						//적 캐릭터 및 충돌처리용 사각형
-	MYRECT _EnemyAttackExploration;		//플레이어 들어올시 공격하는 영역
-	MYRECT _EnemyAttack;				//적을 공격시 충돌처리용
+	MYRECT _EnemyShadow;			//적 그림자
+	MYRECT _Enemy;					//적 캐릭터 및 충돌처리용 사각형
+	MYRECT _EnemyAttackExploration;	//플레이어 들어올시 공격하는 영역
+	MYRECT _EnemyAttack;			//적을 공격시 충돌처리용
 
 	float _ClCenterX, _ClCenterY;
 
@@ -50,11 +49,11 @@ private:
 	float _Distance;
 
 	float _Speed;
-	float _Hp;
+	int _Hp;
 	int _Time;
 
-
-	bool _IsRight; //왼쪽오른쪽
+	bool _IsRight; //오른쪽
+	bool _IsLeft; //왼쪽
 
 public:
 
@@ -76,16 +75,16 @@ public:
 	MYRECT GetEnemyAttackExploration() { return _EnemyAttackExploration; } //플레이어가 들어올시 공격
 	MYRECT GetCheerLeaderAttack() { return _EnemyAttack; } //공격시 영역
 
-
 	CLSTATE GetClState() { return _ClState; }
 
 	POINTFLOAT GetCLPt() { POINTFLOAT temp; temp.x = _ClCenterX; temp.y = _ClCenterY; return temp; }
 
-	void SetCenterX(float x) { _ClCenterX = x; }
-	void SetCenterY(float y) { _ClCenterY = y; }
+	void SetCenterX(float x);
+	void SetCenterY(float y);
 
-	void hitHP(float damge);
+	void SetDamge(float damge);
 
-	float setHP() { return _Hp; }
+	int GetHP() { return _Hp; }
 
+	void SetPlayer(Player* _p) { _pla = _p; }
 };

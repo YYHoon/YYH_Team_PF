@@ -10,6 +10,7 @@ HRESULT EnemyCheerLeader::init()
 HRESULT EnemyCheerLeader::Init(POINTFLOAT pt)
 {
 	_IsRight = true;
+	_IsLeft = false;
 
 	AniInit();
 	AniSet(CLIdle);
@@ -47,25 +48,21 @@ void EnemyCheerLeader::Release()
 
 void EnemyCheerLeader::Update()
 {
+	_Distance = getDistance(_EnemyX, _EnemyY, _pla->GetShadowCenterX(), _pla->GetShadowCenterY());
+	_ChaseAngle = getAngle(_EnemyX, _EnemyY, _pla->GetShadowCenterX(), _pla->GetShadowCenterY());
 
+	if (_ClCenterX > _pla->GetShadowCenterX())
+	{
+		_IsRight = false;
+		_IsLeft = true;
+	}
+	if (_ClCenterX <= _pla->GetShadowCenterX())
+	{
+		_IsRight = true;
+		_IsLeft = false;
+	}
 
-	_Time++;
-
-	cout << _Time << endl;
-
-	//_Distance = getDistance(_EnemyX, _EnemyY, _Test->GetCnetX(), _Test->GetCnetY());
-	//_ChaseAngle = getAngle(_EnemyX, _EnemyY, _Test->GetCnetX(), _Test->GetCnetY());
-
-	//if (_ClCenterX > _Test->GetCnetX())
-	//{
-	//	_IsRight = false;
-	//}
-	//else if (_ClCenterX < _Test->GetCnetX())
-	//{
-	//	_IsRight = true;
-	//}
-
-	if (_IsRight)
+	if (_IsRight && !_IsLeft)
 	{
 		if (_Distance > 75 && _Distance < 300)
 		{
@@ -92,7 +89,7 @@ void EnemyCheerLeader::Update()
 		}
 
 	}
-	else
+	if (!_IsRight && _IsLeft)
 	{
 		if (_Distance > 75 && _Distance < 300)
 		{
@@ -131,22 +128,13 @@ void EnemyCheerLeader::Update()
 	_EnemyX = (_Enemy.left + _Enemy.right) / 2;
 	_EnemyY = (_Enemy.top + _Enemy.bottom) / 2;
 
-	if (_IsRight)
-	{
-		_EnemyAttackExploration.MYRectMakeCenter(_Enemy.right, _EnemyY, 200, 200);
-	}
-	else
-	{		
-		_EnemyAttackExploration.MYRectMakeCenter(_Enemy.left, _EnemyY, 200, 200);
-	}
 ////////////////////////////////////////////////////////////////////////////////////
-	KEYANIMANAGER->update();
 }
 
 void EnemyCheerLeader::Render()
 {
 	//_EnemyAttackExploration.render(getMemDC());
-	_EnemyShadowImage->render(getMemDC(), _EnemyShadow.left, _EnemyShadow.top);
+	_EnemyShadowImage->alphaRender(getMemDC(), _EnemyShadow.left, _EnemyShadow.top, 170);
 	_EnemyImage->aniRender(getMemDC(), _Enemy.left, _Enemy.top, _CLAni);
 	_EnemyAttack.render(getMemDC());
 	//_EnemyShadow.render(getMemDC());
@@ -302,7 +290,7 @@ void EnemyCheerLeader::AniInit()
 void EnemyCheerLeader::AniSet(CLSTATE state)
 {
 	
-	if (_IsRight)
+	if (!_IsRight && _IsLeft)
 	{
 		switch (state)
 		{
@@ -404,7 +392,7 @@ void EnemyCheerLeader::AniSet(CLSTATE state)
 			break;
 		}
 	}
-	else
+	if (_IsRight && !_IsLeft)
 	{
 		switch (state)
 		{
@@ -593,8 +581,17 @@ void EnemyCheerLeader::State()
 	}
 }
 
+void EnemyCheerLeader::SetCenterX(float x)
+{
+	_ClCenterX += x;
+}	
 
-void EnemyCheerLeader::hitHP(float damge)
+void EnemyCheerLeader::SetCenterY(float y)
+{
+	_ClCenterY += y;
+}
+
+void EnemyCheerLeader::SetDamge(float damge)
 {
 	_Hp -= damge;
 }
