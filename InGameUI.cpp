@@ -31,9 +31,9 @@ HRESULT InGameUI::init()
 	_BattleIntroAlphaValue = 0;
 	_ScreenLockAlphaValue = 0;
 	_StageToggle = true;
-
 	/// <summary>
 	_SimulationValue = 100;
+	_IsSimulKeyPress = false;
 	/// </summary>
 	return S_OK;
 }
@@ -55,8 +55,8 @@ void InGameUI::update()
 	_BossProgressBar->setGauge(_SimulationValue, 100);
 
 
-	if (_KyokoX < 10) _KyokoX += 80.0f;
-	if (_MisuzuX > 1000) _MisuzuX -= 80.0f;
+	if (_KyokoX < -30) _KyokoX += 40.0f;
+	if (_MisuzuX > 1000) _MisuzuX -= 100.0f;
 
 }
 
@@ -95,7 +95,10 @@ void InGameUI::render()
 		IMAGEMANAGER->findImage("UI_BOSS_Dialog_Alpha")->alphaRender(getMemDC(), 100);
 
 
-		if (KEYMANAGER->isToggleKey(VK_NUMPAD8))
+		if (KEYMANAGER->isOnceKeyDown(VK_NUMPAD8)) _IsSimulKeyPress = true;
+		if (KEYMANAGER->isOnceKeyUp(VK_NUMPAD8))_IsSimulKeyPress = false;
+
+		if (_IsSimulKeyPress)
 		{
 			IMAGEMANAGER->findImage("KyokoIntro")->render(getMemDC(), _KyokoX, _KyokoY);
 			IMAGEMANAGER->findImage("fx_battle_portraits_misuzu")->render(getMemDC(), _MisuzuX, _MisuzuY);
@@ -103,14 +106,16 @@ void InGameUI::render()
 			IMAGEMANAGER->findImage("fx_vs_R_CORNER_PINK")->alphaRender(getMemDC(), 50 + WINSIZEX - IMAGEMANAGER->findImage("fx_vs_R_CORNER_PINK")->getWidth(), WINSIZEY - IMAGEMANAGER->findImage("fx_vs_R_CORNER_PINK")->getWidth(), _BattleIntroAlphaValue);
 			IMAGEMANAGER->findImage("UI_Battle_Intro")->alphaRender(getMemDC(), 0, 510, _BattleIntroAlphaValue);
 
-			if (_BattleIntroAlphaValue <= 255)
-			{
-				_BattleIntroAlphaValue += 40;
-				if (_BattleIntroAlphaValue > 255) _BattleIntroAlphaValue = 255;
-			}
+			if (_BattleIntroAlphaValue < 255)_BattleIntroAlphaValue += 40;
+			if (_BattleIntroAlphaValue >= 255) _BattleIntroAlphaValue = 255;
+		}
+
+		if (!_IsSimulKeyPress)
+		{
+			if (_BattleIntroAlphaValue > 0) _BattleIntroAlphaValue -= 40;
+			if (_BattleIntroAlphaValue <= 0) _BattleIntroAlphaValue = 0;
 		}
 	}
-	IMAGEMANAGER->findImage("UI_Battle_Intro")->alphaRender(getMemDC(), 0, 510, _BattleIntroAlphaValue);
 
 	if (KEYMANAGER->isStayKeyDown(VK_NUMPAD5)) _StageToggle = false;
 	if (KEYMANAGER->isOnceKeyUp(VK_NUMPAD5))  _StageToggle = true;
@@ -123,6 +128,7 @@ void InGameUI::render()
 			if (_ScreenLockAlphaValue > 255) _ScreenLockAlphaValue = 255;
 		}
 	}
+
 	if (_StageToggle)
 	{
 		if (KEYMANAGER->isOnceKeyDown(VK_NUMPAD5))

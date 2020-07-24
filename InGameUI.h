@@ -17,6 +17,7 @@ private:
 
 /// <summary>
 	int _SimulationValue;
+	bool _IsSimulKeyPress;
 /// </summary>
 
 public:
