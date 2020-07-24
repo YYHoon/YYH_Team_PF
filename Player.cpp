@@ -2,6 +2,7 @@
 #include "player.h"
 #include "State.h"
 #include "Boss.h"
+
 Player::Player()
 {
 	
@@ -233,7 +234,7 @@ void Player::Update()
 
 	if (KEYMANAGER->isOnceKeyDown('N'))_Hp = 0;
 	if (KEYMANAGER->isOnceKeyDown('V'))_DownDmg += 10;
-	cout << _DownDmg << endl;
+	// cout << _DownDmg << endl;
 
 	if (!_Down)
 	{
@@ -389,7 +390,7 @@ void Player::PlayerKeyMove()
 			_State->SetCenterXY(_Center);
 			Skill1();
 			//_AttackRcH = _State->GetAttRect();
-			//cout << _AttackRcH.left << endl;
+			//// cout << _AttackRcH.left << endl;
 			_MoveUD = MOVEUD::NON;
 			_MoveLR = MOVELR::NON;
 		}
@@ -494,13 +495,13 @@ void Player::AttackUpdate()
 				!KEYANIMANAGER->findAnimation("PlayerRightAttack3")->isPlay())
 			{
 				Attack1();
-				//cout << _AttackCount << endl;
+				//// cout << _AttackCount << endl;
 				_AttackCount++;
 				_AttackRc1 = _State->GetAttRect();
-				//cout << _AttackRc1.left << endl;
+				//// cout << _AttackRc1.left << endl;
 				_State->SetAttRect();
 				_AttackRc1.set(0, 0, 0, 0);
-				//cout << _AttackRc1.left << endl;
+				//// cout << _AttackRc1.left << endl;
 			}
 			else if (_AttackCount == 1 && _State->GetAniIndex() > 4)
 			{
@@ -808,7 +809,7 @@ void Player::DownUpdate()
 				else
 				{
 
-					cout << "噢說" << endl;
+					// cout << "噢說" << endl;
 					_Down = false;
 					_HitStack = 0;
 					_StandUp = true;
@@ -839,7 +840,7 @@ void Player::DownUpdate()
 				else
 				{
 
-					cout << "噢說" << endl;
+					// cout << "噢說" << endl;
 					_Down = false;
 					_HitStack = 0;
 					_StandUp = true;

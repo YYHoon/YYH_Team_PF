@@ -2,8 +2,10 @@
 #include "gameNode.h"
 #include <vector>
 
+
 class Player;
 class ParentsObstacle;
+class EnemyManager;
 
 class ParentStage : public gameNode
 {
@@ -12,6 +14,7 @@ protected:
 	string _Name;
 	MYRECT _RightExit;
 	MYRECT _LeftExit;
+	MYRECT _AlphaCollison;
 	MYRECT _EventArea;
 	POINT_FLOAT _EventCenterSpot;
 	POINT_FLOAT _PlayerSpawnXY;
@@ -21,7 +24,7 @@ protected:
 	int _WaveCount;
 	Player* _Player;
 	ParentsObstacle* _Obstacle;
-
+	EnemyManager* _EM;
 	vector<ParentsObstacle*> _vObstacle;
 public:
 	ParentStage();
@@ -40,6 +43,7 @@ public:
 	virtual bool IsColRightExit();
 	virtual bool IsColLefttExit();
 	virtual bool IsInEventArea();
+	virtual bool IsInterSectPillar();
 
 };
 

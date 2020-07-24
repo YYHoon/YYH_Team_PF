@@ -10,6 +10,7 @@ private:
 
 public:
 	virtual HRESULT init()override;
+	void update()override;
 	void render()override;
 	virtual void EventScript()override;
 };

@@ -51,7 +51,6 @@ void EnemyCheerLeader::Update()
 
 	_Time++;
 
-	cout << _Time << endl;
 
 	//_Distance = getDistance(_EnemyX, _EnemyY, _Test->GetCnetX(), _Test->GetCnetY());
 	//_ChaseAngle = getAngle(_EnemyX, _EnemyY, _Test->GetCnetX(), _Test->GetCnetY());
@@ -140,14 +139,14 @@ void EnemyCheerLeader::Update()
 		_EnemyAttackExploration.MYRectMakeCenter(_Enemy.left, _EnemyY, 200, 200);
 	}
 ////////////////////////////////////////////////////////////////////////////////////
-	KEYANIMANAGER->update();
+	ZORDER->ZOrderPush(getMemDC(), RenderType::ANIRENDER, _EnemyImage, _Enemy.left, _Enemy.top, _CLAni,(_EnemyShadow.bottom+_EnemyShadow.top)*0.5);
 }
 
 void EnemyCheerLeader::Render()
 {
 	//_EnemyAttackExploration.render(getMemDC());
 	_EnemyShadowImage->render(getMemDC(), _EnemyShadow.left, _EnemyShadow.top);
-	_EnemyImage->aniRender(getMemDC(), _Enemy.left, _Enemy.top, _CLAni);
+	//_EnemyImage->aniRender(getMemDC(), _Enemy.left, _Enemy.top, _CLAni);
 	_EnemyAttack.render(getMemDC());
 	//_EnemyShadow.render(getMemDC());
 }

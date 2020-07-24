@@ -1,6 +1,6 @@
 #pragma once
 #include "gameNode.h"
-
+#include "Player.h"
 
 
 enum CLSTATE
@@ -34,6 +34,8 @@ private:
 
 	image* _EnemyShadowImage;	//그림자 이미지(중요함)
 	image* _EnemyImage;		//캐릭터 이미지 자주 달라진다
+
+	Player* _ply;
 
 	MYRECT _EnemyShadow;				//적 그림자
 	MYRECT _Enemy;						//적 캐릭터 및 충돌처리용 사각형
@@ -88,4 +90,5 @@ public:
 
 	float setHP() { return _Hp; }
 
+	void SetPlayer(Player* _p) { _ply = _p; }
 };

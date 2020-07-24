@@ -11,15 +11,17 @@ HRESULT Stage1_1::init()
 	_LeftExit.centerSet(1270, 300, 300, 400);
 	_RightExit.centerSet(2150, 500, 200, 400);
 	_IsOnceClear = true;
+	_AlphaCollison.centerSet(585, 530, 135, 565);
 
-	
-
-	ParentsObstacle* VendingMachine1 = new VendingMachine;
-	VendingMachine1->init(500, 500);
-	_vObstacle.push_back(VendingMachine1);
 
 	CAMERAMANAGER->setConfig(0, 0, WINSIZEX, WINSIZEY, 0, 0,2400-WINSIZEX, 64);
 	return S_OK;
+}
+
+void Stage1_1::update()
+{
+
+
 }
 
 void Stage1_1::render()
@@ -43,6 +45,7 @@ void Stage1_1::render()
 
 	CAMERAMANAGER->render(getMemDC(), _Img, 0, -100);
 
+	CAMERAMANAGER->rectangle(getMemDC(), _AlphaCollison);
 	CAMERAMANAGER->rectangle(getMemDC(), _RightExit);
 	CAMERAMANAGER->rectangle(getMemDC(), _LeftExit);
 	

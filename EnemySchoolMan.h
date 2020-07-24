@@ -1,6 +1,6 @@
 #pragma once
 #include "gameNode.h"
-
+#include "Player.h"
 
 
 enum SMSTATE
@@ -31,7 +31,7 @@ private:
 
 	animation* _SmAni;
 
-	
+	Player* _ply;
 
 	image* _SmShadowImage;
 	image* _SmImage;
@@ -88,5 +88,5 @@ public:
 
 	float setHP() { return _Hp; }
 
-
+	void SetPlayer(Player* _p) { _ply = _p; }
 };

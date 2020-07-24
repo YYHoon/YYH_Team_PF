@@ -1,7 +1,6 @@
 #pragma once
 #include "gameNode.h"
-
-
+#include "Player.h"
 
 enum SGSTATE
 {
@@ -31,6 +30,8 @@ private:
 	SGSTATE _SgState;
 
 	animation* _SgAni;
+
+	Player* _ply;
 
 	image* _SgShadowImage;
 	image* _SgImage;
@@ -90,7 +91,7 @@ public:
 	void SmHitHP(float damge);
 	void SetStunGage(float damge);
 
-
+	void SetPlayer(Player* _p) { _ply = _p; }
 
 	void SetCenterX(float x);
 	void SetCenterY(float y);

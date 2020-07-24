@@ -2,6 +2,7 @@
 #include "ParentStage.h"
 #include "Player.h"
 #include "AllObstacle.h"
+#include "EnemyManager.h"
 
 ParentStage::ParentStage()
 {
@@ -51,6 +52,10 @@ bool ParentStage::IsInEventArea()
 	if (isCollision(_Player->GetShadowRect(), _EventArea) && !_IsOnceClear)return true;
 	return false;
 }
-
+bool ParentStage::IsInterSectPillar()
+{
+	if (isCollision(_Player->GetShadowRect(), _AlphaCollison))return true;
+	return false;
+}
 
 

@@ -7,8 +7,8 @@
 HRESULT Stage1_2::init()
 {
 	_Img = IMAGEMANAGER->findImage("Stage1_2");
-	_LeftExit.centerSet(50, 450, 250, 400);
-	_RightExit.centerSet(2710, 450, 250, 400);
+	_LeftExit.centerSet(50, 550, 250, 400);
+	_RightExit.centerSet(2710, 550, 250, 400);
 	_EventCenterSpot.x = _Img->getWidth() / 2;
 	_EventCenterSpot.y = 560;
 	_EventArea.centerSet(_EventCenterSpot.x, _EventCenterSpot.y, 1300, 500);
@@ -23,6 +23,10 @@ HRESULT Stage1_2::init()
 	return S_OK;
 }
 
+void Stage1_2::update()
+{
+}
+
 void Stage1_2::render()
 {
 	CAMERAMANAGER->setX(_Player->GetShadowCenterX());
@@ -31,7 +35,6 @@ void Stage1_2::render()
 	{
 		_WaveCount++;
 	}
-	cout << _IsEventPlay << endl;
 	EventScript();
 	CAMERAMANAGER->render(getMemDC(), _Img, 0, -000);
 	

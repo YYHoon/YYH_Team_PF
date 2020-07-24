@@ -560,7 +560,7 @@ void EnemySchoolMan::Update()
 		_SmAttackExploration.MYRectMakeCenter(_SmHit.left, _EnemyY, 200, 200);
 	}
 ///////////////////////////////////////////////////////////////////////////
-	KEYANIMANAGER->update();
+	ZORDER->ZOrderPush(getMemDC(), RenderType::ANIRENDER, _SmImage, _SmHit.left, _SmHit.top, _SmAni, (_SmShadow.bottom + _SmShadow.top) * 0.5);
 }
 
 
@@ -569,7 +569,7 @@ void EnemySchoolMan::Render()
 	//_SmAttackExploration.render(getMemDC());
 	_SmShadowImage->render(getMemDC(), _SmShadow.left, _SmShadow.top);
 	_SmAttack.render(getMemDC());
-	_SmImage->aniRender(getMemDC(), _SmHit.left, _SmHit.top, _SmAni);
+	//_SmImage->aniRender(getMemDC(), _SmHit.left, _SmHit.top, _SmAni);
 }
 
 void EnemySchoolMan::SmHitHP(float damge)

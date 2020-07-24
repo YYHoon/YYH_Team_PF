@@ -1,5 +1,7 @@
 #pragma once
 #include "gameNode.h"
+
+
 enum class MOVELR
 {
 	LEFT_WALK,
@@ -16,13 +18,14 @@ enum class MOVEUD
 	DOWN_RUN,
 	NON
 };
+class EnemyManager;
 class State;
 class Boss;
 class Player : public gameNode
 {
 private:
 	
-
+	EnemyManager* _EM;
 	State* _State;//순가함 상태
 	Boss* _b;
 	POINTFLOAT _DummyCen;//상태전환시 좌표저장용(점프)
@@ -145,6 +148,7 @@ public:
 	inline void SetCenterX(float x) { _Center.x += x; }
 	inline void SetCenterY(float y) { _Center.y += y; }
 	inline void SetAddressBoss(Boss* b) { _b = b; }
+	inline void SetAddressEM(EnemyManager* EM) { _EM = EM; }
 	inline void SetShadowCenterX(POINTFLOAT XY) {
 		_Center.x = XY.x;
 		_Center.y = XY.y;

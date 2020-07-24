@@ -2,21 +2,48 @@
 #include "Stage1_Start.h"
 #include "Player.h"
 #include "AllObstacle.h"
-
+#include "EnemyManager.h"
 
 HRESULT Stage1_Start::init()
 {
 	_Img = IMAGEMANAGER->findImage("Stage1_Start");
 	
+	_EM = new EnemyManager;
+	_EM->SetPlayerLink(_Player);
+	_EM->Init(_vspawn);
+	_Player->SetAddressEM(_EM);
 
-	_RightExit.centerSet(1435, 250, 300, 300);
-
+	_RightExit.centerSet(1435, 350, 300, 300);
 
 	_IsOnceClear = true;
+
+	_WaveInCountTime = 0;
 
 	CAMERAMANAGER->setConfig(0, -100, WINSIZEX, WINSIZEY, 0, 0, 2016-WINSIZEX, 672-WINSIZEY+100);
 	
 	return S_OK;
+}
+
+void Stage1_Start::update()
+{
+	IsColRightExit();
+	IsColLefttExit();
+	IsInEventArea();
+	EventScript();
+	
+	if (_WaveInCountTime % 50 == 0)
+	{
+		cout << _WaveInCountTime << endl;
+		TagEnemySpawn spawn;
+		spawn.EmType = SchoolGirl;
+		spawn.XY.x = 500;
+		spawn.XY.y = 500;
+		_vspawn.push_back(spawn);
+		_EM->SpawnEnemyTest(_vspawn);
+		_WaveCount += 1;
+	}
+	
+	_WaveInCountTime++;
 }
 
 void Stage1_Start::render()
@@ -24,20 +51,6 @@ void Stage1_Start::render()
 	
 	CAMERAMANAGER->setX(_Player->GetShadowCenterX());
 	CAMERAMANAGER->setY(_Player->GetShadowCenterY() - 200);
-	for (int i = 0; i < ZList.size(); ++i)
-	{
-		
-	}
-
-	if (KEYMANAGER->isOnceKeyDown('T'))
-	{
-		int x = RND->getFromIntTo(300, 400);
-		ParentsObstacle* i = new Table;
-		i->init(x, 0);
-		_vObstacle.push_back(i);
-	}
-
-
 	CAMERAMANAGER->render(getMemDC(), _Img, 0, 100);
 	CAMERAMANAGER->rectangle(getMemDC(), _RightExit);
 	CAMERAMANAGER->rectangle(getMemDC(), _LeftExit);

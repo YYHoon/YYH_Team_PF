@@ -79,22 +79,22 @@ void pixelCollsion::update()
 		if (PixelCollisionTest("Stage1_Start_Pixel", _T.left, _T.top, 255, 0, 0))
 		{
 			_y += speed; 
-			cout << " 11" << endl;
+			//cout  << " 11" << endl;
 		}
 		if (PixelCollisionTest("Stage1_Start_Pixel", _L.left, _L.top, 255, 0, 0))
 		{
 			_x += speed;
-			cout << " 22" << endl;
+			  //cout<< " 22" << endl;
 		}
 		if (PixelCollisionTest("Stage1_Start_Pixel", _B.left, _B.bottom, 255, 0, 0))
 		{
 			_y -= speed;
-			cout << " 33" << endl;
+			 //cout << " 33" << endl;
 		}
 		if (PixelCollisionTest("Stage1_Start_Pixel", _R.right, _R.bottom, 255, 0, 0))
 		{
 			_x -= speed;
-			cout << " 44" << endl;
+			//cout  << " 44" << endl;
 		}
 	}
 
@@ -105,7 +105,7 @@ void pixelCollsion::update()
 	//	if (PixelCollisionTest("Stage1_Start_Pixel", _B.left, _B.bottom, 255, 255, 0))
 	//	{
 	//		_y -= speed;
-	//		cout << " 33" << endl;
+	//		  << " 33" << endl;
 	//	}
 	//}
 	probeRectMake(_x, _y, _rc.top, _rc.bottom, _rc.left, _rc.right);

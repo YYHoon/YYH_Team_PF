@@ -3,32 +3,35 @@
 #include "Player.h"
 #include "AllStage.h"
 
+
 HRESULT StageManager::init()
 {
 	_Player = new Player;
 	_Player->Init();
 	
+	_EM = new EnemyManager;
+	_EM->SetPlayerLink(_Player);
+	_Player->SetAddressEM(_EM);
+	_EM->Init(_vSpawn);
+	
+
 	ParentStage* _Stage1_Start = new Stage1_Start;
 	_Stage1_Start->SetPlayerMemoryAddressLink(_Player);
-	//_Stage1_Start->init();
 	_vStageName.push_back("Stage1_Start");
 	_vStage.push_back(_Stage1_Start);
 
 	ParentStage* _Stage1_1 = new Stage1_1;
 	_Stage1_1->SetPlayerMemoryAddressLink(_Player);
-	//_Stage1_1->init();
 	_vStageName.push_back("Stage1_1");
 	_vStage.push_back(_Stage1_1);
 
 	ParentStage* _Stage1_2 = new Stage1_2;
 	_Stage1_2->SetPlayerMemoryAddressLink(_Player);
-	//_Stage1_2->init();
 	_vStageName.push_back("Stage1_2");
 	_vStage.push_back(_Stage1_2);
 
 	ParentStage* _Stage1_Boss = new Stage1_Boss;
 	_Stage1_Boss->SetPlayerMemoryAddressLink(_Player);
-	//_Stage1_Boss->init();
 	_vStageName.push_back("Stage1_Boss");
 	_vStage.push_back(_Stage1_Boss);
 
@@ -48,13 +51,41 @@ void StageManager::update()
 {
 	SCENEMANAGER->update();
 	
+	int RndX = RND->getFromIntTo(100, 1500);
+
 	if (KEYMANAGER->isOnceKeyDown(VK_F1))
 	{
 		_CurrentStageIndex++;
 		SCENEMANAGER->changeScene(_vStageName[_CurrentStageIndex]);
 	}
+	if (KEYMANAGER->isOnceKeyDown(VK_F2))
+	{
+		TagEnemySpawn _EnSpawn;
+
+		_EnSpawn.EmType = SchoolGirl;
+		_EnSpawn.XY.x = RndX;
+		_EnSpawn.XY.y = 500;
+
+
+		_vSpawn.push_back(_EnSpawn);
+		_EM->SpawnEnemyTest(_vSpawn);
+		_EM->GetEnemySchoolMan().size();
+	}
+
+	if (KEYMANAGER->isOnceKeyDown(VK_F3))
+	{
+		TagEnemySpawn _EnSpawn;
+
+		_EnSpawn.EmType = SchoolMan;
+		_EnSpawn.XY.x = 1000;
+		_EnSpawn.XY.y = 500;
+
+		_vSpawn.push_back(_EnSpawn);
+		_EM->SpawnEnemyTest(_vSpawn);
+	}
 	MoveStage();
 	_Player->Update();
+	_EM->Updata();
 }
 
 void StageManager::render()
@@ -80,7 +111,7 @@ void StageManager::MoveStage()
 			}else
 			if (i == 1)
 			{
-				_Player->SetShadowCenterX(PointFloatMake(50, 500));
+				_Player->SetShadowCenterX(PointFloatMake(150, 800));
 				break;
 			}else
 			if (i == 2)

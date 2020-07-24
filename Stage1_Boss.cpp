@@ -51,5 +51,4 @@ void Stage1_Boss::render()
 	}
 	_Boss->render();
 	ZORDER->ZOrderRender();
-	cout << _vObstacle.size() << endl;
 }

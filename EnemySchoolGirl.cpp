@@ -17,6 +17,8 @@ HRESULT EnemySchoolGirl::Init(POINTFLOAT pt)
 
 	_SgState = SgIdle;
 
+	
+
 	_SgCenterX = pt.x;
 	_SgCenterY = pt.y;
 
@@ -57,7 +59,6 @@ void EnemySchoolGirl::Update()
 
 	_Time++;
 
-	cout << _Time << endl;
 
 	//_Distance = getDistance(_EnemyX, _EnemyY, _Test->GetCnetX(), _Test->GetCnetY());
 	//_ChaseAngle = getAngle(_EnemyX, _EnemyY, _Test->GetCnetX(), _Test->GetCnetY());
@@ -345,7 +346,7 @@ void EnemySchoolGirl::Update()
 	}
 
 ///////////////////////////////////////////////////////////////////////////////////////////////
-	KEYANIMANAGER->update();
+	ZORDER->ZOrderPush(getMemDC(), RenderType::ANIRENDER, _SgImage, _SgHit.left, _SgHit.top, _SgAni, (_SgShadow.bottom + _SgShadow.top) * 0.5);
 }
 
 void EnemySchoolGirl::Render()
@@ -354,7 +355,7 @@ void EnemySchoolGirl::Render()
 	//_SgShadow.render(getMemDC());
 	_SgShadowImage->render(getMemDC(), _SgShadow.left, _SgShadow.top);
 	//_SgHit.render(getMemDC());
-	_SgImage->aniRender(getMemDC(), _SgHit.left, _SgHit.top, _SgAni);
+	//_SgImage->aniRender(getMemDC(), _SgHit.left, _SgHit.top, _SgAni);
 	if (_SgState == SgJab || _SgState == SgKick)
 	{
 		_SgAttack.render(getMemDC());
