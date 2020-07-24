@@ -82,6 +82,9 @@
     <Filter Include="playGround\StageManager\Stage">
       <UniqueIdentifier>{72bd1445-aaf2-4530-935e-53bb54ff8c70}</UniqueIdentifier>
     </Filter>
+    <Filter Include="playGround\Dialog">
+      <UniqueIdentifier>{7176951f-f543-4895-a693-53e76e76aa82}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -285,6 +288,12 @@
     <ClInclude Include="InGameUI.h">
       <Filter>playGround\UI</Filter>
     </ClInclude>
+    <ClInclude Include="Dialogue.h">
+      <Filter>playGround\Dialog</Filter>
+    </ClInclude>
+    <ClInclude Include="DialogueImage.h">
+      <Filter>playGround\Dialog</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -460,6 +469,12 @@
     </ClCompile>
     <ClCompile Include="InGameUI.cpp">
       <Filter>playGround\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Dialogue.cpp">
+      <Filter>playGround\Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="DialogueImage.cpp">
+      <Filter>playGround\Dialog</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

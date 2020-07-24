@@ -8,9 +8,9 @@
 #include "EnemySchoolGirl.h"
 #include "AllUI.h"
 
-#include <iostream>
-#pragma comment(linker, "/entry:WinMainCRTStartup /subsystem:console")
-using namespace std;
+//#include <iostream>
+//#pragma comment(linker, "/entry:WinMainCRTStartup /subsystem:console")
+//using namespace std;
 
 #define RED RGB(255, 0, 0)
 #define GREED RGB(0, 255, 0)

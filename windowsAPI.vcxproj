@@ -165,6 +165,8 @@
     <ClInclude Include="commonMacroFunction.h" />
     <ClInclude Include="Desk.h" />
     <ClInclude Include="DestructiblePillar.h" />
+    <ClInclude Include="DialogueImage.h" />
+    <ClInclude Include="Dialogue.h" />
     <ClInclude Include="effect.h" />
     <ClInclude Include="effectManager.h" />
     <ClInclude Include="EnemyCheerLeader.h" />
@@ -230,6 +232,8 @@
     <ClCompile Include="collision.cpp" />
     <ClCompile Include="Desk.cpp" />
     <ClCompile Include="DestructiblePillar.cpp" />
+    <ClCompile Include="DialogueImage.cpp" />
+    <ClCompile Include="Dialogue.cpp" />
     <ClCompile Include="effect.cpp" />
     <ClCompile Include="effectManager.cpp" />
     <ClCompile Include="EnemyCheerLeader.cpp" />

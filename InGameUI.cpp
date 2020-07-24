@@ -17,8 +17,6 @@ HRESULT InGameUI::init()
 	_BossProgressBar->init(457, 750, 572, 43);
 	_BossProgressBar->setGauge(100, 100);
 
-	_PlayerHP = 24;
-
 	IMAGEMANAGER->findImage("KyokoIntro")->setX(_KyokoX);
 
 	_KyokoX = -IMAGEMANAGER->findImage("KyokoIntro")->getWidth();
@@ -26,7 +24,6 @@ HRESULT InGameUI::init()
 
 	_MisuzuX = WINSIZEX + IMAGEMANAGER->findImage("fx_battle_portraits_misuzu")->getWidth();
 	_MisuzuY = WINSIZEY - IMAGEMANAGER->findImage("fx_battle_portraits_misuzu")->getHeight();
-
 	_BattleIntroCount = 0;
 	_BattleIntroAlphaValue = 0;
 	_ScreenLockAlphaValue = 0;
@@ -68,7 +65,7 @@ void InGameUI::render()
 	IMAGEMANAGER->findImage("UI_HUD_Nplayer_BG")->render(getMemDC(), 1045, 42);
 	IMAGEMANAGER->findImage("UI_RCG_HUD_portrait_Kyoko_default")->render(getMemDC(), 201, 1);
 
-	if (KEYMANAGER->isOnceKeyDown(VK_LEFT))_PlayerHP--;
+	if (KEYMANAGER->isOnceKeyDown(VK_LEFT)) _PlayerHP--;
 
 	if (_PlayerHP <= 24)
 	{

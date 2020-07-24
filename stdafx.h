@@ -16,6 +16,9 @@
 #include <vector>
 using namespace std;
 
+#include <fstream>
+#include <string>
+
 #include "commonMacroFunction.h"
 #include "randomFunction.h"
 #include "keyManager.h"

@@ -27,6 +27,7 @@ void CharacterSelectScene::update()
 	{
 		SOUNDMANAGER->play("MemuConfirm", 0.3f);
 		SOUNDMANAGER->stop("MenuMusic");
+		SCENEMANAGER->changeScene("Stage1_Start");
 	}
 
 	if (KEYMANAGER->isOnceKeyDown(VK_BACK))
