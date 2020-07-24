@@ -19,19 +19,21 @@ HRESULT Stage1_2::init()
 
 	_Ev = new StopCamera;
 
-	CAMERAMANAGER->setConfig(0, -100, WINSIZEX, WINSIZEY, 0, 0, 2860, 1040);
+	CAMERAMANAGER->setConfig(0, -100, WINSIZEX, WINSIZEY, 0, 0, 2860-WINSIZEX, 1040-WINSIZEY-00);
 	return S_OK;
 }
 
 void Stage1_2::render()
 {
+	CAMERAMANAGER->setX(_Player->GetShadowCenterX());
+	CAMERAMANAGER->setY(_Player->GetShadowCenterY() - 200);
 	if (KEYMANAGER->isOnceKeyDown(VK_SPACE))
 	{
 		_WaveCount++;
 	}
 	cout << _IsEventPlay << endl;
 	EventScript();
-	CAMERAMANAGER->render(getMemDC(), _Img, 0, -100);
+	CAMERAMANAGER->render(getMemDC(), _Img, 0, -000);
 	
 	CAMERAMANAGER->rectangle(getMemDC(), _RightExit);
 	CAMERAMANAGER->rectangle(getMemDC(), _LeftExit);
@@ -44,7 +46,7 @@ void Stage1_2::render()
 	{
 		CAMERAMANAGER->render(getMemDC(), _vObstacle[i]->GetImg(), _vObstacle[i]->GetCollision().left, _vObstacle[i]->GetCollision().top);
 	}
-
+	ZORDER->ZOrderRender();
 }
 
 void Stage1_2::EventScript()

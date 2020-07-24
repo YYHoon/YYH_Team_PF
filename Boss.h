@@ -1,7 +1,6 @@
 #pragma once
 #include "gameNode.h"
 
-//class Boss_State;
 class Player;
 
 enum class PHAZE
@@ -89,6 +88,8 @@ public:
 	static void LeftCRY(void* obj);
 	static void RightSIT(void* obj);
 	static void LeftSIT(void* obj);
+	static void RightWAKE(void* obj);
+	static void LeftWAKE(void* obj);
 
 	animation* GetAni() { return _Ani; }
 	BOSS_STATE GetState() { return _Bs; }
@@ -96,6 +97,7 @@ public:
 
 	void SetAni(animation* ani) { _Ani = ani; }
 	void SetState(BOSS_STATE bs) { _Bs = bs; }
+	void SetPoint(POINT_FLOAT Center) { _Center = Center; }
 	void SetPlayerAddressLink(Player* player) { _Player = player; }
 };
 

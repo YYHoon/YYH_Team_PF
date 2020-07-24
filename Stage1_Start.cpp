@@ -14,13 +14,21 @@ HRESULT Stage1_Start::init()
 
 	_IsOnceClear = true;
 
-	CAMERAMANAGER->setConfig(0, -100, WINSIZEX, WINSIZEY, 0, 0, 2016, 672);
+	CAMERAMANAGER->setConfig(0, -100, WINSIZEX, WINSIZEY, 0, 0, 2016-WINSIZEX, 672-WINSIZEY+100);
 	
 	return S_OK;
 }
 
 void Stage1_Start::render()
 {
+	
+	CAMERAMANAGER->setX(_Player->GetShadowCenterX());
+	CAMERAMANAGER->setY(_Player->GetShadowCenterY() - 200);
+	for (int i = 0; i < ZList.size(); ++i)
+	{
+		
+	}
+
 	if (KEYMANAGER->isOnceKeyDown('T'))
 	{
 		int x = RND->getFromIntTo(300, 400);
@@ -30,7 +38,7 @@ void Stage1_Start::render()
 	}
 
 
-	CAMERAMANAGER->render(getMemDC(), _Img, 0, 0);
+	CAMERAMANAGER->render(getMemDC(), _Img, 0, 100);
 	CAMERAMANAGER->rectangle(getMemDC(), _RightExit);
 	CAMERAMANAGER->rectangle(getMemDC(), _LeftExit);
 
@@ -41,5 +49,6 @@ void Stage1_Start::render()
 		CAMERAMANAGER->render(getMemDC(), _vObstacle[i]->GetImg(), _vObstacle[i]->GetCollision().left, _vObstacle[i]->GetCollision().top);
 	
 	}
+	ZORDER->ZOrderRender();
 }
 

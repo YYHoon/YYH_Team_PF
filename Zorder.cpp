@@ -91,6 +91,7 @@ void Zorder::MergeSortZOrder(vector<TagZOrder>& vMerge, int left, int right, int
 
 void Zorder::ZOrderRender()
 {
+	
 	MergeZOrder(vZList, 0, vZList.size() - 1);
 	for (int i = 0; i < vZList.size(); i++)
 	{

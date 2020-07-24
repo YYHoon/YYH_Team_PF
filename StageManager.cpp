@@ -6,29 +6,29 @@
 HRESULT StageManager::init()
 {
 	_Player = new Player;
-	_Player->init();
-
+	_Player->Init();
+	
 	ParentStage* _Stage1_Start = new Stage1_Start;
 	_Stage1_Start->SetPlayerMemoryAddressLink(_Player);
-	_Stage1_Start->init();
+	//_Stage1_Start->init();
 	_vStageName.push_back("Stage1_Start");
 	_vStage.push_back(_Stage1_Start);
 
 	ParentStage* _Stage1_1 = new Stage1_1;
 	_Stage1_1->SetPlayerMemoryAddressLink(_Player);
-	_Stage1_1->init();
+	//_Stage1_1->init();
 	_vStageName.push_back("Stage1_1");
 	_vStage.push_back(_Stage1_1);
 
 	ParentStage* _Stage1_2 = new Stage1_2;
 	_Stage1_2->SetPlayerMemoryAddressLink(_Player);
-	_Stage1_2->init();
+	//_Stage1_2->init();
 	_vStageName.push_back("Stage1_2");
 	_vStage.push_back(_Stage1_2);
 
 	ParentStage* _Stage1_Boss = new Stage1_Boss;
 	_Stage1_Boss->SetPlayerMemoryAddressLink(_Player);
-	_Stage1_Boss->init();
+	//_Stage1_Boss->init();
 	_vStageName.push_back("Stage1_Boss");
 	_vStage.push_back(_Stage1_Boss);
 
@@ -46,13 +46,15 @@ HRESULT StageManager::init()
 
 void StageManager::update()
 {
+	SCENEMANAGER->update();
+	
 	if (KEYMANAGER->isOnceKeyDown(VK_F1))
 	{
 		_CurrentStageIndex++;
 		SCENEMANAGER->changeScene(_vStageName[_CurrentStageIndex]);
 	}
 	MoveStage();
-	_Player->update();
+	_Player->Update();
 }
 
 void StageManager::render()
@@ -70,32 +72,38 @@ void StageManager::MoveStage()
 			SCENEMANAGER->changeScene(_vStageName[_CurrentStageIndex]);
 			_vStage[_CurrentStageIndex - 1]->release();
 
-			//if (i == 0)
-			//{
-			//	_Player->SetCenter(1270, 500);
-			//}
-			//if (i == 1)
-			//{
-			//	_Player->SetCenter(50, 500);
-			//}
-			//if (i == 2)
-			//{
-			//	_Player->SetCenter(1400, 800);
-			//}
+			if (i == 0)
+			{
+				
+				_Player->SetShadowCenterX(PointFloatMake(1270, 500));
+				break;
+			}else
+			if (i == 1)
+			{
+				_Player->SetShadowCenterX(PointFloatMake(50, 500));
+				break;
+			}else
+			if (i == 2)
+			{
+				_Player->SetShadowCenterX(PointFloatMake(1100, 850));
+				break;
+			}
 
 		}
 		if (_vStage[i]->IsColLefttExit() && KEYMANAGER->isOnceKeyDown(VK_SPACE))
 		{
 			_CurrentStageIndex -= 1;
 			SCENEMANAGER->changeScene(_vStageName[_CurrentStageIndex]);
-			//if (i == 1)
-			//{
-			//	_Player->SetCenter(1370, 400);
-			//}
-			//if (i == 2)
-			//{
-			//	_Player->SetCenter(1910, 650);
-			//}
+			if (i == 1)
+			{
+				_Player->SetShadowCenterX(PointFloatMake(1370, 400));
+				break;
+			}
+			if (i == 2)
+			{
+				_Player->SetShadowCenterX(PointFloatMake(1910, 650));
+				break;
+			}
 		}
 	}
 
