@@ -698,7 +698,7 @@ void Boss::update()
     if (_Bs == BOSS_STATE::ATTACK)
     {
     }
-    ZORDER->ZOrderPush(getMemDC(), RenderType::ANIRENDER, _Img, _Center.x - (_Img->getFrameWidth() * 0.5), _Center.y - 240, _Ani, _Center.y);
+    ZORDER->ZOrderPush(getMemDC(), RenderType::ANIRENDER, _Img, _Center.x - (_Img->getFrameWidth() * 0.5), _Center.y - 240, _Ani, _Center.y+40);
 }
 
 void Boss::render()

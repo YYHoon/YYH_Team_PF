@@ -20,16 +20,16 @@ HRESULT playGround::init()
 	soundinit(); // 사운드도 따로 뺐습니다.
 
 	p = new Player;
-	//b = new Boss;
-	//b->SetPlayerAddressLink(p);
-	//p->SetAddressBoss(b);
+	b = new Boss;
+	b->SetPlayerAddressLink(p);
+	p->SetBossMemoryAddressLink(b);
 	p->PlayerImageAniStting();
 	p->Init();
 	//_SM = new StageManager;
 	//_SM->init();
 	//_pixel = new pixelCollsion;
 	//_pixel->init();
-	//b->init();
+	b->init();
 	//_en = new EnemySchoolGirl;
 	//_en->Init(PointFloatMake(500,500));
 	
@@ -57,7 +57,7 @@ void playGround::update()
 {
 	gameNode::update();
 	p->Update();
-	//b->update();
+	b->update();
 	//_SM->update();
 	//_pixel->update();
 	//_en->Update();
@@ -72,7 +72,7 @@ void playGround::render()
 	//=================================================
 	//_SM->render();
 	//p->Render();
-	//b->render();
+	b->render();
 	//_pixel->render();
 	//_en->Render();
 	//SCENEMANAGER->render();

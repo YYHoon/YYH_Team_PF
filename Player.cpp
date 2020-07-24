@@ -126,9 +126,9 @@ void Player::PlayerImageAniStting()
 
 	//댑
 	int lDap[] = { 24,23,22,21,20,19,18,17,16,15,14,13,12,11,10,9,8,7,6,5,4,3,2,1,0 };
-	KEYANIMANAGER->addArrayFrameAnimation("PlayerLeftDap", "PlayerDap", lDap, 25, 10, false);
+	KEYANIMANAGER->addArrayFrameAnimation("PlayerLeftDap", "PlayerDap", lDap, 25, 20, false);
 	int rDap[] = { 25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49 };
-	KEYANIMANAGER->addArrayFrameAnimation("PlayerRightDap", "PlayerDap", rDap, 25, 10, false);
+	KEYANIMANAGER->addArrayFrameAnimation("PlayerRightDap", "PlayerDap", rDap, 25, 20, false);
 
 	//점프
 	int lJump[] = { 2,1 };
@@ -233,7 +233,7 @@ void Player::Update()
 
 	if (KEYMANAGER->isOnceKeyDown('N'))_Hp = 0;
 	if (KEYMANAGER->isOnceKeyDown('V'))_DownDmg += 10;
-	cout << _DownDmg << endl;
+	//cout << _DownDmg << endl;
 
 	if (!_Down)
 	{
@@ -243,6 +243,7 @@ void Player::Update()
 			DownReaction();
 		}//피격테스트
 	}
+	BossAndPlayerCol();
 	HitUpdate();
 	DownUpdate();
 	StandUpUpdate();
@@ -269,20 +270,22 @@ void Player::Release()
 void Player::Render()
 {
 	if (KEYMANAGER->isStayKeyDown(VK_SPACE))DebugRender();
-	_State->Render();
+	//_State->Render();
 
 
 }
 
 void Player::DebugRender()
 {
+	_State->DebugRender();
 	CAMERAMANAGER->rectangle(getMemDC(), _AttackRc1);
 	CAMERAMANAGER->rectangle(getMemDC(), _AttackRc2);
 	CAMERAMANAGER->rectangle(getMemDC(), _AttackRc3);
 	CAMERAMANAGER->rectangle(getMemDC(), _AttackRcH);
 	CAMERAMANAGER->rectangle(getMemDC(), _PlayerHitRc);
 	CAMERAMANAGER->rectangle(getMemDC(), _ShadowRc);
-	_State->DebugRender();
+	CAMERAMANAGER->rectangle(getMemDC(), _DashAtt);
+	
 }
 
 void Player::PlayerKeyMove()
@@ -536,7 +539,7 @@ void Player::DashUpdate()
 	if (_RRun)
 	{
 		_RTime++;
-		if (_RTime < 10 && _RClickTime >= 3)
+		if (_RTime < 5 && _RClickTime >= 3)
 		{
 			SetState(PlayRightRun::GetInstance());
 			_State->SetCenterXY(_Center);
@@ -547,7 +550,7 @@ void Player::DashUpdate()
 			_RTime = 0;
 			_RRun = false;
 		}
-		if (_RTime == 10)
+		if (_RTime == 5)
 		{
 			_RClickTime = 0;
 			_RTime = 0;
@@ -557,7 +560,7 @@ void Player::DashUpdate()
 	if (_LRun)
 	{
 		_LTime++;
-		if (_LTime < 10 && _LClickTime >= 3)
+		if (_LTime < 5 && _LClickTime >= 3)
 		{
 			SetState(PlayLeftRun::GetInstance());
 			_State->SetCenterXY(_Center);
@@ -568,7 +571,7 @@ void Player::DashUpdate()
 			_LTime = 0;
 			_LRun = false;
 		}
-		if (_LTime == 10)
+		if (_LTime == 5)
 		{
 			_LClickTime = 0;
 			_LTime = 0;
@@ -727,7 +730,7 @@ void Player::HitReaction()
 void Player::HitUpdate()
 {
 	
-	if (_Left && _Hit)
+	if (!_Boss->GetBossLeft() && _Hit)
 	{
 		_Center.x += 2;
 		_HitStack += 2;
@@ -742,7 +745,7 @@ void Player::HitUpdate()
 		_MoveUD = MOVEUD::NON;
 		_MoveLR = MOVELR::NON;
 	}
-	if (!_Left && _Hit)
+	if (_Boss->GetBossLeft() && _Hit)
 	{
 		_Center.x -= 2;
 		_HitStack += 2;
@@ -881,6 +884,53 @@ void Player::StandUpUpdate()
 	}
 
 
+}
+
+void Player::BossAndPlayerCol()
+{
+	if (isCollision(_PlayerHitRc, _Boss->GetAttRect()))
+	{
+		cout << "3" << endl;
+		//보스의 왼쪽펀지
+		if (_Boss->GetState() == BOSS_STATE::ATTACK && _Boss->GetBossLeft())
+		{
+			cout << "2" << endl;
+			_State = PlayRightHit::GetInstance();
+			_State->SetCenterXY(_Center);
+			_Hit = true;
+			Default();
+		}
+
+		//보스의 오른쪽펀치
+		if (_Boss->GetState() == BOSS_STATE::ATTACK && !_Boss->GetBossLeft())
+		{
+			cout << "1" << endl;
+			_State = PlayLeftHit::GetInstance();
+			_State->SetCenterXY(_Center);
+			_Hit = true;
+			Default();
+		}
+
+		//보스의 왼쪽에서 땅찍기 맞을때
+		if (_Boss->GetState() == BOSS_STATE::LANDHIT && _Boss->GetBossCenterX() <= _Center.x)
+		{
+			_State = PlayLeftDown::GetInstance();
+
+			Default();
+			_Down = true;
+		}
+
+		//보스의 오른쪽에서 땅찍기 맞을때	
+		if (_Boss->GetState() == BOSS_STATE::LANDHIT && _Boss->GetBossCenterX() > _Center.x)
+		{
+			_State = PlayRightDown::GetInstance();
+
+			Default();
+			_Down = true;
+		}
+	}
+	//HitReaction();
+	//DownReaction();
 }
 
 

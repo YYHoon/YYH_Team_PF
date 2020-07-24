@@ -44,7 +44,7 @@ void State::Render()
 
 void State::DebugRender()
 {
-	//CAMERAMANAGER->rectangle(getMemDC(), _PlayerRc);
+	CAMERAMANAGER->rectangle(getMemDC(), _PlayerRc);
 	//CAMERAMANAGER->rectangle(getMemDC(), _AttackRc);
 }
 

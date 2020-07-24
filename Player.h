@@ -24,7 +24,7 @@ private:
 	
 
 	State* _State;//순가함 상태
-	Boss* _b;
+	Boss* _Boss;
 	POINTFLOAT _DummyCen;//상태전환시 좌표저장용(점프)
 	POINTFLOAT _DummyCenHit;//상태전환용 좌표(피격)
 	image* _Shadow;//그림자이미지
@@ -43,10 +43,10 @@ private:
 	MYRECT _DashAtt;
 
 	float _Money;
-	float _DownDmg = 0;
-	float _Hp;
 	float _Exp;
 	int _Level;
+	int _DownDmg = 0;
+	int _Hp;
 
 	int _AttackCount = 0;
 	/// <대쉬>
@@ -98,7 +98,7 @@ public:
 	virtual void DownReaction();
 	virtual void DownUpdate();
 	virtual void StandUpUpdate();
-
+	virtual void BossAndPlayerCol();
 
 
 
@@ -144,11 +144,11 @@ public:
 	inline void SetAttackCount(int count) { _AttackCount += count; }
 	inline void SetCenterX(float x) { _Center.x += x; }
 	inline void SetCenterY(float y) { _Center.y += y; }
-	inline void SetAddressBoss(Boss* b) { _b = b; }
 	inline void SetShadowCenterX(POINTFLOAT XY) {
 		_Center.x = XY.x;
 		_Center.y = XY.y;
 	}
+	inline void SetBossMemoryAddressLink(Boss* b) { _Boss = b; }
 	
 	void SetState(State* state);
 };

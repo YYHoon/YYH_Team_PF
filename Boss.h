@@ -47,8 +47,8 @@ private:
 	animation* _Ani;
 	MYRECT _Hit;//히트박스
 	MYRECT _Shadow;
-	MYRECT _Rc; // 공격렉트
-	MYRECT _Attack;
+	MYRECT _Rc; 
+	MYRECT _Attack;// 공격렉트
 	POINT_FLOAT _Center;
 	BOSS_STATE _Bs;
 	BOSS_STATE _ExBs;//이전 상태
@@ -93,6 +93,11 @@ public:
 	animation* GetAni() { return _Ani; }
 	BOSS_STATE GetState() { return _Bs; }
 	BOSS_STATE GetExState() { return _ExBs; }
+
+	inline MYRECT GetAttRect() { return _Attack; }//겟보스 공격렉트 
+	inline bool GetBossLeft() { return _IsLookLeft; }//겟보스 좌우값
+	inline float GetBossCenterX() { return _Center.x; }//보스그림자의 센터x값
+	
 
 	void SetAni(animation* ani) { _Ani = ani; }
 	void SetState(BOSS_STATE bs) { _Bs = bs; }
