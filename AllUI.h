@@ -5,3 +5,4 @@
 #include "CharacterSelectScene.h"
 #include "VideoScene.h"
 #include "Movies.h"
+#include "InGameUI.h"

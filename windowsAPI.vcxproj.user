@@ -8,7 +8,7 @@
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <LocalDebuggerEnvironment>PATH=D:\YYH_TeamProject\opencv\build\x64\vc15\bin;%PATH%</LocalDebuggerEnvironment>
+    <LocalDebuggerEnvironment>PATH=C:\opencv\build\x64\vc15\bin;%PATH%</LocalDebuggerEnvironment>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
   </PropertyGroup>
 </Project>
