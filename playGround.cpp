@@ -71,7 +71,7 @@ void playGround::render()
 	PatBlt(getMemDC(), 0, 0, WINSIZEX, WINSIZEY, WHITENESS);
 	//=================================================
 	//_SM->render();
-	//p->Render();
+	p->Render();
 	b->render();
 	//_pixel->render();
 	//_en->Render();

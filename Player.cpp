@@ -198,7 +198,7 @@ void Player::Update()
 		if(_State != PlayLeftDown::GetInstance() && _State != PlayRightDown::GetInstance())Default();
 	}
 
-	if (_AttackCount < 0 || _AttackCount>2)_AttackCount = 0;
+	
 	if (!KEYANIMANAGER->findAnimation("PlayerHurrKick")->isPlay())_AttackRcH.set(0, 0, 0, 0);
 	if (KEYANIMANAGER->findAnimation("PlayerHurrKick")->isPlay())_AttackRcH.set(_Center.x-150, _Center.y-170, _Center.x + 150, _Center.y);
 
@@ -211,23 +211,22 @@ void Player::Update()
 
 
 
-
 	_ShadowRc.set(_Center.x - (_Shadow->getWidth() * 0.5f),
 		_Center.y - (_Shadow->getHeight() * 0.5f),
 		_Center.x + (_Shadow->getWidth() * 0.5f),
 		_Center.y + (_Shadow->getHeight() * 0.5f));
 
-	_PlayerHitRc.set(_State->GetPlayerRect().left+30, _State->GetPlayerRect().top+50,
-		_State->GetPlayerRect().right-30, _State->GetPlayerRect().bottom);
-	
+	_PlayerHitRc.set(_State->GetPlayerRect().left + 30, _State->GetPlayerRect().top + 50,
+		_State->GetPlayerRect().right - 30, _State->GetPlayerRect().bottom);
+
+
 
 	
-	//if (_Hit)_State->SetCenterXY(_DummyCenHit);
 	
 
-	if (KEYMANAGER->isOnceKeyDown('N'))_Hp = 0;
-	if (KEYMANAGER->isOnceKeyDown('V'))_DownDmg += 10;
-	//cout << _DownDmg << endl;
+	if (KEYMANAGER->isOnceKeyDown('N'))_HitDmg = 10;
+	if (KEYMANAGER->isOnceKeyDown('V'))_HitDmg = 50;
+	
 
 	if (!_Down)
 	{
@@ -245,7 +244,7 @@ void Player::Update()
 	DashAttUpdate();//플레이어 대쉬어택 업데이트
 	GuardOff();// 플레이어 가드 지속시간
 	JumpUpdate();//플레이어 점프 업데이트
-
+	AttCountTimer();//어택카운트 초기화 타임
 
 	if (!_Jump && !_Fall)
 	{
@@ -256,6 +255,14 @@ void Player::Update()
 	{
 		_State->SetCenterXY(_DummyCen);
 	}
+	_ShadowRc.set(_Center.x - (_Shadow->getWidth() * 0.5f),
+		_Center.y - (_Shadow->getHeight() * 0.5f),
+		_Center.x + (_Shadow->getWidth() * 0.5f),
+		_Center.y + (_Shadow->getHeight() * 0.5f));
+
+	_PlayerHitRc.set(_State->GetPlayerRect().left + 30, _State->GetPlayerRect().top + 50,
+		_State->GetPlayerRect().right - 30, _State->GetPlayerRect().bottom);
+
 	ZORDER->ZOrderPush(getMemDC(), RenderType::RENDER, _Shadow, _ShadowRc.left, _ShadowRc.top, _ShadowRc.top);
 	_State->Update();
 }
@@ -267,19 +274,17 @@ void Player::Release()
 void Player::Render()
 {
 	if (KEYMANAGER->isStayKeyDown(VK_SPACE))DebugRender();
-	//_State->Render();
-
 
 }
 
 void Player::DebugRender()
 {
 	_State->DebugRender();
+	CAMERAMANAGER->rectangle(getMemDC(), _PlayerHitRc);
 	CAMERAMANAGER->rectangle(getMemDC(), _AttackRc1);
 	CAMERAMANAGER->rectangle(getMemDC(), _AttackRc2);
 	CAMERAMANAGER->rectangle(getMemDC(), _AttackRc3);
 	CAMERAMANAGER->rectangle(getMemDC(), _AttackRcH);
-	CAMERAMANAGER->rectangle(getMemDC(), _PlayerHitRc);
 	CAMERAMANAGER->rectangle(getMemDC(), _ShadowRc);
 	CAMERAMANAGER->rectangle(getMemDC(), _DashAtt);
 	
@@ -414,7 +419,7 @@ void Player::PlayerKeyMove()
 			_MoveUD = MOVEUD::NON;
 			_MoveLR = MOVELR::NON;
 		}
-		if (KEYMANAGER->isOnceKeyDown('J'))
+		if (KEYMANAGER->isOnceKeyDown('J') && !_Hit && !_Down && !_StandUp)
 		{
 			_DummyCen = _State->GetCenterXY();
 			if (_Left)
@@ -488,9 +493,7 @@ void Player::MoveUpdate()
 
 void Player::AttackUpdate()
 {
-	_AttackRc1.set(0, 0, 0, 0);
-	_AttackRc2.set(0, 0, 0, 0);
-	_AttackRc3.set(0, 0, 0, 0);
+	
 	if (KEYMANAGER->isOnceKeyDown('H')&&!_DashAttbool)
 	{
 		if (_State == PlayRightRun::GetInstance())
@@ -510,31 +513,31 @@ void Player::AttackUpdate()
 			{
 				Attack1();
 				cout << _AttackCount << endl;
+				_AttCountOn = true;
 				_AttackCount++;
 				_AttackRc1 = _State->GetAttRect();
-				//cout << _AttackRc1.left << endl;
 				_State->SetAttRect();
 				
-				//cout << _AttackRc1.left << endl;
+				
 			}
-			else if (_AttackCount == 1 && !KEYANIMANAGER->findAnimation("PlayerLeftAttack1")->isPlay() &&
+			if (_AttackCount == 1 && !KEYANIMANAGER->findAnimation("PlayerLeftAttack1")->isPlay() &&
 				!KEYANIMANAGER->findAnimation("PlayerRightAttack1")->isPlay())
 			{
 
 				Attack2();
-
+				_AttCountOn = true;
 				_AttackCount++;
 				_AttackRc2 = _State->GetAttRect();
 				_State->SetAttRect();
 				
 			}
 
-			else if (_AttackCount == 2 && !KEYANIMANAGER->findAnimation("PlayerLeftAttack2")->isPlay() &&
+			if (_AttackCount == 2 && !KEYANIMANAGER->findAnimation("PlayerLeftAttack2")->isPlay() &&
 				!KEYANIMANAGER->findAnimation("PlayerRightAttack2")->isPlay())
 			{
 
 				Attack3();
-
+				_AttCountOn = true;
 				_AttackCount++;
 				_AttackRc3 = _State->GetAttRect();
 				_State->SetAttRect();
@@ -545,6 +548,18 @@ void Player::AttackUpdate()
 		_MoveLR = MOVELR::NON;
 	}
 	
+	if (!KEYANIMANAGER->findAnimation("PlayerLeftAttack1")->isPlay() &&
+		!KEYANIMANAGER->findAnimation("PlayerRightAttack1")->isPlay() &&
+		!KEYANIMANAGER->findAnimation("PlayerLeftAttack2")->isPlay() &&
+		!KEYANIMANAGER->findAnimation("PlayerRightAttack2")->isPlay() &&
+		!KEYANIMANAGER->findAnimation("PlayerLeftAttack3")->isPlay() &&
+		!KEYANIMANAGER->findAnimation("PlayerRightAttack3")->isPlay())
+	{
+		_AttackRc1.set(0, 0, 0, 0);
+		_AttackRc2.set(0, 0, 0, 0);
+		_AttackRc3.set(0, 0, 0, 0);
+		_AttCountOn = false;
+	}
 
 }
 
@@ -598,6 +613,7 @@ void Player::DashAttUpdate()
 {
 	if (_DashAttbool)
 	{
+		_DashAtt.set(0, 0, 0, 0);
 		if (_State == PlayRightRun::GetInstance())
 		{
 			if (KEYANIMANAGER->findAnimation("PlayerRightDiveAttack")->getNowAniIndex() < 10)
@@ -610,7 +626,7 @@ void Player::DashAttUpdate()
 				_State = PlayRightIdle::GetInstance();
 				_State->SetCenterXY(_Center);
 				_DashAttbool = false;
-				_DashAtt.set(0, 0, 0, 0);
+				
 			}
 		}
 		if (_State == PlayLeftRun::GetInstance())
@@ -625,7 +641,7 @@ void Player::DashAttUpdate()
 				_State = PlayLeftIdle::GetInstance();
 				_State->SetCenterXY(_Center);
 				_DashAttbool = false;
-				_DashAtt.set(0, 0, 0, 0);
+				
 			}
 		}
 	}
@@ -715,29 +731,6 @@ void Player::JumpUpdate()
 }
 
 
-//void Player::HitReaction()
-//{
-//
-//	if (!_Jump && !_Fall && _DownDmg<=20)
-//	{
-//		if (_Left)
-//		{
-//			_State = PlayLeftHit::GetInstance();
-//			_State->SetCenterXY(_Center);
-//			_Hit = true;
-//		}
-//		if (!_Left)
-//		{
-//			_State = PlayRightHit::GetInstance();
-//			_State->SetCenterXY(_Center);
-//			_Hit = true;
-//		}
-//
-//	}
-//
-//	Default();
-//	
-//}
 
 void Player::HitUpdate()
 {
@@ -778,29 +771,7 @@ void Player::HitUpdate()
 	
 }
 
-//void Player::DownReaction()
-//{
-//	if (_Jump || _Fall || _DownDmg > 20 && !_Down)
-//	{
-//		_State->SetCenterXY(_DummyCen);
-//		if (_Left)
-//		{
-//			_State = PlayLeftDown::GetInstance();
-//			
-//			Default();
-//			_Down = true;
-//		}
-//		if (!_Left)
-//		{
-//			_State = PlayRightDown::GetInstance();
-//			
-//			Default();
-//			_Down = true;
-//		}
-//	}
-//
-//
-//}
+
 
 void Player::DownUpdate()
 {
@@ -906,41 +877,26 @@ void Player::BossAndPlayerCol()
 		//보스의 왼쪽펀지
 		if (_Boss->GetState() == BOSS_STATE::ATTACK && _Boss->GetBossLeft()&&!_RGuard)
 		{
-			
-			_State = PlayRightHit::GetInstance();
-			_State->SetCenterXY(_Center);
-			_Hit = true;
-			Default();
+			RightHitReaction();
 		}
 
 		//보스의 오른쪽펀치
 		if (_Boss->GetState() == BOSS_STATE::ATTACK && !_Boss->GetBossLeft()&&!_LGuard)
 		{
-			
-			_State = PlayLeftHit::GetInstance();
-			_State->SetCenterXY(_Center);
-			_Hit = true;
-			Default();
+			LeftHitReaction();
 		}
 		
 
 		//보스의 왼쪽에서 땅찍기 맞을때
 		if (_Boss->GetState() == BOSS_STATE::LANDHIT && _Boss->GetBossCenterX() <= _Center.x)
 		{
-			if (!_Left) _Left = true;
-			_State = PlayLeftDown::GetInstance();
-			Default();
-			_Down = true;
+			LeftDownReaction();
 		}
 
 		//보스의 오른쪽에서 땅찍기 맞을때	
 		if (_Boss->GetState() == BOSS_STATE::LANDHIT && _Boss->GetBossCenterX() > _Center.x)
 		{
-			if (_Left) _Left = false;
-			_State = PlayRightDown::GetInstance();
-
-			Default();
-			_Down = true;
+			RightDownReaction();
 		}
 	}
 }
@@ -956,6 +912,56 @@ void Player::GuardOff()
 		_LGuard = false;
 	}
 }
+
+void Player::AttCountTimer()
+{
+	if (_AttackCount < 0 || _AttackCount>2)_AttackCount = 0;
+	if (!_AttCountOn)
+	{
+		_AttCountTimer++;
+		if (_AttCountTimer > 20)
+		{
+			_AttackCount = 0;
+			_AttCountTimer = 0;
+		}
+	}
+}
+
+void Player::RightHitReaction()
+{
+	_State = PlayRightHit::GetInstance();
+	_State->SetCenterXY(_Center);
+	_Hit = true;
+	Default();
+}
+
+void Player::LeftHitReaction()
+{
+	_State = PlayLeftHit::GetInstance();
+	_State->SetCenterXY(_Center);
+	_Hit = true;
+	Default();
+}
+
+void Player::RightDownReaction()
+{
+	_Left = false;
+	_State = PlayRightDown::GetInstance();
+	_State->SetCenterXY(_Center);
+	_Down = true;
+	Default();
+}
+
+void Player::LeftDownReaction()
+{
+	_Left = true;
+	_State = PlayLeftDown::GetInstance();
+	_State->SetCenterXY(_Center);
+	_Down = true;
+	Default();
+}
+
+
 
 
 

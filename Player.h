@@ -24,13 +24,15 @@ private:
 	
 
 	State* _State;//순가함 상태
-	Boss* _Boss;
+	Boss* _Boss; //보스와충돌 통신용
+
 	POINTFLOAT _DummyCen;//상태전환시 좌표저장용(점프)
 	POINTFLOAT _DummyCenHit;//상태전환용 좌표(피격)
 	image* _Shadow;//그림자이미지
 	POINTFLOAT _Center;//그림자센터
 	MYRECT _ShadowRc;//그림자렉트
 	MYRECT _PlayerHitRc;//플레이어피격존
+
 	MOVELR _MoveLR;//이동함수용이넘
 	MOVEUD _MoveUD;//이동함수용이넘
 	float _Speed;
@@ -45,10 +47,13 @@ private:
 	float _Money;
 	float _Exp;
 	int _Level;
-	int _DownDmg = 0;
+	int _HitDmg = 0;
 	int _Hp;
 
 	int _AttackCount = 0;
+	int _AttCountTimer = 0;
+	bool _AttCountOn = false;
+
 	/// <대쉬>
 	bool _LRun=false;
 	int _LTime = 0;
@@ -97,13 +102,16 @@ public:
 	virtual void DashUpdate();
 	virtual void DashAttUpdate();
 	virtual void JumpUpdate();
-	//virtual void HitReaction();
 	virtual void HitUpdate();
-	//virtual void DownReaction();
 	virtual void DownUpdate();
 	virtual void StandUpUpdate();
 	virtual void BossAndPlayerCol();
 	virtual void GuardOff();
+	virtual void AttCountTimer();
+	virtual void RightHitReaction();
+	virtual void LeftHitReaction();
+	virtual void RightDownReaction();
+	virtual void LeftDownReaction();
 
 
 	virtual void Walk();
@@ -140,12 +148,12 @@ public:
 	
 
 
-
+	
 	inline void SetPlayerLevel(int level) { _Level = level; }//플레이어레벨
 	inline void SetPlayerMoney(float money) { _Money = money; }//플레이어소지금
 	inline void SetPlayerHp(float hp) { _Hp = hp; }//플레이어체력
 	inline void SetPlayerExp(float exp) { _Exp = exp; }//플레이어경험치
-	inline void SetAttackCount(int count) { _AttackCount += count; }
+	inline void SetAttackCount(int count) { _AttackCount += count; }//플레이어 콤보어택 카운트 피격당할때마다 1씩 넣어주세여
 	inline void SetCenterX(float x) { _Center.x += x; }
 	inline void SetCenterY(float y) { _Center.y += y; }
 	inline void SetShadowCenterX(POINTFLOAT XY) {
