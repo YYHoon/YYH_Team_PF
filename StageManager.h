@@ -1,5 +1,7 @@
 #pragma once
 #include "gameNode.h"
+#include "Boss.h"
+#include "InGameUI.h"
 #include <vector>
 
 class ParentStage;
@@ -14,7 +16,8 @@ private:
 	vector<ParentStage*> _vStage;
 
 	EventManager* _EM;
-
+	Boss* _Boss;
+	InGameUI* _InGameUI;
 	int _CurrentStageIndex;
 	Player* _Player;
 

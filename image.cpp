@@ -528,9 +528,127 @@ void image::alphaRender(HDC hdc, int destX, int destY, BYTE alpha)
 	}
 }
 
+void image::alphaAniRender(HDC hdc, int destX, int destY, animation* ani, BYTE alpha)
+{
+	int sourX = ani->getFramePos().x;
+	int sourY = ani->getFramePos().y;
+
+	_blendFunc.SourceConstantAlpha = alpha;
+
+	if (_trans)
+	{
+		BitBlt(_blendImage->hMemDC,
+			0,
+			0,
+			_imageInfo->frameWidth,
+			_imageInfo->frameHeight,
+			hdc,
+			destX,
+			destY,
+			SRCCOPY);
+
+		GdiTransparentBlt(
+			_blendImage->hMemDC,
+			0,
+			0, 
+			_imageInfo->frameWidth,
+			_imageInfo->frameHeight,
+			_imageInfo->hMemDC,
+			sourX * _imageInfo->frameWidth,
+			sourY * _imageInfo->frameHeight,
+			_imageInfo->frameWidth,
+			_imageInfo->frameHeight,
+			_transColor);
+
+		AlphaBlend(hdc, destX, destY,
+			_imageInfo->frameWidth, 
+			_imageInfo->frameHeight,
+			_blendImage->hMemDC,
+			0, 0, 
+			_imageInfo->frameWidth,
+			_imageInfo->frameHeight, 
+			_blendFunc);
+	}
+	else
+	{
+		AlphaBlend(hdc, destX, destY,
+			_imageInfo->frameWidth,
+			_imageInfo->frameHeight,
+			_imageInfo->hMemDC,
+			sourX * _imageInfo->frameWidth,
+			sourY * _imageInfo->frameHeight,
+			_imageInfo->frameWidth,
+			_imageInfo->frameHeight,
+			_blendFunc);
+	}
+}
+
 void image::aniRender(HDC hdc, int destX, int destY, animation* ani)
 {
-	cout << "È®ÀÎ3" << endl;
-
 	render(hdc, destX, destY, ani->getFramePos().x, ani->getFramePos().y, ani->getFrameWidth(), ani->getFrameHeight());
+}
+
+void image::alphaAniRedRender(HDC hdc, int destX, int destY, animation* ani, BYTE alpha)
+{
+	int sourX = ani->getFramePos().x;
+	int sourY = ani->getFramePos().y;
+
+	_blendFunc.SourceConstantAlpha = alpha;
+
+	HDC tempDC = CreateCompatibleDC(_imageInfo->hMemDC);
+	HBITMAP tempBitMap = CreateCompatibleBitmap(_imageInfo->hMemDC, _imageInfo->width, _imageInfo->height);
+	HBITMAP tempOrigin = static_cast<HBITMAP>(SelectObject(tempDC, tempBitMap));
+
+	HDC redDC = CreateCompatibleDC(_imageInfo->hMemDC);
+	HBITMAP redBitMap = CreateCompatibleBitmap(_imageInfo->hMemDC, _imageInfo->width, _imageInfo->height);
+	HBITMAP redOrigin = static_cast<HBITMAP>(SelectObject(redDC, redBitMap));
+
+	if (_trans)
+	{
+		BitBlt(redDC, 
+			0,
+			0,
+			_imageInfo->width,
+			_imageInfo->height,
+			IMAGEMANAGER->findImage("redDC")->getMemDC(),
+			0,
+			0,
+			SRCCOPY);
+
+		BitBlt(tempDC,
+			0,
+			0, 
+			_imageInfo->width,
+			_imageInfo->height,
+			redDC,
+			0,
+			0,
+			SRCCOPY);
+
+		GdiTransparentBlt(tempDC, 0, 0, _imageInfo->width, _imageInfo->height,
+			_imageInfo->hMemDC, 0, 0, _imageInfo->width, _imageInfo->height, _transColor);
+
+		AlphaBlend(redDC, 0, 0,
+			_imageInfo->width, _imageInfo->height,
+			tempDC, 0, 0, _imageInfo->width,
+			_imageInfo->height, _blendFunc);
+
+		GdiTransparentBlt(hdc, destX, destY, _imageInfo->frameWidth, _imageInfo->frameHeight,
+			redDC, sourX, sourY, _imageInfo->frameWidth, _imageInfo->frameHeight, RGB(255, 0, 0));
+	}
+	else
+	{
+		AlphaBlend(hdc, _imageInfo->x, _imageInfo->y,
+			_imageInfo->width, _imageInfo->height,
+			_imageInfo->hMemDC, 0, 0, _imageInfo->width,
+			_imageInfo->height, _blendFunc);
+	}
+
+	DeleteObject(tempDC);
+	DeleteObject(tempBitMap);
+	DeleteObject(tempOrigin);
+
+	DeleteObject(redDC);
+	DeleteObject(redBitMap);
+	DeleteObject(redOrigin);
 }

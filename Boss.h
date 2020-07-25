@@ -1,7 +1,6 @@
 #pragma once
 #include "gameNode.h"
 
-//class Boss_State;
 class Player;
 
 enum class PHAZE
@@ -49,7 +48,9 @@ private:
 	MYRECT _Shadow;
 	MYRECT _Rc; // 공격렉트
 	MYRECT _Attack;
+	MYRECT _AttackLeft;
 	POINT_FLOAT _Center;
+	POINT_FLOAT _PLCenter;
 	BOSS_STATE _Bs;
 	BOSS_STATE _ExBs;//이전 상태
 	PHAZE _Pz;
@@ -59,6 +60,7 @@ private:
 	float _Jump;
 	int _Hp;
 	int _Time;//기술 쿨타임
+	int _AttackNum;
 	int _HitNum;
 	bool _IsLookLeft;
 	
@@ -89,13 +91,21 @@ public:
 	static void LeftCRY(void* obj);
 	static void RightSIT(void* obj);
 	static void LeftSIT(void* obj);
+	static void RightWAKE(void* obj);
+	static void LeftWAKE(void* obj);
 
 	animation* GetAni() { return _Ani; }
 	BOSS_STATE GetState() { return _Bs; }
 	BOSS_STATE GetExState() { return _ExBs; }
-
+	bool GetBossLeft() {	return _IsLookLeft;	}
+	MYRECT GetAttRect() { return _Attack; }
+	float GetBossCenterX() { return _Center.x; };
+	float GetBossCenterY() { return _Center.y; };
 	void SetAni(animation* ani) { _Ani = ani; }
 	void SetState(BOSS_STATE bs) { _Bs = bs; }
+	void SetPoint(POINT_FLOAT Center) { _Center = Center; }
 	void SetPlayerAddressLink(Player* player) { _Player = player; }
+
+	
 };
 
