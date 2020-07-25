@@ -147,8 +147,8 @@ void Player::PlayerImageAniStting()
 HRESULT Player::Init()
 {
 	PlayerImageAniStting();
-	_Center.x = 300;
-	_Center.y = 600;
+	_Center.x = 500;
+	_Center.y = 800;
 	_Shadow = IMAGEMANAGER->findImage("PlayerShadow");
 	_ShadowRc.set(_Center.x - (_Shadow->getWidth() * 0.5f),
 		_Center.y - (_Shadow->getHeight() * 0.5f),
@@ -173,7 +173,11 @@ HRESULT Player::Init()
 	_State->SetCenterXY(_Center);
 	_State->Init();
 	Default();
-
+	
+	_ProbeL = _ShadowRc.left;
+	_ProbeR = _ShadowRc.right;
+	_ProbeT = _ShadowRc.top;
+	_ProbeB = _ShadowRc.bottom;
 	
 	return S_OK;
 
@@ -245,6 +249,7 @@ void Player::Update()
 	GuardOff();// 플레이어 가드 지속시간
 	JumpUpdate();//플레이어 점프 업데이트
 	AttCountTimer();//어택카운트 초기화 타임
+	PixelCol();//픽셀충돌용함수
 
 	if (!_Jump && !_Fall)
 	{
@@ -274,7 +279,6 @@ void Player::Release()
 void Player::Render()
 {
 	if (KEYMANAGER->isStayKeyDown(VK_SPACE))DebugRender();
-
 }
 
 void Player::DebugRender()
@@ -873,7 +877,6 @@ void Player::BossAndPlayerCol()
 {
 	if (isCollision(_PlayerHitRc, _Boss->GetAttRect()))
 	{
-		
 		//보스의 왼쪽펀지
 		if (_Boss->GetState() == BOSS_STATE::ATTACK && _Boss->GetBossLeft()&&!_RGuard)
 		{
@@ -959,6 +962,78 @@ void Player::LeftDownReaction()
 	_State->SetCenterXY(_Center);
 	_Down = true;
 	Default();
+}
+
+void Player::PixelCol()
+{
+	_ProbeL = _ShadowRc.left;
+	_ProbeR = _ShadowRc.right;
+	_ProbeT = _ShadowRc.top;
+	_ProbeB = _ShadowRc.bottom;
+
+	
+	COLORREF colorL = GetPixel(IMAGEMANAGER->findImage(_MapName)->getMemDC(), _ShadowRc.left, _Center.y);
+	int Lr = GetRValue(colorL);
+	int Lg = GetGValue(colorL);
+	int Lb = GetBValue(colorL);
+	if (Lr == 255 && Lg == 0 && Lb == 0)
+	{
+		if (_MoveLR == MOVELR::LEFT_RUN)
+		{
+			_Center.x = _Center.x + _Speed * 1.5f;
+		}
+		else
+		{
+			_Center.x += _Speed;
+		}
+	}
+	COLORREF colorT = GetPixel(IMAGEMANAGER->findImage(_MapName)->getMemDC(), _Center.x, _ShadowRc.top);
+	int Tr = GetRValue(colorT);
+	int Tg = GetGValue(colorT);
+	int Tb = GetBValue(colorT);
+	if (Tr == 255 && Tg == 0 && Tb == 0)
+	{
+		if (_MoveUD == MOVEUD::UP_RUN)
+		{
+			_Center.y = _Center.y + _Speed;
+		}
+		else
+		{
+			_Center.y += _Speed * 0.5f;
+		}
+	}
+	COLORREF colorB = GetPixel(IMAGEMANAGER->findImage(_MapName)->getMemDC(), _Center.x, _ShadowRc.bottom);
+	int Br = GetRValue(colorB);
+	int Bg = GetGValue(colorB);
+	int Bb = GetBValue(colorB);
+	if (Br == 255 && Bg == 0 && Bb == 0)
+	{
+		if (_MoveUD == MOVEUD::UP_RUN)
+		{
+			_Center.y = _Center.y - _Speed;
+		}
+		else
+		{
+			_Center.y -= _Speed * 0.5f;
+		}
+	}
+	COLORREF colorR = GetPixel(IMAGEMANAGER->findImage(_MapName)->getMemDC(), _ShadowRc.right, _Center.y);
+	int Rr = GetRValue(colorR);
+	int Rg = GetGValue(colorR);
+	int Rb = GetBValue(colorR);
+	if (Rr == 255 && Rg == 0 && Rb == 0)
+	{
+		if (_MoveLR == MOVELR::RIGHT_RUN)
+		{
+			_Center.x = _Center.x - _Speed * 1.5f;
+		}
+		else
+		{
+			_Center.x -= _Speed;
+		}
+	}
+
+	
 }
 
 

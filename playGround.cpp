@@ -15,7 +15,7 @@ playGround::~playGround()
 HRESULT playGround::init()
 {
 	gameNode::init(true);
-	CAMERAMANAGER->setConfig(0, 0, WINSIZEX, WINSIZEY, 0, 0, 0, 0);
+	CAMERAMANAGER->setConfig(0, 0, WINSIZEX, WINSIZEY, 0, 0, 2769, 1280);
 	imginit(); // 모든 이미지를 여기다 넣도록
 	soundinit(); // 사운드도 따로 뺐습니다.
 
@@ -25,6 +25,7 @@ HRESULT playGround::init()
 	p->SetBossMemoryAddressLink(b);
 	p->PlayerImageAniStting();
 	p->Init();
+	p->SetMapName("Stage1_Boss_Pixel");
 	//_SM = new StageManager;
 	//_SM->init();
 	//_pixel = new pixelCollsion;
@@ -62,6 +63,8 @@ void playGround::update()
 	//_pixel->update();
 	//_en->Update();
 	//SCENEMANAGER->update();
+	CAMERAMANAGER->setX(p->GetShadowCenterX());
+	CAMERAMANAGER->setY(p->GetShadowCenterY());
 	KEYANIMANAGER->update();
 }
 
@@ -70,6 +73,7 @@ void playGround::render()
 {	
 	PatBlt(getMemDC(), 0, 0, WINSIZEX, WINSIZEY, WHITENESS);
 	//=================================================
+	CAMERAMANAGER->render(getMemDC(), IMAGEMANAGER->findImage("Stage1_Boss_Pixel"),0,0);
 	//_SM->render();
 	p->Render();
 	b->render();

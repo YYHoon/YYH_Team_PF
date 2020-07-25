@@ -44,11 +44,11 @@ private:
 	MYRECT _DAP;
 	MYRECT _DashAtt;
 
-	float _Money;
-	float _Exp;
-	int _Level;
+	float _Money = 0;
+	float _Exp = 0;
+	int _Level = 0;
 	int _HitDmg = 0;
-	int _Hp;
+	int _Hp = 500;
 
 	int _AttackCount = 0;
 	int _AttCountTimer = 0;
@@ -82,6 +82,15 @@ private:
 	//방향값
 	bool _Left=false;
 
+
+	//픽셀탐사용 프로브
+	int _ProbeL;
+	int _ProbeR;
+	int _ProbeT;
+	int _ProbeB;
+	string _MapName;
+
+
 public:
 
 	Player();
@@ -112,6 +121,7 @@ public:
 	virtual void LeftHitReaction();
 	virtual void RightDownReaction();
 	virtual void LeftDownReaction();
+	virtual void PixelCol();
 
 
 	virtual void Walk();
@@ -127,7 +137,7 @@ public:
 	virtual void Default();
 
 
-	
+	//충돌처리용//
 	inline bool GetPlayerDirection() { return _Left; }	//플레이어좌우상태
 	inline float GetShadowCenterX() { return _Center.x; }//그림자센터X
 	inline float GetShadowCenterY() { return _Center.y; }//그림자센터Y
@@ -141,11 +151,17 @@ public:
 	inline MYRECT GetAttackRCH() { return _AttackRcH; }//허리케인킥렉트
 	inline MYRECT GetAttackRCDAP() { return _DAP; }//댑렉트
 	inline MYRECT GetAttackRCDash() { return _DashAtt; }//댑렉트
+	//충돌처리용//
+
+
+
+	///UI용 ////
 	inline int GetPlayerLevel() { return _Level; }//플레이어레벨
 	inline float GetPlayerMoney() { return _Money; }//플레이어소지금
 	inline float GetPlayerHp() { return _Hp; }//플레이어체력
 	inline float GetPlayerExp() { return _Exp; }//플레이어경험치
-	
+	///UI용 ////
+
 
 
 	
@@ -162,5 +178,8 @@ public:
 	}
 	inline void SetBossMemoryAddressLink(Boss* b) { _Boss = b; }
 	
+	//픽셀충돌용 이미지 넣는거
+	inline void SetMapName(string mapname) { _MapName = mapname; }
+
 	void SetState(State* state);
 };
