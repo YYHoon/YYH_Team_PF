@@ -103,7 +103,11 @@ public:
 	virtual void DownUpdate();
 	virtual void StandUpUpdate();
 	virtual void BossAndPlayerCol();
+<<<<<<< HEAD
 	virtual void GuardOff();
+=======
+
+>>>>>>> 1931ea5e96c0a1e806e794e4c9e235c189326673
 
 
 	virtual void Walk();

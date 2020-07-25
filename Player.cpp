@@ -237,6 +237,7 @@ void Player::Update()
 			//DownReaction();
 		}//피격테스트
 	}
+<<<<<<< HEAD
 	BossAndPlayerCol(); //보스와 플레이어 공격충돌
 	HitUpdate();//플레이어 일반피격시 리액션
 	DownUpdate();//플레이어 강공격피격시 리액션
@@ -246,6 +247,14 @@ void Player::Update()
 	GuardOff();// 플레이어 가드 지속시간
 	JumpUpdate();//플레이어 점프 업데이트
 
+=======
+	BossAndPlayerCol();
+	HitUpdate();
+	DownUpdate();
+	StandUpUpdate();
+	DashUpdate();
+	DashAttUpdate();
+>>>>>>> 1931ea5e96c0a1e806e794e4c9e235c189326673
 
 	if (!_Jump && !_Fall)
 	{
@@ -553,7 +562,11 @@ void Player::DashUpdate()
 	if (_RRun)
 	{
 		_RTime++;
+<<<<<<< HEAD
 		if (_RTime < 15 && _RClickTime >= 3)
+=======
+		if (_RTime < 5 && _RClickTime >= 3)
+>>>>>>> 1931ea5e96c0a1e806e794e4c9e235c189326673
 		{
 			SetState(PlayRightRun::GetInstance());
 			_State->SetCenterXY(_Center);
@@ -564,7 +577,11 @@ void Player::DashUpdate()
 			_RTime = 0;
 			_RRun = false;
 		}
+<<<<<<< HEAD
 		if (_RTime == 15)
+=======
+		if (_RTime == 5)
+>>>>>>> 1931ea5e96c0a1e806e794e4c9e235c189326673
 		{
 			_RClickTime = 0;
 			_RTime = 0;
@@ -574,7 +591,11 @@ void Player::DashUpdate()
 	if (_LRun)
 	{
 		_LTime++;
+<<<<<<< HEAD
 		if (_LTime < 15 && _LClickTime >= 3)
+=======
+		if (_LTime < 5 && _LClickTime >= 3)
+>>>>>>> 1931ea5e96c0a1e806e794e4c9e235c189326673
 		{
 			SetState(PlayLeftRun::GetInstance());
 			_State->SetCenterXY(_Center);
@@ -585,7 +606,11 @@ void Player::DashUpdate()
 			_LTime = 0;
 			_LRun = false;
 		}
+<<<<<<< HEAD
 		if (_LTime == 15)
+=======
+		if (_LTime == 5)
+>>>>>>> 1931ea5e96c0a1e806e794e4c9e235c189326673
 		{
 			_LClickTime = 0;
 			_LTime = 0;
@@ -902,11 +927,19 @@ void Player::BossAndPlayerCol()
 {
 	if (isCollision(_PlayerHitRc, _Boss->GetAttRect()))
 	{
+<<<<<<< HEAD
 		
 		//보스의 왼쪽펀지
 		if (_Boss->GetState() == BOSS_STATE::ATTACK && _Boss->GetBossLeft()&&!_RGuard)
 		{
 			
+=======
+		cout << "3" << endl;
+		//보스의 왼쪽펀지
+		if (_Boss->GetState() == BOSS_STATE::ATTACK && _Boss->GetBossLeft())
+		{
+			cout << "2" << endl;
+>>>>>>> 1931ea5e96c0a1e806e794e4c9e235c189326673
 			_State = PlayRightHit::GetInstance();
 			_State->SetCenterXY(_Center);
 			_Hit = true;
@@ -914,21 +947,35 @@ void Player::BossAndPlayerCol()
 		}
 
 		//보스의 오른쪽펀치
+<<<<<<< HEAD
 		if (_Boss->GetState() == BOSS_STATE::ATTACK && !_Boss->GetBossLeft()&&!_LGuard)
 		{
 			
+=======
+		if (_Boss->GetState() == BOSS_STATE::ATTACK && !_Boss->GetBossLeft())
+		{
+			cout << "1" << endl;
+>>>>>>> 1931ea5e96c0a1e806e794e4c9e235c189326673
 			_State = PlayLeftHit::GetInstance();
 			_State->SetCenterXY(_Center);
 			_Hit = true;
 			Default();
 		}
+<<<<<<< HEAD
 		
+=======
+>>>>>>> 1931ea5e96c0a1e806e794e4c9e235c189326673
 
 		//보스의 왼쪽에서 땅찍기 맞을때
 		if (_Boss->GetState() == BOSS_STATE::LANDHIT && _Boss->GetBossCenterX() <= _Center.x)
 		{
+<<<<<<< HEAD
 			if (!_Left) _Left = true;
 			_State = PlayLeftDown::GetInstance();
+=======
+			_State = PlayLeftDown::GetInstance();
+
+>>>>>>> 1931ea5e96c0a1e806e794e4c9e235c189326673
 			Default();
 			_Down = true;
 		}
@@ -936,13 +983,17 @@ void Player::BossAndPlayerCol()
 		//보스의 오른쪽에서 땅찍기 맞을때	
 		if (_Boss->GetState() == BOSS_STATE::LANDHIT && _Boss->GetBossCenterX() > _Center.x)
 		{
+<<<<<<< HEAD
 			if (_Left) _Left = false;
+=======
+>>>>>>> 1931ea5e96c0a1e806e794e4c9e235c189326673
 			_State = PlayRightDown::GetInstance();
 
 			Default();
 			_Down = true;
 		}
 	}
+<<<<<<< HEAD
 }
 
 void Player::GuardOff()
@@ -955,6 +1006,10 @@ void Player::GuardOff()
 	{
 		_LGuard = false;
 	}
+=======
+	//HitReaction();
+	//DownReaction();
+>>>>>>> 1931ea5e96c0a1e806e794e4c9e235c189326673
 }
 
 
