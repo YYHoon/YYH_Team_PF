@@ -33,18 +33,18 @@ void State::Update()
 		_Center.y);
 
 	
-
+	ZORDER->ZOrderPush(getMemDC(), RenderType::ANIRENDER, _PlayerImg, _PlayerRc.left, _PlayerRc.top, _PlayerAni, _PlayerRc.bottom);
 }
 
 void State::Render()
 {
-
+	
 	_PlayerImg->aniRender(getMemDC(), _PlayerRc.left, _PlayerRc.top, _PlayerAni);
 }
 
 void State::DebugRender()
 {
-	//CAMERAMANAGER->rectangle(getMemDC(), _PlayerRc);
+	CAMERAMANAGER->rectangle(getMemDC(), _PlayerRc);
 	//CAMERAMANAGER->rectangle(getMemDC(), _AttackRc);
 }
 

@@ -51,7 +51,9 @@ void EnemyCheerLeader::Update()
 
 	_Time++;
 
-	cout << _Time << endl;
+	
+	
+	
 
 	//_Distance = getDistance(_EnemyX, _EnemyY, _Test->GetCnetX(), _Test->GetCnetY());
 	//_ChaseAngle = getAngle(_EnemyX, _EnemyY, _Test->GetCnetX(), _Test->GetCnetY());

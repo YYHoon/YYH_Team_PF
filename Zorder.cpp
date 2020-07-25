@@ -33,6 +33,34 @@ void Zorder::ZOrderPush(HDC hdc, RenderType type, image* img, float DestX, float
 	vZList.push_back(ZPush);
 }
 
+void Zorder::ZOrderPush(HDC hdc, RenderType type, image* img, float DestX, float DestY, animation* ani, float ShadowZ)
+{
+
+	TagZOrder ZPush;
+	ZPush.Hdc = hdc;
+	ZPush.RenderType = type;
+	ZPush.Img = img;
+	ZPush.DextX = DestX;
+	ZPush.DextY = DestY;
+	ZPush.ani = ani;
+	ZPush.ShadowZ = ShadowZ;
+	vZList.push_back(ZPush);
+}
+
+void Zorder::ZOrderPush(HDC hdc, RenderType type, image* img, float DestX, float DestY, animation* ani, string KeyName, float ShadowZ)
+{
+	TagZOrder ZPush;
+	ZPush.Hdc = hdc;
+	ZPush.RenderType = type;
+	ZPush.Img = img;
+	ZPush.DextX = DestX;
+	ZPush.DextY = DestY;
+	ZPush.ani = ani;
+	ZPush.KeyName = KeyName;
+	ZPush.ShadowZ = ShadowZ;
+	vZList.push_back(ZPush);
+}
+
 void Zorder::MergeZOrder(vector<TagZOrder>& vMerge, int left, int right)
 {
 	if (left >= right) return;
@@ -63,6 +91,7 @@ void Zorder::MergeSortZOrder(vector<TagZOrder>& vMerge, int left, int right, int
 
 void Zorder::ZOrderRender()
 {
+	
 	MergeZOrder(vZList, 0, vZList.size() - 1);
 	for (int i = 0; i < vZList.size(); i++)
 	{
@@ -75,10 +104,12 @@ void Zorder::ZOrderRender()
 			CAMERAMANAGER->frameRender(vZList[i].Hdc, vZList[i].Img, vZList[i].DextX, vZList[i].DextY, vZList[i].FrameX, vZList[i].FrameY);
 			break;
 		case RenderType::ANIRENDER:
+			CAMERAMANAGER->AniRender(vZList[i].Hdc, vZList[i].Img, vZList[i].DextX, vZList[i].DextY, vZList[i].ani);
 			break;
 		case RenderType::ALPHARENDER:
 			break;
 		case RenderType::KEYANIRENDER:
+			CAMERAMANAGER->KeyAniRender(vZList[i].Hdc, vZList[i].Img, vZList[i].KeyName, vZList[i].DextX, vZList[i].DextY, vZList[i].ani);
 			break;
 		case RenderType::END:
 			break;

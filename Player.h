@@ -24,7 +24,7 @@ private:
 	
 
 	State* _State;//순가함 상태
-	Boss* _b;
+	Boss* _Boss;
 	POINTFLOAT _DummyCen;//상태전환시 좌표저장용(점프)
 	POINTFLOAT _DummyCenHit;//상태전환용 좌표(피격)
 	image* _Shadow;//그림자이미지
@@ -43,10 +43,10 @@ private:
 	MYRECT _DashAtt;
 
 	float _Money;
-	float _DownDmg = 0;
-	float _Hp;
 	float _Exp;
 	int _Level;
+	int _DownDmg = 0;
+	int _Hp;
 
 	int _AttackCount = 0;
 	/// <대쉬>
@@ -60,7 +60,7 @@ private:
 	
 	//점프
 	float _JumpStack = 0;
-	float _JumpMax = 200;
+	float _JumpMax = 300;
 	bool _Jump = false;
 	bool _Fall = false;
 	//점프
@@ -70,7 +70,11 @@ private:
 	bool _StandUp = false;
 	bool _DashAttbool = false;
 
-	bool _Guard = false;
+	//가드
+	bool _LGuard = false;
+	bool _RGuard = false;
+	
+	//방향값
 	bool _Left=false;
 
 public:
@@ -93,13 +97,13 @@ public:
 	virtual void DashUpdate();
 	virtual void DashAttUpdate();
 	virtual void JumpUpdate();
-	virtual void HitReaction();
+	//virtual void HitReaction();
 	virtual void HitUpdate();
-	virtual void DownReaction();
+	//virtual void DownReaction();
 	virtual void DownUpdate();
 	virtual void StandUpUpdate();
-
-
+	virtual void BossAndPlayerCol();
+	virtual void GuardOff();
 
 
 	virtual void Walk();
@@ -133,7 +137,7 @@ public:
 	inline float GetPlayerMoney() { return _Money; }//플레이어소지금
 	inline float GetPlayerHp() { return _Hp; }//플레이어체력
 	inline float GetPlayerExp() { return _Exp; }//플레이어경험치
-	inline bool GetPlayerGuardState() { return _Guard; } //가드했는지
+	
 
 
 
@@ -144,11 +148,11 @@ public:
 	inline void SetAttackCount(int count) { _AttackCount += count; }
 	inline void SetCenterX(float x) { _Center.x += x; }
 	inline void SetCenterY(float y) { _Center.y += y; }
-	inline void SetAddressBoss(Boss* b) { _b = b; }
 	inline void SetShadowCenterX(POINTFLOAT XY) {
 		_Center.x = XY.x;
 		_Center.y = XY.y;
 	}
+	inline void SetBossMemoryAddressLink(Boss* b) { _Boss = b; }
 	
 	void SetState(State* state);
 };
