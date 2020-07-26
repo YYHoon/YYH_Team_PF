@@ -41,14 +41,15 @@ private:
 	MYRECT _AttackRc2;
 	MYRECT _AttackRc3;
 	MYRECT _AttackRcH;
-	MYRECT _DAP;
+	bool _Dap = false;
+	int _DapMax = 0;
 	MYRECT _DashAtt;
 
 	float _Money = 0;
 	float _Exp = 0;
 	int _Level = 0;
 	int _HitDmg = 0;
-	int _Hp = 500;
+	int _Hp = 24;
 
 	int _AttackCount = 0;
 	int _AttCountTimer = 0;
@@ -82,6 +83,8 @@ private:
 	//방향값
 	bool _Left=false;
 
+	//피격 딜레이
+	bool _HitD = false;
 
 	//픽셀탐사용 프로브
 	int _ProbeL;
@@ -122,6 +125,8 @@ public:
 	virtual void RightDownReaction();
 	virtual void LeftDownReaction();
 	virtual void PixelCol();
+	virtual void DapMove();
+	virtual void HitDUpDate();
 
 
 	virtual void Walk();
@@ -149,7 +154,6 @@ public:
 	inline MYRECT GetAttackRC2() { return _AttackRc2; }//콤보평타2번렉트
 	inline MYRECT GetAttackRC3() { return _AttackRc3; }//콤보평타3번렉트
 	inline MYRECT GetAttackRCH() { return _AttackRcH; }//허리케인킥렉트
-	inline MYRECT GetAttackRCDAP() { return _DAP; }//댑렉트
 	inline MYRECT GetAttackRCDash() { return _DashAtt; }//댑렉트
 	//충돌처리용//
 

@@ -20,7 +20,7 @@ void VideoScene::update()
 {
 	if (KEYMANAGER->isOnceKeyDown(VK_RETURN) || KEYMANAGER->isOnceKeyDown(VK_ESCAPE) || _IFrame.empty())
 	{
-		destroyWindow("IntroVideo");
+		destroyWindow("YYH");
 		SCENEMANAGER->changeScene("IntroMenuScene");
 	}
 }
@@ -43,10 +43,10 @@ int VideoScene::IntroVideo()
 
 		if (_IFrame.empty()) break;
 
-		imshow("IntroVideo", _IFrame);
+		imshow("YYH", _IFrame);
 
 		if (waitKey(24) >= 0) break;
 	}
-	destroyWindow("IntroVideo");
+	destroyWindow("YYH");
 	return 0;
 }

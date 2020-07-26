@@ -11,8 +11,8 @@ HRESULT Stage1_1::init()
 	_LeftExit.centerSet(1270, 300, 300, 400);
 	_RightExit.centerSet(2150, 500, 200, 400);
 	_IsOnceClear = true;
-	if(!SOUNDMANAGER->isPlaySound("Stage_2"))
-		SOUNDMANAGER->play("Stage_2", 0.3f);
+	//if(!SOUNDMANAGER->isPlaySound("Stage_2"))
+	//	SOUNDMANAGER->play("Stage_2", 0.3f);
 	_Player->SetMapName("Stage1_1_Pixel");
 	_Player->SetMapY(-100);
 	ParentsObstacle* VendingMachine1 = new VendingMachine;
@@ -25,36 +25,17 @@ HRESULT Stage1_1::init()
 
 void Stage1_1::render()
 {
-
-
 	CAMERAMANAGER->setX(_Player->GetShadowCenterX());
 	CAMERAMANAGER->setY(_Player->GetShadowCenterY() - 200);
-	if (KEYMANAGER->isOnceKeyDown(VK_F3))
-	{
-		for (int i = 0; i < _vObstacle.size(); ++i)
-		{
-			if (_vObstacle[i]->GetName() == "VendingMachine")
-			{
-				_vObstacle[i]->DestroyedMesh(true);
-
-			}
-		}
-	}
-	
 
 	CAMERAMANAGER->render(getMemDC(), _Img, 0, -100);
 
 	if (KEYMANAGER->isStayKeyDown(VK_CONTROL))
 	{
+		CAMERAMANAGER->render(getMemDC(), IMAGEMANAGER->findImage("Stage1_1_Pixel"), 0, -100);
 		CAMERAMANAGER->rectangle(getMemDC(), _RightExit);
 		CAMERAMANAGER->rectangle(getMemDC(), _LeftExit);
 	}
 
-	
-
-	for (int i = 0; i < _vObstacle.size(); i++)
-	{
-		CAMERAMANAGER->render(getMemDC(), _vObstacle[i]->GetImg(), _vObstacle[i]->GetCollision().left, _vObstacle[i]->GetCollision().top);
-	}
 	ZORDER->ZOrderRender();
 }

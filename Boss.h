@@ -43,13 +43,15 @@ private:
 
 	image* _Img;
 	image* _ShadowImg;
+	image* _CrackImg;
 	animation* _Ani;
 	MYRECT _Hit;//히트박스
 	MYRECT _Shadow;
 	MYRECT _Rc; // 공격렉트
 	MYRECT _Attack;
-	MYRECT _AttackLeft;
+
 	POINT_FLOAT _Center;
+	POINT_FLOAT _ExCenter;
 	POINT_FLOAT _PLCenter;
 	BOSS_STATE _Bs;
 	BOSS_STATE _ExBs;//이전 상태
@@ -60,8 +62,12 @@ private:
 	float _Jump;
 	int _Hp;
 	int _Time;//기술 쿨타임
+	int _JumpTime;//기술 쿨타임
+	int _HitTime;//히트 쿨타임
 	int _AttackNum;
 	int _HitNum;
+
+	int _Alpha;
 	bool _IsLookLeft;
 	
 	const char* _State[22] = { "IDLE","WALK","ATTACK","SLAP","GUARD","PUNCH",
@@ -99,6 +105,7 @@ public:
 	BOSS_STATE GetExState() { return _ExBs; }
 	bool GetBossLeft() {	return _IsLookLeft;	}
 	MYRECT GetAttRect() { return _Attack; }
+	MYRECT GetBossShadowRect() { return _Shadow; }
 	int GetBossHp() { return _Hp; }
 	void SetBossHp(int hp) { _Hp -= hp; }
 	float GetBossCenterX() { return _Center.x; };

@@ -44,6 +44,7 @@ void Stage1_2::render()
 	
 	if (KEYMANAGER->isStayKeyDown(VK_CONTROL))
 	{
+		CAMERAMANAGER->render(getMemDC(), IMAGEMANAGER->findImage("Stage1_2_Pixel"), 0, 00);
 		CAMERAMANAGER->rectangle(getMemDC(), _RightExit);
 		CAMERAMANAGER->rectangle(getMemDC(), _LeftExit);
 		CAMERAMANAGER->rectangle(getMemDC(), _EventArea);

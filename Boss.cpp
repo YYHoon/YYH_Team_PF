@@ -6,32 +6,8 @@
 HRESULT Boss::init()
 {
     _ShadowImg = IMAGEMANAGER->addImage("Shadow", "image/Boss/Shadow.bmp", 200, 59, true, RGB(255, 0, 255));
-
-    IMAGEMANAGER->addImage("redDC", "image/Boss/redDC.bmp", 3000, 1000, false, NULL);
-
-    _Img= IMAGEMANAGER->addFrameImage("IDLE", "image/Boss/idle.bmp", 0, 0, 2772, 566, 12, 2, true, RGB(255, 0, 255));
-    IMAGEMANAGER->addFrameImage("WALK", "image/Boss/walk.bmp", 0, 0, 1557, 526, 9, 2, true, RGB(255, 0, 255));
-    IMAGEMANAGER->addFrameImage("ATTACK", "image/Boss/attack.bmp", 0, 0, 2430, 582, 10, 2, true, RGB(255, 0, 255));
-    IMAGEMANAGER->addFrameImage("SLAP", "image/Boss/slap.bmp", 0, 0, 4634, 520, 14, 2, true, RGB(255, 0, 255));
-    IMAGEMANAGER->addFrameImage("SLAPRED", "image/Boss/slap_red.bmp", 0, 0, 4634, 520, 14, 2, true, RGB(255, 0, 255));
-    IMAGEMANAGER->addFrameImage("PUNCH", "image/Boss/punch.bmp", 0, 0, 10935, 700, 27, 2, true, RGB(255, 0, 255));
-    IMAGEMANAGER->addFrameImage("PUNCHRED", "image/Boss/punch_red.bmp", 0, 0, 10935, 700, 27, 2, true, RGB(255, 0, 255));
-    IMAGEMANAGER->addFrameImage("HIT", "image/Boss/hit.bmp", 0, 0, 2295, 528, 9, 2, true, RGB(255, 0, 255));
-    IMAGEMANAGER->addFrameImage("KNOCK", "image/Boss/knock.bmp", 0, 0, 2340, 520, 10, 2, true, RGB(255, 0, 255));
-    IMAGEMANAGER->addFrameImage("SIT", "image/Boss/sit.bmp", 0, 0, 876, 392, 4, 2, true, RGB(255, 0, 255));
-    IMAGEMANAGER->addFrameImage("WAKE", "image/Boss/wake.bmp", 0, 0, 4731, 538, 19, 2, true, RGB(255, 0, 255));
-    IMAGEMANAGER->addFrameImage("TAUNT", "image/Boss/taunt.bmp", 0, 0, 4899, 668, 23, 2, true, RGB(255, 0, 255));
-    IMAGEMANAGER->addFrameImage("TAUNTRED", "image/Boss/taunt_red.bmp", 0, 0, 4899, 668, 23, 2, true, RGB(255, 0, 255));
-    IMAGEMANAGER->addFrameImage("ROAR", "image/Boss/roar.bmp", 0, 0, 2520, 520, 12, 2, true, RGB(255, 0, 255));
-    IMAGEMANAGER->addFrameImage("IDLE_RUSH", "image/Boss/idle_rush.bmp", 0, 0, 1040, 508, 5, 2, true, RGB(255, 0, 255));
-    IMAGEMANAGER->addFrameImage("RUSH", "image/Boss/rush.bmp", 0, 0, 1752, 498, 8, 2, true, RGB(255, 0, 255));
-    IMAGEMANAGER->addFrameImage("RUSHTURN", "image/Boss/rushturn.bmp", 0, 0, 540, 496, 3, 2, true, RGB(255, 0, 255));
-    IMAGEMANAGER->addFrameImage("JUMP", "image/Boss/jump.bmp", 0, 0, 1368, 594, 6, 2, true, RGB(255, 0, 255));
-    IMAGEMANAGER->addFrameImage("UP", "image/Boss/up.bmp", 0, 0, 912, 594, 4, 2, true, RGB(255, 0, 255));
-    IMAGEMANAGER->addFrameImage("DOWN", "image/Boss/down.bmp", 0, 0, 684, 570, 3, 2, true, RGB(255, 0, 255));
-    IMAGEMANAGER->addFrameImage("LANDHIT", "image/Boss/landhit.bmp", 0, 0, 2052, 570, 9, 2, true, RGB(255, 0, 255));
-    IMAGEMANAGER->addFrameImage("DEAD", "image/Boss/dead.bmp", 0, 0, 2772, 566, 9, 2, true, RGB(255, 0, 255));
-    IMAGEMANAGER->addFrameImage("CRY", "image/Boss/cry.bmp", 0, 0, 1232, 566, 4, 2, true, RGB(255, 0, 255));
+    _CrackImg = IMAGEMANAGER->addImage("CRACK", "image/Boss/CRACK.bmp", 819, 256, true, RGB(255, 0, 255));
+    _Img = IMAGEMANAGER->addFrameImage("IDLE", "image/Boss/idle.bmp", 0, 0, 2772, 566, 12, 2, true, RGB(255, 0, 255));
 
     _Bs = BOSS_STATE::IDLE;
     _ExBs = BOSS_STATE::IDLE;
@@ -44,13 +20,14 @@ HRESULT Boss::init()
     _Rc = { _Center.x - 50,_Center.y - 50,_Center.x + 50,_Center.y + 50 };
     _Shadow = { _Center.x - 50,_Center.y - 50,_Center.x + 50,_Center.y + 50 };
     _Attack = { 0,0,0,0 };
-    _AttackLeft = { 0,0,0,0 };
-    _Angle = 0;
     _Speed = 2.0f;
-    _Hp = 9;
+    _Hp = 90;
     _Time = 0;
+    _JumpTime = 0;
+    _HitTime = 100;
     _AttackNum = 0;
     _HitNum = 0;
+    _Alpha = 0;
     _IsLookLeft = true;
 
     int Right_Idle[] = { 0,1,2,3,4,5,6,7,8,9,10,11 };
@@ -218,6 +195,21 @@ void Boss::update()
     _Angle = getAngle(_Center.x, _Center.y, _Player->GetShadowCenterPoint().x, _Player->GetShadowCenterPoint().y);
 
     _Time++;
+    if (_JumpTime < 1000)
+    {
+        _JumpTime++;
+    }
+    if (_HitTime < 100)
+    {
+        _HitTime++;
+    }
+
+    if (_Alpha > 0)
+    {
+        _Alpha--;
+    }
+
+    cout << _Hp << endl;
 
     if (KEYMANAGER->isOnceKeyDown('1')) _Bs = BOSS_STATE::IDLE;
     if (KEYMANAGER->isOnceKeyDown('2')) _Bs = BOSS_STATE::WALK;
@@ -229,13 +221,25 @@ void Boss::update()
     if (KEYMANAGER->isOnceKeyDown('8')) _Bs = BOSS_STATE::DEAD;
 
     if (KEYMANAGER->isOnceKeyDown('Z')) _Ani->start();
-    if (KEYMANAGER->isOnceKeyDown('Q')) _Hp--;
+    if (KEYMANAGER->isOnceKeyDown('Q')) _Hp -= 10;
 
     if (_Bs != BOSS_STATE::IDLE && _Bs != BOSS_STATE::DOWN)
     {
         _Time = 100;
     }
-    if (_Bs == BOSS_STATE::WALK || _Bs == BOSS_STATE::DOWN)
+
+    if (_Bs == BOSS_STATE::LANDHIT)
+    {
+        _JumpTime = 0;
+    }
+
+    if ((_Pz != PHAZE::FIRST) && (_JumpTime > 600) && ((_Bs == BOSS_STATE::IDLE) || (_Bs == BOSS_STATE::WALK)) &&
+        (getDistance(_Center.x, _Center.y, _Player->GetShadowCenterPoint().x, _Player->GetShadowCenterPoint().y) > 700))
+    {
+        _Bs = BOSS_STATE::JUMP;
+    }
+
+    if (_Bs == BOSS_STATE::WALK || _Bs == BOSS_STATE::DOWN || _Bs == BOSS_STATE::HIT)
     {
         if (_Center.x > _Player->GetShadowCenterPoint().x)
         {
@@ -250,61 +254,82 @@ void Boss::update()
     {
         _Jump = 0;
     }
-    if ((_Hp <= 6) && (_Hp > 3))
+
+    if (_Hp == -200)
     {
-        if (_Pz == PHAZE::FIRST)
-        {
-            _Bs = BOSS_STATE::ROAR;
-        }
-        _Pz = PHAZE::SECOND;
-    }
-    else if ((_Hp <= 3) && (_Hp > 0))
-    {
-        if (_Pz == PHAZE::SECOND)
-        {
-            _Bs = BOSS_STATE::ROAR;
-        }
-        _Pz = PHAZE::THIRD;
-    }
-    else if (_Hp == 0)
-    {
-        _Hp -= 1;
+        _Hp--;
         _Bs = BOSS_STATE::DEAD;
     }
 
-    // 공격 시 플레이어 HP 줄어듬
-    if (isCollision(_Player->GetPlayerRect(), _Attack))
+    if (_Bs == BOSS_STATE::IDLE || _Bs == BOSS_STATE::WALK || _Bs == BOSS_STATE::ATTACK)
     {
-        // _Player->SetHp(_Player->GetHp() - 1);
-    }
-    if (_Bs == BOSS_STATE::IDLE || _Bs == BOSS_STATE::WALK ||_Bs == BOSS_STATE::ATTACK)
-    {
-        if (isCollision(_Player->GetAttackRC1(), _Rc))
+        if (_HitTime > 30)
         {
-            _Bs = BOSS_STATE::HIT;
-            _HitNum = 1;
-        }
-        else if (isCollision(_Player->GetAttackRC2(), _Rc))
-        {
-            _Bs = BOSS_STATE::HIT;
-            _HitNum = 2;
-        }
-        else if (isCollision(_Player->GetAttackRC3(), _Rc))
-        {
-            _Bs = BOSS_STATE::KNOCK;
-        }
-        else if (isCollision(_Player->GetAttackRCH(), _Rc))
-        {
-            _Bs = BOSS_STATE::KNOCK;
-        }
-        else if (isCollision(_Player->GetAttackRCDash(), _Rc))
-        {
-            _Bs = BOSS_STATE::KNOCK;
+            if (isCollision(_Player->GetAttackRC1(), _Rc))
+            {
+                SOUNDMANAGER->play("HITSOUND1", 0.1f);
+                _Bs = BOSS_STATE::HIT;
+                _HitNum = 1;
+                _Hp -= 4;
+
+            }
+            else if (isCollision(_Player->GetAttackRC2(), _Rc))
+            {
+                SOUNDMANAGER->play("HITSOUND2", 0.1f);
+                _Bs = BOSS_STATE::HIT;
+                _HitNum = 2;
+                _Hp -= 4;
+
+            }
+            else if (isCollision(_Player->GetAttackRC3(), _Rc))
+            {
+                SOUNDMANAGER->play("HITSOUND4", 0.1f);
+                _Bs = BOSS_STATE::KNOCK;
+                _Hp -= 8;
+
+            }
+            else if (isCollision(_Player->GetAttackRCH(), _Rc))
+            {
+                SOUNDMANAGER->play("HITSOUND4", 0.1f);
+                _Bs = BOSS_STATE::KNOCK;
+                _Hp -= 8;
+
+            }
+            else if (isCollision(_Player->GetAttackRCDash(), _Rc))
+            {
+                SOUNDMANAGER->play("HITSOUND4", 0.1f);
+                _Bs = BOSS_STATE::KNOCK;
+                _Hp -= 8;
+
+            }
+            _HitTime = 0;
         }
     }
     switch (_Bs)
     {
     case BOSS_STATE::IDLE:
+
+        if ((_Hp <= 60) && (_Hp > 30))
+        {
+            if ((_Pz == PHAZE::FIRST))
+            {
+                _Bs = BOSS_STATE::ROAR;
+            }
+            _Pz = PHAZE::SECOND;
+        }
+        else if ((_Hp <= 30) && (_Hp > 0))
+        {
+            if ((_Pz == PHAZE::SECOND))
+            {
+                _Bs = BOSS_STATE::ROAR;
+            }
+            _Pz = PHAZE::THIRD;
+        }
+        else if ((_Hp <= 0) && (_Hp >= -50))
+        {
+            _Hp = -200;
+        }
+
         _Img = IMAGEMANAGER->findImage("IDLE");
         if (_Time > 200)
         {
@@ -324,7 +349,7 @@ void Boss::update()
                 (_Center.y - 30 < _Player->GetShadowCenterPoint().y))
             {
                 _AttackNum = RND->getInt(4);
-                cout << _AttackNum << endl;
+
                 _Time = 100;
                 switch (_AttackNum)
                 {
@@ -347,7 +372,7 @@ void Boss::update()
                 (_Center.y - 30 < _Player->GetShadowCenterPoint().y))
             {
                 _AttackNum = RND->getInt(4);
-              //  cout << _AttackNum << endl;
+
                 _Time = 100;
                 switch (_AttackNum)
                 {
@@ -394,7 +419,7 @@ void Boss::update()
         }
         if (_Pz != PHAZE::THIRD)
         {
-        _Img = IMAGEMANAGER->findImage("PUNCH");
+            _Img = IMAGEMANAGER->findImage("PUNCH");
         }
         else
         {
@@ -408,6 +433,14 @@ void Boss::update()
         }
         _Img = IMAGEMANAGER->findImage("ROAR");
         _ExBs = BOSS_STATE::ROAR;
+        if (_Ani->getNowAniIndex() == 8)
+        {
+            _Attack = { _Center.x - 400, _Center.y - 200, _Center.x + 400, _Center.y + 200 };
+        }
+        else
+        {
+            _Attack = { 0,0,0,0 };
+        }
         break;
     case BOSS_STATE::IDLE_RUSH:
         _Img = IMAGEMANAGER->findImage("IDLE_RUSH");
@@ -417,17 +450,21 @@ void Boss::update()
         _Img = IMAGEMANAGER->findImage("RUSH");
         if (isCollision(_Rc, _Player->GetShadowRect()))
         {
+            SOUNDMANAGER->stop("RUSHSOUND");
             _ExBs = BOSS_STATE::RIGHTRUSH;
             _Ani->stop();
             RightTAUNT(this);
+            _Attack = { 0,0,0,0 };
         }
     case BOSS_STATE::LEFTRUSH:
         _Img = IMAGEMANAGER->findImage("RUSH");
         if (isCollision(_Rc, _Player->GetShadowRect()))
         {
+            SOUNDMANAGER->stop("RUSHSOUND");
             _ExBs = BOSS_STATE::LEFTRUSH;
             _Ani->stop();
             LeftTAUNT(this);
+            _Attack = { 0,0,0,0 };
         }
         break;
     case BOSS_STATE::RUSHTURN:
@@ -437,7 +474,6 @@ void Boss::update()
         }
         _Img = IMAGEMANAGER->findImage("RUSHTURN");
         _ExBs = BOSS_STATE::RUSHTURN;
-
         break;
     case BOSS_STATE::JUMP:
         if (!_Ani->isPlay())
@@ -454,7 +490,7 @@ void Boss::update()
         break;
     case BOSS_STATE::LANDHIT:
         _Img = IMAGEMANAGER->findImage("LANDHIT");
-        if (_Ani->getNowAniIndex() == 4)
+        if (_Ani->getNowAniIndex() == 0)
         {
             _Attack = { _Center.x - 400, _Center.y - 200, _Center.x + 400, _Center.y + 200 };
         }
@@ -474,6 +510,7 @@ void Boss::update()
         break;
     case BOSS_STATE::KNOCK:
         _Img = IMAGEMANAGER->findImage("KNOCK");
+
         break;
     case BOSS_STATE::SIT:
         _Img = IMAGEMANAGER->findImage("SIT");
@@ -484,6 +521,18 @@ void Boss::update()
             _Ani->start();
         }
         _Img = IMAGEMANAGER->findImage("WAKE");
+        if (_Ani->getNowAniIndex() == 10)
+        {
+            SOUNDMANAGER->play("LANDHITSOUND", 0.1f);
+            _ExCenter.x = _Center.x - (IMAGEMANAGER->findImage("IDLE")->getFrameWidth() * 0.5) - 280;
+            _ExCenter.y = _Center.y - 120;
+            _Alpha = 255;
+            _Attack = { _Center.x - 400, _Center.y - 200, _Center.x + 400, _Center.y + 200 };
+        }
+        else
+        {
+            _Attack = { 0,0,0,0 };
+        }
         break;
     case BOSS_STATE::TAUNT:
         if (!_Ani->isPlay())
@@ -551,6 +600,7 @@ void Boss::update()
             _Ani = KEYANIMANAGER->findAnimation("RightAttack");
             if (_Ani->getNowAniIndex() == 5)
             {
+                SOUNDMANAGER->play("ATTACKSOUNT", 0.5f);
                 _Attack = { _Center.x, _Center.y - 30, _Center.x + 200, _Center.y + 30 };
             }
             else
@@ -563,11 +613,12 @@ void Boss::update()
             _Ani = KEYANIMANAGER->findAnimation("LeftAttack");
             if (_Ani->getNowAniIndex() == 5)
             {
-                _AttackLeft = { _Center.x, _Center.y - 30, _Center.x - 200, _Center.y + 30 };
+                SOUNDMANAGER->play("ATTACKSOUNT", 0.5f);
+                _Attack = { _Center.x - 200, _Center.y - 30, _Center.x, _Center.y + 30 };
             }
             else
             {
-                _AttackLeft = { 0,0,0,0 };
+                _Attack = { 0,0,0,0 };
             }
         }
         break;
@@ -585,6 +636,7 @@ void Boss::update()
             }
             if (_Ani->getNowAniIndex() == 8)
             {
+                SOUNDMANAGER->play("SLAPSOUNT", 0.5f);
                 _Attack = { _Center.x, _Center.y - 30, _Center.x + 200, _Center.y + 30 };
             }
             else
@@ -605,87 +657,149 @@ void Boss::update()
 
             if (_Ani->getNowAniIndex() == 8)
             {
-                _AttackLeft = { _Center.x, _Center.y - 30, _Center.x - 200, _Center.y + 30 };
-            }
-            else
-            {
-                _AttackLeft = { 0,0,0,0 };
-            }
-        }
-        break;
-    case BOSS_STATE::GUARD:
-        break;
-    case BOSS_STATE::PUNCH:
-        
-        if (_Ani->getNowAniIndex()<12 && (_Pz == PHAZE::THIRD))
-        {
-            if (_Player->GetShadowCenterX() >= _Center.x)
-            {
-                _PLCenter.x = _Player->GetShadowCenterX() - 10;
-            }
-            else
-            {
-                _PLCenter.x = _Player->GetShadowCenterX() + 10;;
-            }
-            if (_Player->GetShadowCenterY() >= _Center.y)
-            {
-                _PLCenter.y = _Player->GetShadowCenterY() - 10;
-            }
-            else
-            {
-                _PLCenter.y = _Player->GetShadowCenterY() + 10;
-            }
-            _Player->SetCenterX1(_PLCenter.x);
-            _Player->SetCenterY1(_PLCenter.y);
-        }
-        if (!_IsLookLeft)
-        {
-
-            if (_Pz != PHAZE::THIRD)
-            {
-                _Ani = KEYANIMANAGER->findAnimation("RightPunch");
-            }
-            else
-            {
-                _Ani = KEYANIMANAGER->findAnimation("RightPunchred");
-            }
-
-            if (_Ani->getNowAniIndex() > 12 && _Ani->getNowAniIndex() < 19)
-            {
-                _Center.x += 8;
-                _Center.y += -sinf(_Angle) * 8;
-            }
-            if (_Ani->getNowAniIndex() == 9)
-            {
-                _Attack = { _Center.x, _Center.y - 30, _Center.x + 200, _Center.y + 30 };
+                SOUNDMANAGER->play("SLAPSOUNT", 0.5f);
+                _Attack = { _Center.x - 200, _Center.y - 30, _Center.x, _Center.y + 30 };
             }
             else
             {
                 _Attack = { 0,0,0,0 };
             }
         }
+        break;
+    case BOSS_STATE::GUARD:
+        break;
+    case BOSS_STATE::PUNCH:
+
+        if (_Ani->getNowAniIndex() < 12 && (_Pz == PHAZE::THIRD))
+        {
+            if (_IsLookLeft)
+            {
+                if (_Player->GetShadowCenterX() >= _Center.x - 150)
+                {
+                    _PLCenter.x = _Player->GetShadowCenterX() - 10;
+                }
+                else
+                {
+                    _PLCenter.x = _Player->GetShadowCenterX() + 10;;
+                }
+                if (_Player->GetShadowCenterY() >= _Center.y)
+                {
+                    _PLCenter.y = _Player->GetShadowCenterY() - 10;
+                }
+                else
+                {
+                    _PLCenter.y = _Player->GetShadowCenterY() + 10;
+                }
+            }
+            else
+            {
+
+                if (_Player->GetShadowCenterX() >= _Center.x + 150)
+                {
+                    _PLCenter.x = _Player->GetShadowCenterX() - 10;
+                }
+                else
+                {
+                    _PLCenter.x = _Player->GetShadowCenterX() + 10;;
+                }
+                if (_Player->GetShadowCenterY() >= _Center.y)
+                {
+                    _PLCenter.y = _Player->GetShadowCenterY() - 10;
+                }
+                else
+                {
+                    _PLCenter.y = _Player->GetShadowCenterY() + 10;
+                }
+            }
+            _Player->SetCenterX1(_PLCenter.x);
+            _Player->SetCenterY1(_PLCenter.y);
+        }
+
+        if (!_IsLookLeft)
+        {
+            if (_Pz != PHAZE::THIRD)
+            {
+                _Ani = KEYANIMANAGER->findAnimation("RightPunch");
+
+                if (_Ani->getNowAniIndex() == 2)
+                {
+                    SOUNDMANAGER->play("PUNCHSOUND", 0.1f);
+                }
+                if (_Ani->getNowAniIndex() > 12 && _Ani->getNowAniIndex() < 19)
+                {
+                    _Center.x += 8;
+                    _Center.y += -sinf(_Angle) * 8;
+                }
+                if (_Ani->getNowAniIndex() == 17)
+                {
+                    _Attack = { _Center.x - 200, _Center.y - 30, _Center.x + 200, _Center.y + 30 };
+                }
+                else
+                {
+                    _Attack = { 0,0,0,0 };
+                }
+            }
+            else
+            {
+                _Ani = KEYANIMANAGER->findAnimation("RightPunchred");
+
+                if (_Ani->getNowAniIndex() == 2)
+                {
+                    SOUNDMANAGER->play("PUNCHSOUND", 0.1f);
+                }
+
+                if (_Ani->getNowAniIndex() == 17)
+                {
+                    _Attack = { _Center.x - 200, _Center.y - 30, _Center.x + 200, _Center.y + 30 };
+                }
+                else
+                {
+                    _Attack = { 0,0,0,0 };
+                }
+            }
+
+        }
         else
         {
             if (_Pz != PHAZE::THIRD)
             {
                 _Ani = KEYANIMANAGER->findAnimation("LeftPunch");
+
+                if (_Ani->getNowAniIndex() == 2)
+                {
+                    SOUNDMANAGER->play("PUNCHSOUND", 0.1f);
+                }
+                if (_Ani->getNowAniIndex() > 12 && _Ani->getNowAniIndex() < 19)
+                {
+                    _Center.x -= 8;
+                    _Center.y += -sinf(_Angle) * 8;
+                }
+                if (_Ani->getNowAniIndex() == 17)
+                {
+                    _Attack = { _Center.x - 200, _Center.y - 30, _Center.x + 200, _Center.y + 30 };
+                }
+                else
+                {
+                    _Attack = { 0,0,0,0 };
+                }
             }
             else
             {
                 _Ani = KEYANIMANAGER->findAnimation("LeftPunchred");
-            }
-            if (_Ani->getNowAniIndex() > 12 && _Ani->getNowAniIndex() < 19)
-            {
-                _Center.x -= 8;
-                _Center.y += -sinf(_Angle) * 8;
-            }
-            if (_Ani->getNowAniIndex() == 9)
-            {
-                _AttackLeft = { _Center.x, _Center.y - 30, _Center.x - 200, _Center.y + 30 };
-            }
-            else
-            {
-                _AttackLeft = { 0,0,0,0 };
+
+                if (_Ani->getNowAniIndex() == 2)
+                {
+                    SOUNDMANAGER->play("PUNCHSOUND", 0.1f);
+                }
+
+                if (_Ani->getNowAniIndex() == 17)
+                {
+                    _Attack = { _Center.x - 200, _Center.y - 30, _Center.x + 200, _Center.y + 30 };
+                }
+                else
+                {
+                    _Attack = { 0,0,0,0 };
+                }
             }
         }
         break;
@@ -716,6 +830,7 @@ void Boss::update()
         {
             _IsLookLeft = false;
         }
+        _Attack = { _Center.x - 50, _Center.y - 30, _Center.x + 150, _Center.y + 30 };
 
         _Ani = KEYANIMANAGER->findAnimation("RightRush");
         _Center.x += _Speed * 2;
@@ -727,6 +842,7 @@ void Boss::update()
 
         if (_Center.x - 500 > _Player->GetShadowCenterPoint().x)
         {
+            SOUNDMANAGER->stop("RUSHSOUND");
             _Bs = BOSS_STATE::RUSHTURN;
         }
         break;
@@ -735,6 +851,8 @@ void Boss::update()
         {
             _IsLookLeft = true;
         }
+
+        _Attack = { _Center.x - 150, _Center.y - 30, _Center.x + 50, _Center.y + 30 };
 
         _Ani = KEYANIMANAGER->findAnimation("LeftRush");
         _Center.x -= _Speed * 2;
@@ -745,10 +863,14 @@ void Boss::update()
         }
         if (_Center.x + 700 < _Player->GetShadowCenterPoint().x)
         {
+            SOUNDMANAGER->stop("RUSHSOUND");
             _Bs = BOSS_STATE::RUSHTURN;
         }
         break;
     case BOSS_STATE::RUSHTURN:
+
+        _Attack = { 0,0,0,0 };
+
         if (!_IsLookLeft)
         {
             _Ani = KEYANIMANAGER->findAnimation("RightTurn");
@@ -800,6 +922,10 @@ void Boss::update()
         }
         if (_Jump <= 0)
         {
+            SOUNDMANAGER->play("LANDHITSOUND", 0.1f);
+            _ExCenter.x = _Center.x - (IMAGEMANAGER->findImage("IDLE")->getFrameWidth() * 0.5) - 280;
+            _ExCenter.y = _Center.y - 120;
+            _Alpha = 255;
             _Bs = BOSS_STATE::LANDHIT;
         }
         break;
@@ -940,28 +1066,24 @@ void Boss::update()
 
 void Boss::render()
 {
-    if (_Bs == BOSS_STATE::ATTACK || _Bs ==BOSS_STATE::SLAP || _Bs == BOSS_STATE::PUNCH )
-    {
-        if (!_IsLookLeft && (_Ani->getNowAniIndex() == 5))CAMERAMANAGER->rectangle(getMemDC(), _Attack);
-        if (_IsLookLeft && (_Ani->getNowAniIndex() == 5)) CAMERAMANAGER->rectangle(getMemDC(), _AttackLeft);
-    }
-    if (_Bs == BOSS_STATE::LANDHIT && _Ani->getNowAniIndex() == 1)
+    CAMERAMANAGER->alpharender(getMemDC(), _CrackImg, _ExCenter.x, _ExCenter.y, _Alpha);
+
+    CAMERAMANAGER->render(getMemDC(), _ShadowImg, _Center.x - (IMAGEMANAGER->findImage("IDLE")->getFrameWidth() * 0.5) + 10, _Center.y - 30);
+
+    if (KEYMANAGER->isStayKeyDown(VK_CONTROL))
     {
         CAMERAMANAGER->rectangle(getMemDC(), _Attack);
+        CAMERAMANAGER->rectangle(getMemDC(), _Rc);
     }
-    CAMERAMANAGER->rectangle(getMemDC(), _Rc);
-    CAMERAMANAGER->render(getMemDC(), _ShadowImg, _Center.x - (IMAGEMANAGER->findImage("IDLE")->getFrameWidth() * 0.5) + 10, _Center.y-30);
 
     if (_Pz != PHAZE::THIRD)
     {
         switch (_Bs)
         {
         case BOSS_STATE::IDLE:
-           // _Img->alphaAniRender(getMemDC(), _Center.x - (_Img->getFrameWidth() * 0.5), _Center.y - 280, _Ani, 155);
             ZORDER->ZOrderPush(getMemDC(), RenderType::ANIRENDER, _Img, _Center.x - (_Img->getFrameWidth() * 0.5), _Center.y - 280, _Ani, _Center.y);
             break;
         case BOSS_STATE::WALK:
-           // _Img->alphaAniRender(getMemDC(), _Center.x - (_Img->getFrameWidth() * 0.5), _Center.y - 260, _Ani, 155);
             ZORDER->ZOrderPush(getMemDC(), RenderType::ANIRENDER, _Img, _Center.x - (_Img->getFrameWidth() * 0.5), _Center.y - 260, _Ani, _Center.y);
             break;
         case BOSS_STATE::ATTACK:
@@ -977,11 +1099,11 @@ void Boss::render()
         case BOSS_STATE::SLAP:
             if (!_IsLookLeft)
             {
-                ZORDER->ZOrderPush(getMemDC(), RenderType::ANIRENDER, _Img, _Center.x - (_Img->getFrameWidth() * 0.5)+50, _Center.y - 260, _Ani, _Center.y);
+                ZORDER->ZOrderPush(getMemDC(), RenderType::ANIRENDER, _Img, _Center.x - (_Img->getFrameWidth() * 0.5) + 50, _Center.y - 260, _Ani, _Center.y);
             }
             else
             {
-                ZORDER->ZOrderPush(getMemDC(), RenderType::ANIRENDER, _Img, _Center.x - (_Img->getFrameWidth() * 0.5)-50, _Center.y - 260, _Ani, _Center.y);
+                ZORDER->ZOrderPush(getMemDC(), RenderType::ANIRENDER, _Img, _Center.x - (_Img->getFrameWidth() * 0.5) - 50, _Center.y - 260, _Ani, _Center.y);
             }
             break;
         case BOSS_STATE::GUARD:
@@ -1007,7 +1129,7 @@ void Boss::render()
             }
             break;
         case BOSS_STATE::IDLE_RUSH:
-                ZORDER->ZOrderPush(getMemDC(), RenderType::ANIRENDER, _Img, _Center.x - (_Img->getFrameWidth() * 0.5), _Center.y - 260, _Ani, _Center.y);
+            ZORDER->ZOrderPush(getMemDC(), RenderType::ANIRENDER, _Img, _Center.x - (_Img->getFrameWidth() * 0.5), _Center.y - 260, _Ani, _Center.y);
             break;
         case BOSS_STATE::RIGHTRUSH:
             ZORDER->ZOrderPush(getMemDC(), RenderType::ANIRENDER, _Img, _Center.x - (_Img->getFrameWidth() * 0.5), _Center.y - 250, _Ani, _Center.y);
@@ -1018,27 +1140,27 @@ void Boss::render()
 
             break;
         case BOSS_STATE::RUSHTURN:
-                ZORDER->ZOrderPush(getMemDC(), RenderType::ANIRENDER, _Img, _Center.x - (_Img->getFrameWidth() * 0.5), _Center.y - 260, _Ani, _Center.y);
+            ZORDER->ZOrderPush(getMemDC(), RenderType::ANIRENDER, _Img, _Center.x - (_Img->getFrameWidth() * 0.5), _Center.y - 260, _Ani, _Center.y);
             break;
         case BOSS_STATE::JUMP:
-                ZORDER->ZOrderPush(getMemDC(), RenderType::ANIRENDER, _Img, _Center.x - (_Img->getFrameWidth() * 0.5), _Center.y - 290, _Ani, _Center.y);
+            ZORDER->ZOrderPush(getMemDC(), RenderType::ANIRENDER, _Img, _Center.x - (_Img->getFrameWidth() * 0.5), _Center.y - 290, _Ani, _Center.y);
             break;
         case BOSS_STATE::UP:
-                ZORDER->ZOrderPush(getMemDC(), RenderType::ANIRENDER, _Img, _Center.x - (_Img->getFrameWidth() * 0.5), _Center.y - 280 - _Jump, _Ani, _Center.y);
+            ZORDER->ZOrderPush(getMemDC(), RenderType::ANIRENDER, _Img, _Center.x - (_Img->getFrameWidth() * 0.5), _Center.y - 280 - _Jump, _Ani, _Center.y);
             break;
         case BOSS_STATE::DOWN:
-                ZORDER->ZOrderPush(getMemDC(), RenderType::ANIRENDER, _Img, _Center.x - (_Img->getFrameWidth() * 0.5), _Center.y - 280 - _Jump, _Ani, _Center.y);
+            ZORDER->ZOrderPush(getMemDC(), RenderType::ANIRENDER, _Img, _Center.x - (_Img->getFrameWidth() * 0.5), _Center.y - 280 - _Jump, _Ani, _Center.y);
             break;
         case BOSS_STATE::LANDHIT:
-                ZORDER->ZOrderPush(getMemDC(), RenderType::ANIRENDER, _Img, _Center.x - (_Img->getFrameWidth() * 0.5), _Center.y - 280, _Ani, _Center.y);
+            ZORDER->ZOrderPush(getMemDC(), RenderType::ANIRENDER, _Img, _Center.x - (_Img->getFrameWidth() * 0.5), _Center.y - 280, _Ani, _Center.y);
             break;
         case BOSS_STATE::HIT:
-                ZORDER->ZOrderPush(getMemDC(), RenderType::ANIRENDER, _Img, _Center.x - (_Img->getFrameWidth() * 0.5), _Center.y - 260, _Ani, _Center.y);
+            ZORDER->ZOrderPush(getMemDC(), RenderType::ANIRENDER, _Img, _Center.x - (_Img->getFrameWidth() * 0.5), _Center.y - 260, _Ani, _Center.y);
             break;
         case BOSS_STATE::GROUNDHIT:
             break;
         case BOSS_STATE::KNOCK:
-                ZORDER->ZOrderPush(getMemDC(), RenderType::ANIRENDER, _Img, _Center.x - (_Img->getFrameWidth() * 0.5), _Center.y - 260 - _Jump, _Ani, _Center.y);
+            ZORDER->ZOrderPush(getMemDC(), RenderType::ANIRENDER, _Img, _Center.x - (_Img->getFrameWidth() * 0.5), _Center.y - 260 - _Jump, _Ani, _Center.y);
             break;
         case BOSS_STATE::SIT:
             if (!_IsLookLeft)
@@ -1099,7 +1221,7 @@ void Boss::render()
         switch (_Bs)
         {
         case BOSS_STATE::IDLE:
-            ZORDER->ZOrderPush(getMemDC(), RenderType::KEYANIALPHARENDER, _Img, _Center.x - (_Img->getFrameWidth() * 0.5), _Center.y - 280, _Ani, _Center.y,200);
+            ZORDER->ZOrderPush(getMemDC(), RenderType::KEYANIALPHARENDER, _Img, _Center.x - (_Img->getFrameWidth() * 0.5), _Center.y - 280, _Ani, _Center.y, 200);
             break;
         case BOSS_STATE::WALK:
             ZORDER->ZOrderPush(getMemDC(), RenderType::KEYANIALPHARENDER, _Img, _Center.x - (_Img->getFrameWidth() * 0.5), _Center.y - 260, _Ani, _Center.y, 200);
@@ -1121,7 +1243,7 @@ void Boss::render()
             }
             else
             {
-                ZORDER->ZOrderPush(getMemDC(), RenderType::ANIRENDER, _Img, _Center.x - (_Img->getFrameWidth() * 0.5) - 50, _Center.y - 260, _Ani, _Center.y,200);
+                ZORDER->ZOrderPush(getMemDC(), RenderType::ANIRENDER, _Img, _Center.x - (_Img->getFrameWidth() * 0.5) - 50, _Center.y - 260, _Ani, _Center.y, 200);
             }
             break;
         case BOSS_STATE::GUARD:
@@ -1272,6 +1394,7 @@ void Boss::RightRUSH(void* obj)
         b->SetState(BOSS_STATE::RIGHTRUSH);
         b->SetAni(KEYANIMANAGER->findAnimation("RightRush"));
         b->GetAni()->start();
+        SOUNDMANAGER->play("RUSHSOUND", 0.3f);
     }
     else
     {
@@ -1297,6 +1420,7 @@ void Boss::LeftRUSH(void* obj)
         b->SetState(BOSS_STATE::LEFTRUSH);
         b->SetAni(KEYANIMANAGER->findAnimation("LeftRush"));
         b->GetAni()->start();
+        SOUNDMANAGER->play("RUSHSOUND", 0.3f);
     }
     else
     {
@@ -1313,6 +1437,7 @@ void Boss::RightTAUNT(void* obj)
     b->SetState(BOSS_STATE::TAUNT);
     b->SetAni(KEYANIMANAGER->findAnimation("RightTaunt"));
     b->GetAni()->start();
+    SOUNDMANAGER->play("TAUNTSOUND", 0.5f);
 }
 
 void Boss::LeftTAUNT(void* obj)
@@ -1322,6 +1447,7 @@ void Boss::LeftTAUNT(void* obj)
     b->SetState(BOSS_STATE::TAUNT);
     b->SetAni(KEYANIMANAGER->findAnimation("LeftTaunt"));
     b->GetAni()->start();
+    SOUNDMANAGER->play("TAUNTSOUND", 0.5f);
 }
 
 void Boss::RightJUMP(void* obj)
@@ -1331,6 +1457,7 @@ void Boss::RightJUMP(void* obj)
     b->SetState(BOSS_STATE::UP);
     b->SetAni(KEYANIMANAGER->findAnimation("RightUp"));
     b->GetAni()->start();
+    SOUNDMANAGER->play("JUMPSOUND", 0.5f);
 }
 
 void Boss::LeftTJUMP(void* obj)
@@ -1340,6 +1467,7 @@ void Boss::LeftTJUMP(void* obj)
     b->SetState(BOSS_STATE::UP);
     b->SetAni(KEYANIMANAGER->findAnimation("LeftUp"));
     b->GetAni()->start();
+    SOUNDMANAGER->play("JUMPSOUND", 0.5f);
 }
 
 void Boss::RightCRY(void* obj)

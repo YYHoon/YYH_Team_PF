@@ -115,7 +115,46 @@ void playGround::imginit()
 		IMAGEMANAGER->addImage("MISUZU_NAME_HP_BAR", "Image/UI/MISUZU_NAME_HP_BAR.bmp", 155, 42, true, MAGENTA);
 		IMAGEMANAGER->addImage("UI_Screen_Lock_Chain", "Image/UI/UI_Screen_Lock_Chain.bmp", 1600, 900, true, MAGENTA);
 	}
-	
+	//Player
+	{
+		IMAGEMANAGER->addFrameImage("PlayerBattleStart", "Player/Kyoko_BattleStart.bmp", 2964, 420, 26, 2, true, RGB(255, 0, 255));
+		IMAGEMANAGER->addFrameImage("PlayerIdle", "Player/Kyoko_Idle.bmp", 1440, 450, 12, 2, true, RGB(255, 0, 255));
+		IMAGEMANAGER->addFrameImage("PlayerWalk", "Player/Kyoko_Walk.bmp", 1476, 402, 12, 2, true, RGB(255, 0, 255));
+		IMAGEMANAGER->addFrameImage("PlayerRun", "Player/Kyoko_Run.bmp", 2736, 384, 16, 2, true, RGB(255, 0, 255));
+		IMAGEMANAGER->addFrameImage("PlayerAttack1", "Player/Kyoko_ComboAttack1.bmp", 1548, 390, 6, 2, true, RGB(255, 0, 255));
+		IMAGEMANAGER->addFrameImage("PlayerAttack2", "Player/Kyoko_ComboAttack2.bmp", 1869, 402, 7, 2, true, RGB(255, 0, 255));
+		IMAGEMANAGER->addFrameImage("PlayerAttack3", "Player/Kyoko_ComboAttack3.bmp", 2970, 462, 9, 2, true, RGB(255, 0, 255));
+		IMAGEMANAGER->addFrameImage("PlayerHit", "Player/Kyoko_Hit.bmp", 246, 348, 2, 2, true, RGB(255, 0, 255));
+		IMAGEMANAGER->addFrameImage("PlayerDown", "Player/Kyoko_Down.bmp", 4896, 366, 24, 2, true, RGB(255, 0, 255));
+		IMAGEMANAGER->addFrameImage("PlayerGuard", "Player/Kyoko_Guard.bmp", 351, 378, 3, 2, true, RGB(255, 0, 255));
+		IMAGEMANAGER->addFrameImage("PlayerDiveAttack", "Player/Kyoko_Dive.bmp", 5040, 360, 21, 2, true, RGB(255, 0, 255));
+		IMAGEMANAGER->addFrameImage("PlayerGameOver", "Player/Kyoko_GameOver.bmp", 6240, 282, 26, 2, true, RGB(255, 0, 255));
+		IMAGEMANAGER->addFrameImage("PlayerHKick", "Player/Kyoko_HurricaneKick.bmp", 2997, 657, 9, 3, true, RGB(255, 0, 255));
+		IMAGEMANAGER->addFrameImage("PlayerStandUp", "Player/Kyoko_StandUp.bmp", 3315, 330, 17, 2, true, RGB(255, 0, 255));
+		IMAGEMANAGER->addFrameImage("PlayerStomp", "Player/Kyoko_Stomp.bmp", 1290, 420, 10, 2, true, RGB(255, 0, 255));
+		IMAGEMANAGER->addFrameImage("PlayerStnned", "Player/Kyoko_Stunned.bmp", 384, 384, 4, 2, true, RGB(255, 0, 255));
+		IMAGEMANAGER->addFrameImage("PlayerDap", "Player/Kyoko_Ultimate.bmp", 3675, 384, 25, 2, true, RGB(255, 0, 255));
+		IMAGEMANAGER->addFrameImage("PlayerJump", "Player/Kyoko_Jump.bmp", 405, 414, 3, 2, true, RGB(255, 0, 255));
+		IMAGEMANAGER->addImage("PlayerShadow", "Player/KyoKo_Shadow.bmp", 128, 38, true, RGB(255, 0, 255));
+		//이펙트
+		EFFECTMANAGER->addEffect("Playeroang", "Player/eff/Kyoko_Down.bmp", 1800, 100, 180, 100, 1, 0.5f, 1);
+		EFFECTMANAGER->addEffect("PlayerLDAP", "Player/eff/LDAP.bmp", 768, 111, 192, 111, 1, 0.2f, 1);
+		EFFECTMANAGER->addEffect("PlayerRDAP", "Player/eff/RDAP.bmp", 768, 111, 192, 111, 1, 0.2f, 1);
+		EFFECTMANAGER->addEffect("PlayerWind", "Player/eff/KyoKo_Wind.bmp", 633, 200, 127, 200, 1, 0.3f, 1);
+		EFFECTMANAGER->addEffect("PlayerAWind", "Player/eff/KyoKo_AWind.bmp", 633, 200, 127, 200, 1, 0.3f, 1);
+		EFFECTMANAGER->addEffect("PlayerBungea", "Player/eff/Bungea.bmp", 1020, 600, 170, 600, 1, 0.3f, 1);
+		EFFECTMANAGER->addEffect("PlayerAttEff", "Player/eff/Effect_Hit2.bmp", 1800, 200, 200, 200, 1, 0.3f, 1);
+		//효과음
+		SOUNDMANAGER->addSound("PlayerAtt1", "Player/sound/Att1.WAV", false, false);
+		SOUNDMANAGER->addSound("PlayerAtt2", "Player/sound/Att2.WAV", false, false);
+		SOUNDMANAGER->addSound("PlayerAtt3", "Player/sound/Att3.WAV", false, false);
+		SOUNDMANAGER->addSound("PlayerHit1", "Player/sound/Hit1.WAV", false, false);
+		SOUNDMANAGER->addSound("PlayerHit2", "Player/sound/Hit2.WAV", false, false);
+		SOUNDMANAGER->addSound("PlayerHit3", "Player/sound/Hit3.WAV", false, false);
+		SOUNDMANAGER->addSound("PlayerDap", "Player/sound/Dap.WAV", false, false);
+		SOUNDMANAGER->addSound("PlayerHkick", "Player/sound/Hkick.WAV", false, false);
+		SOUNDMANAGER->addSound("PlayerDashAtt", "Player/sound/DashAtt.WAV", false, false);
+	}
 
 	//StageManager
 	IMAGEMANAGER->addImage("Stage1_Start", "image/Stage_BG/Stage1_Start.bmp", 2016, 672, false, RGB(0, 0, 0));
@@ -144,7 +183,29 @@ void playGround::imginit()
 	IMAGEMANAGER->addFrameImage("MoneyFallen", "image/Item/Money_Fallen.bmp", 78, 25, 3, 1, true, RGB(255, 0, 255));
 	IMAGEMANAGER->addImage("MoneyLand", "image/Item/Money_Land.bmp", 23, 11, true, RGB(255, 0, 255));
 	// Boss
-
+	IMAGEMANAGER->addImage("redDC", "image/Boss/redDC.bmp", 5000, 1000, false, NULL);
+	IMAGEMANAGER->addFrameImage("WALK", "image/Boss/walk.bmp", 0, 0, 1557, 526, 9, 2, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addFrameImage("ATTACK", "image/Boss/attack.bmp", 0, 0, 2430, 582, 10, 2, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addFrameImage("SLAP", "image/Boss/slap.bmp", 0, 0, 4634, 520, 14, 2, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addFrameImage("SLAPRED", "image/Boss/slap_red.bmp", 0, 0, 4634, 520, 14, 2, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addFrameImage("PUNCH", "image/Boss/punch.bmp", 0, 0, 10935, 700, 27, 2, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addFrameImage("PUNCHRED", "image/Boss/punch_red.bmp", 0, 0, 10935, 700, 27, 2, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addFrameImage("HIT", "image/Boss/hit.bmp", 0, 0, 2295, 528, 9, 2, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addFrameImage("KNOCK", "image/Boss/knock.bmp", 0, 0, 2340, 520, 10, 2, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addFrameImage("SIT", "image/Boss/sit.bmp", 0, 0, 876, 392, 4, 2, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addFrameImage("WAKE", "image/Boss/wake.bmp", 0, 0, 4731, 538, 19, 2, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addFrameImage("TAUNT", "image/Boss/taunt.bmp", 0, 0, 4899, 668, 23, 2, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addFrameImage("TAUNTRED", "image/Boss/taunt_red.bmp", 0, 0, 4899, 668, 23, 2, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addFrameImage("ROAR", "image/Boss/roar.bmp", 0, 0, 2520, 520, 12, 2, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addFrameImage("IDLE_RUSH", "image/Boss/idle_rush.bmp", 0, 0, 1040, 508, 5, 2, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addFrameImage("RUSH", "image/Boss/rush.bmp", 0, 0, 1752, 498, 8, 2, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addFrameImage("RUSHTURN", "image/Boss/rushturn.bmp", 0, 0, 540, 496, 3, 2, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addFrameImage("JUMP", "image/Boss/jump.bmp", 0, 0, 1368, 594, 6, 2, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addFrameImage("UP", "image/Boss/up.bmp", 0, 0, 912, 594, 4, 2, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addFrameImage("DOWN", "image/Boss/down.bmp", 0, 0, 684, 570, 3, 2, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addFrameImage("LANDHIT", "image/Boss/landhit.bmp", 0, 0, 2052, 570, 9, 2, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addFrameImage("DEAD", "image/Boss/dead.bmp", 0, 0, 2772, 566, 9, 2, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addFrameImage("CRY", "image/Boss/cry.bmp", 0, 0, 1232, 566, 4, 2, true, RGB(255, 0, 255));
 	// Enemy
 	IMAGEMANAGER->addImage("Enemy_Shadow", "image/enemy/Enemy_Shadow.bmp", 128, 38, true, RGB(255, 0, 255));
 	//여학생 걷기
@@ -172,4 +233,16 @@ void playGround::soundinit()
 	SOUNDMANAGER->addSound("Stage_1", "Sounds/RCG_Dollar_Signs.wav", true, true);
 	SOUNDMANAGER->addSound("Stage_2", "Sounds/RCG_The_Burbs.wav", true, true);
 	SOUNDMANAGER->addSound("Stage_Boss", "Sounds/RCG_boss_misuzu.wav", true, true);
+	//BOSS
+	SOUNDMANAGER->addSound("ATTACKSOUND", "Sounds/Boss/boss_misuzu_elbow_bonk.wav", false, false);
+	SOUNDMANAGER->addSound("JUMPSOUND", "Sounds/Boss/boss_misuzu_meteor_drop_jump2.wav", false, false);
+	SOUNDMANAGER->addSound("LANDHITSOUND", "Sounds/Boss/boss_misuzu_meteor_drop_impact.wav", false, false);
+	SOUNDMANAGER->addSound("RUSHSOUND", "Sounds/Boss/boss_misuzu_shoulder_tackle_footstep.wav", false, true);
+	SOUNDMANAGER->addSound("SLAPSOUND", "Sounds/Boss/boss_misuzu_slap.wav", false, false);
+	SOUNDMANAGER->addSound("PUNCHSOUND", "Sounds/Boss/boss_misuzu_windup_punch.wav", false, false);
+	SOUNDMANAGER->addSound("HITSOUND1", "Sounds/Boss/vo_misuzu_gethit_01.wav", false, false);
+	SOUNDMANAGER->addSound("HITSOUND2", "Sounds/Boss/vo_misuzu_gethit_02.wav", false, false);
+	SOUNDMANAGER->addSound("HITSOUND3", "Sounds/Boss/vo_misuzu_gethit_03.wav", false, false);
+	SOUNDMANAGER->addSound("HITSOUND4", "Sounds/Boss/vo_misuzu_gethit_heavy_01.wav", false, false);
+	SOUNDMANAGER->addSound("TAUNTSOUND", "Sounds/Boss/vo_misuzu_laugh_02.wav", false, false);
 }

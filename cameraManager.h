@@ -43,7 +43,7 @@ public:
 	void render(HDC hdc, image* img);
 	void render(HDC hdc, image* img, float destX, float destY);
 	void render(HDC hdc, image* img, float destX, float destY, float sourX, float sourY, float sourWidth, float sourHeight);
-	
+	void alpharender(HDC hdc, image* img, float destX, float destY, int alpha);
 	void loopRender(HDC hdc, image* img, float destX, float destY);
 
 	void frameRender(HDC hdc, image* img, float destX, float destY);

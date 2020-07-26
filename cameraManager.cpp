@@ -166,7 +166,12 @@ void cameraManager::render(HDC hdc, image* img, float destX, float destY, float 
 	float newY = getRelativeY(destY);
 	if (img) img->render(hdc, newX, newY, sourX, sourY, sourWidth, sourHeight);
 }
-
+void cameraManager::alpharender(HDC hdc, image* img, float destX, float destY, int alpha)
+{
+	float newX = getRelativeX(destX);
+	float newY = getRelativeY(destY);
+	if (img) img->alphaRender(hdc, newX, newY, alpha);
+}
 void cameraManager::frameRender(HDC hdc, image* img, float destX, float destY)
 {
 	float newX = getRelativeX(destX);
