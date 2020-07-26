@@ -60,6 +60,7 @@ private:
 	float _Jump;
 	int _Hp;
 	int _Time;//기술 쿨타임
+	int _JumpTime;//기술 쿨타임
 	int _AttackNum;
 	int _HitNum;
 	bool _IsLookLeft;

@@ -922,8 +922,6 @@ void Player::BossAndPlayerCol()
 			LeftHitReaction();
 		}
 
-
-
 		//º¸½º ¿À¸¥ÂÊ ¼Õ¹Ù´Ú ÈÖµÎ¸£±â
 		if (_Boss->GetState() == BOSS_STATE::SLAP && _Boss->GetBossCenterX() <= _Center.x)
 		{
@@ -935,30 +933,48 @@ void Player::BossAndPlayerCol()
 		{
 			LeftDownReaction();
 		}
-	}
 
-	//º¸½º¿ÞÂÊ°ø°Ý·ºÆ®¿Í Ãæµ¹
-	if (isCollision(_PlayerHitRc, _Boss->GetAttRectLeft()) && !_Dap)
-	{
-		//º¸½ºÀÇ ¿ÞÂÊÆÝÁö
-		if (_Boss->GetState() == BOSS_STATE::ATTACK && _Boss->GetBossLeft() && !_RGuard)
+		//º¸½ºÀÇ ¿ÞÂÊÆÝÄ¡
+		if (_Boss->GetState() == BOSS_STATE::ATTACK && _Boss->GetBossCenterX() >= _Center.x)
 		{
 			RightHitReaction();
 		}
 
-		//º¸½º ¿ÞÂÊ ¼Õ¹Ù´ÚÄ¡±â
-		if (_Boss->GetState() == BOSS_STATE::SLAP && _Boss->GetBossCenterX() > _Center.x)
+		//º¸½º ¿ÞÂÊ ¼Õ¹Ù´Ú ÈÖµÎ¸£±â
+		if (_Boss->GetState() == BOSS_STATE::SLAP && _Boss->GetBossCenterX() >= _Center.x)
 		{
 			RightHitReaction();
 		}
 
 		//º¸½º ¿ÞÂÊ°­ÆÝÄ¡
-		if (_Boss->GetState() == BOSS_STATE::PUNCH && _Boss->GetBossCenterX() > _Center.x)
+		if (_Boss->GetState() == BOSS_STATE::PUNCH && _Boss->GetBossCenterX() >= _Center.x)
 		{
 			RightDownReaction();
 		}
-
 	}
+
+	////º¸½º¿ÞÂÊ°ø°Ý·ºÆ®¿Í Ãæµ¹
+	//if (isCollision(_PlayerHitRc, _Boss->GetAttRectLeft()) && !_Dap)
+	//{
+	//	//º¸½ºÀÇ ¿ÞÂÊÆÝÁö
+	//	if (_Boss->GetState() == BOSS_STATE::ATTACK && _Boss->GetBossLeft() && !_RGuard)
+	//	{
+	//		RightHitReaction();
+	//	}
+	//
+	//	//º¸½º ¿ÞÂÊ ¼Õ¹Ù´ÚÄ¡±â
+	//	if (_Boss->GetState() == BOSS_STATE::SLAP && _Boss->GetBossCenterX() > _Center.x)
+	//	{
+	//		RightHitReaction();
+	//	}
+	//
+	//	//º¸½º ¿ÞÂÊ°­ÆÝÄ¡
+	//	if (_Boss->GetState() == BOSS_STATE::PUNCH && _Boss->GetBossCenterX() > _Center.x)
+	//	{
+	//		RightDownReaction();
+	//	}
+	//
+	//}
 
 	//º¸½º ±×¸²ÀÚ·ºÆ®¿Í Ãæµ¹
 	if (isCollision(_PlayerHitRc, _Boss->GetBossShadowRect()) && !_Dap)

@@ -49,6 +49,7 @@ HRESULT Boss::init()
     _Speed = 2.0f;
     _Hp = 9;
     _Time = 0;
+    _JumpTime = 0;
     _AttackNum = 0;
     _HitNum = 0;
     _IsLookLeft = true;
@@ -218,6 +219,10 @@ void Boss::update()
     _Angle = getAngle(_Center.x, _Center.y, _Player->GetShadowCenterPoint().x, _Player->GetShadowCenterPoint().y);
 
     _Time++;
+    if (_JumpTime<1000)
+    {
+        _JumpTime++;
+    }
 
     if (KEYMANAGER->isOnceKeyDown('1')) _Bs = BOSS_STATE::IDLE;
     if (KEYMANAGER->isOnceKeyDown('2')) _Bs = BOSS_STATE::WALK;
@@ -235,7 +240,19 @@ void Boss::update()
     {
         _Time = 100;
     }
-    if (_Bs == BOSS_STATE::WALK || _Bs == BOSS_STATE::DOWN || _Bs == BOSS_STATE::HIT)
+
+    if (_Bs == BOSS_STATE::LANDHIT)
+    {
+        _JumpTime = 0;
+    }
+
+    if ((_Pz != PHAZE::FIRST) && (_JumpTime > 600) && ((_Bs == BOSS_STATE::IDLE) || (_Bs == BOSS_STATE::WALK)) &&
+        (getDistance(_Center.x, _Center.y, _Player->GetShadowCenterPoint().x, _Player->GetShadowCenterPoint().y)>700))
+    {
+        _Bs = BOSS_STATE::JUMP;
+    }
+
+    if (_Bs == BOSS_STATE::WALK || _Bs == BOSS_STATE::DOWN || _Bs == BOSS_STATE::HIT )
     {
         if (_Center.x > _Player->GetShadowCenterPoint().x)
         {
@@ -579,11 +596,11 @@ void Boss::update()
             _Ani = KEYANIMANAGER->findAnimation("LeftAttack");
             if (_Ani->getNowAniIndex() == 5)
             {
-                _AttackLeft = { _Center.x, _Center.y - 30, _Center.x - 200, _Center.y + 30 };
+                _Attack = { _Center.x-200, _Center.y - 30, _Center.x, _Center.y + 30 };
             }
             else
             {
-                _AttackLeft = { 0,0,0,0 };
+                _Attack = { 0,0,0,0 };
             }
         }
         break;
@@ -621,11 +638,11 @@ void Boss::update()
 
             if (_Ani->getNowAniIndex() == 8)
             {
-                _AttackLeft = { _Center.x, _Center.y - 30, _Center.x - 200, _Center.y + 30 };
+                _Attack = { _Center.x-200, _Center.y - 30, _Center.x, _Center.y + 30 };
             }
             else
             {
-                _AttackLeft = { 0,0,0,0 };
+                _Attack = { 0,0,0,0 };
             }
         }
         break;
@@ -635,73 +652,115 @@ void Boss::update()
         
         if (_Ani->getNowAniIndex()<12 && (_Pz == PHAZE::THIRD))
         {
-            if (_Player->GetShadowCenterX() >= _Center.x)
+            if (_IsLookLeft)
             {
-                _PLCenter.x = _Player->GetShadowCenterX() - 10;
+                if (_Player->GetShadowCenterX() >= _Center.x - 150)
+                {
+                    _PLCenter.x = _Player->GetShadowCenterX() - 10;
+                }
+                else
+                {
+                    _PLCenter.x = _Player->GetShadowCenterX() + 10;;
+                }
+                if (_Player->GetShadowCenterY() >= _Center.y)
+                {
+                    _PLCenter.y = _Player->GetShadowCenterY() - 10;
+                }
+                else
+                {
+                    _PLCenter.y = _Player->GetShadowCenterY() + 10;
+                }
             }
             else
             {
-                _PLCenter.x = _Player->GetShadowCenterX() + 10;;
-            }
-            if (_Player->GetShadowCenterY() >= _Center.y)
-            {
-                _PLCenter.y = _Player->GetShadowCenterY() - 10;
-            }
-            else
-            {
-                _PLCenter.y = _Player->GetShadowCenterY() + 10;
+
+                if (_Player->GetShadowCenterX() >= _Center.x + 150)
+                {
+                    _PLCenter.x = _Player->GetShadowCenterX() - 10;
+                }
+                else
+                {
+                    _PLCenter.x = _Player->GetShadowCenterX() + 10;;
+                }
+                if (_Player->GetShadowCenterY() >= _Center.y)
+                {
+                    _PLCenter.y = _Player->GetShadowCenterY() - 10;
+                }
+                else
+                {
+                    _PLCenter.y = _Player->GetShadowCenterY() + 10;
+                }
             }
             _Player->SetCenterX1(_PLCenter.x);
             _Player->SetCenterY1(_PLCenter.y);
         }
+
         if (!_IsLookLeft)
         {
 
             if (_Pz != PHAZE::THIRD)
             {
                 _Ani = KEYANIMANAGER->findAnimation("RightPunch");
+                if (_Ani->getNowAniIndex() > 12 && _Ani->getNowAniIndex() < 19)
+                {
+                    _Center.x += 8;
+                    _Center.y += -sinf(_Angle) * 8;
+                }
+                if (_Ani->getNowAniIndex() == 17)
+                {
+                    _Attack = { _Center.x-200, _Center.y - 30, _Center.x + 200, _Center.y + 30 };
+                }
+                else
+                {
+                    _Attack = { 0,0,0,0 };
+                }
             }
             else
             {
                 _Ani = KEYANIMANAGER->findAnimation("RightPunchred");
+
+                if (_Ani->getNowAniIndex() == 17)
+                {
+                    _Attack = { _Center.x - 200, _Center.y - 30, _Center.x + 200, _Center.y + 30 };
+                }
+                else
+                {
+                    _Attack = { 0,0,0,0 };
+                }
             }
 
-            if (_Ani->getNowAniIndex() > 12 && _Ani->getNowAniIndex() < 19)
-            {
-                _Center.x += 8;
-                _Center.y += -sinf(_Angle) * 8;
-            }
-            if (_Ani->getNowAniIndex() == 9)
-            {
-                _Attack = { _Center.x, _Center.y - 30, _Center.x + 200, _Center.y + 30 };
-            }
-            else
-            {
-                _Attack = { 0,0,0,0 };
-            }
         }
         else
         {
             if (_Pz != PHAZE::THIRD)
             {
                 _Ani = KEYANIMANAGER->findAnimation("LeftPunch");
+                if (_Ani->getNowAniIndex() > 12 && _Ani->getNowAniIndex() < 19)
+                {
+                    _Center.x -= 8;
+                    _Center.y += -sinf(_Angle) * 8;
+                }
+                if (_Ani->getNowAniIndex() == 17)
+                {
+                    _Attack = { _Center.x - 200, _Center.y - 30, _Center.x + 200, _Center.y + 30 };
+                }
+                else
+                {
+                    _Attack = { 0,0,0,0 };
+                }
             }
             else
             {
                 _Ani = KEYANIMANAGER->findAnimation("LeftPunchred");
-            }
-            if (_Ani->getNowAniIndex() > 12 && _Ani->getNowAniIndex() < 19)
-            {
-                _Center.x -= 8;
-                _Center.y += -sinf(_Angle) * 8;
-            }
-            if (_Ani->getNowAniIndex() == 9)
-            {
-                _AttackLeft = { _Center.x, _Center.y - 30, _Center.x - 200, _Center.y + 30 };
-            }
-            else
-            {
-                _AttackLeft = { 0,0,0,0 };
+
+                if (_Ani->getNowAniIndex() == 17)
+                {
+                    _Attack = { _Center.x - 200, _Center.y - 30, _Center.x + 200, _Center.y + 30 };
+                }
+                else
+                {
+                    _Attack = { 0,0,0,0 };
+                }
             }
         }
         break;
@@ -959,7 +1018,7 @@ void Boss::render()
     if (_Bs == BOSS_STATE::ATTACK || _Bs ==BOSS_STATE::SLAP || _Bs == BOSS_STATE::PUNCH )
     {
         if (!_IsLookLeft && (_Ani->getNowAniIndex() == 5))CAMERAMANAGER->rectangle(getMemDC(), _Attack);
-        if (_IsLookLeft && (_Ani->getNowAniIndex() == 5)) CAMERAMANAGER->rectangle(getMemDC(), _AttackLeft);
+        if (_IsLookLeft) CAMERAMANAGER->rectangle(getMemDC(), _Attack);
     }
     if (_Bs == BOSS_STATE::LANDHIT && _Ani->getNowAniIndex() == 1)
     {
