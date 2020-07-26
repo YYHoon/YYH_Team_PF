@@ -347,7 +347,7 @@ void Boss::update()
                 (_Center.y - 30 < _Player->GetShadowCenterPoint().y))
             {
                 _AttackNum = RND->getInt(4);
-                cout << _AttackNum << endl;
+              //  cout << _AttackNum << endl;
                 _Time = 100;
                 switch (_AttackNum)
                 {

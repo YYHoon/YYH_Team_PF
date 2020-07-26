@@ -237,21 +237,6 @@
     <ClInclude Include="pixelCollsion.h">
       <Filter>playGround\PixelColl</Filter>
     </ClInclude>
-    <ClInclude Include="EnemyCheerLeader.h">
-      <Filter>playGround\Enemy</Filter>
-    </ClInclude>
-    <ClInclude Include="EnemyManager.h">
-      <Filter>playGround\Enemy</Filter>
-    </ClInclude>
-    <ClInclude Include="EnemySchoolGirl.h">
-      <Filter>playGround\Enemy</Filter>
-    </ClInclude>
-    <ClInclude Include="EnemySchoolMan.h">
-      <Filter>playGround\Enemy</Filter>
-    </ClInclude>
-    <ClInclude Include="commonMacroFunction.h">
-      <Filter>playGround\Enemy</Filter>
-    </ClInclude>
     <ClInclude Include="CharacterSelectScene.h">
       <Filter>playGround\UI</Filter>
     </ClInclude>
@@ -284,6 +269,15 @@
     </ClInclude>
     <ClInclude Include="BossProgressBar.h">
       <Filter>2DGameFramework\progressBar</Filter>
+    </ClInclude>
+    <ClInclude Include="commonMacroFunction.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Enemy.h">
+      <Filter>playGround\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="SchoolGirl.h">
+      <Filter>playGround\Enemy</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -422,18 +416,6 @@
     <ClCompile Include="pixelCollsion.cpp">
       <Filter>playGround\PixelColl</Filter>
     </ClCompile>
-    <ClCompile Include="EnemyCheerLeader.cpp">
-      <Filter>playGround\Enemy</Filter>
-    </ClCompile>
-    <ClCompile Include="EnemyManager.cpp">
-      <Filter>playGround\Enemy</Filter>
-    </ClCompile>
-    <ClCompile Include="EnemySchoolGirl.cpp">
-      <Filter>playGround\Enemy</Filter>
-    </ClCompile>
-    <ClCompile Include="EnemySchoolMan.cpp">
-      <Filter>playGround\Enemy</Filter>
-    </ClCompile>
     <ClCompile Include="CharacterSelectScene.cpp">
       <Filter>playGround\UI</Filter>
     </ClCompile>
@@ -460,6 +442,12 @@
     </ClCompile>
     <ClCompile Include="BossProgressBar.cpp">
       <Filter>2DGameFramework\progressBar</Filter>
+    </ClCompile>
+    <ClCompile Include="Enemy.cpp">
+      <Filter>playGround\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="SchoolGirl.cpp">
+      <Filter>playGround\Enemy</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

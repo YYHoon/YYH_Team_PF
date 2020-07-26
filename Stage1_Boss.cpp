@@ -3,14 +3,18 @@
 #include "Player.h"
 #include "AllObstacle.h"
 #include "Boss.h"
-
+#include "BossProgressBar.h"
 
 HRESULT Stage1_Boss::init()
 {
 	_Img = IMAGEMANAGER->findImage("Stage1_Boss");
 	_Player->SetMapName("Stage1_Boss_Pixel");
 	_Player->SetMapY(00);
+	if (!SOUNDMANAGER->isPlaySound("Stage_Boss"))
+		SOUNDMANAGER->play("Stage_Boss", 0.3f);
+		_BossProgressBar = new BossProgressBar;
 
+	_BossProgressBar->init(457, 720, 572, 43);
 	_Boss = new Boss;
 	_Boss->init();
 	_Boss->SetPlayerAddressLink(_Player);
@@ -26,24 +30,15 @@ void Stage1_Boss::update()
 	IsInEventArea();
 	EventScript();
 	_Boss->update();
-
+	_BossProgressBar->update();
+	_BossProgressBar->setGauge(_Boss->GetBossHp(), 9);
 	_Test.set(_Player->GetAttackRC1().left, _Player->GetAttackRC1().top, _Player->GetAttackRC1().right, _Player->GetAttackRC1().bottom);
 
 	CAMERAMANAGER->setX(_Player->GetShadowCenterX());
 	CAMERAMANAGER->setY(_Player->GetShadowCenterY() - 200);
-	if (KEYMANAGER->isOnceKeyDown('3'))
+	if (KEYMANAGER->isOnceKeyDown(VK_NUMPAD7))
 	{
-		int x = RND->getFromIntTo(300, 400);
-		ParentsObstacle* i = new DestructiblePillar;
-		i->init(x, WINSIZEY * 0.5, true);
-		_vObstacle.push_back(i);
-	}
-	if (KEYMANAGER->isOnceKeyDown('2'))
-	{
-		int x = RND->getFromIntTo(300, 400);
-		ParentsObstacle* i = new DestructiblePillar;
-		i->init(x, WINSIZEY * 0.5, false);
-		_vObstacle.push_back(i);
+		_Boss->SetBossHp(1);
 	}
 }
 void Stage1_Boss::render()
@@ -56,8 +51,10 @@ void Stage1_Boss::render()
 	_Boss->render();
 	CAMERAMANAGER->rectangle(getMemDC(), _Player->GetAttackRC1());
 	ZORDER->ZOrderRender();
-	CAMERAMANAGER->rectangle(getMemDC(), _Test);
+	//CAMERAMANAGER->rectangle(getMemDC(), _Test);
+	_BossProgressBar->render();
+	IMAGEMANAGER->findImage("RCG_bossmeter_frame")->render(getMemDC(), 427, 707);
+	IMAGEMANAGER->findImage("MISUZU_NAME_HP_BAR")->render(getMemDC(), 665, 717);
+
 
 }
-
-

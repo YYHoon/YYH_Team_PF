@@ -15,8 +15,9 @@ private:
 	int _BattleIntroAlphaValue;
 	int _ScreenLockAlphaValue;
 	int _BattleIntroCount;
+	int _Bosscount = 0;
 	bool _StageToggle;
-
+	bool _StageBoss;
 /// <summary>
 	int _SimulationValue;
 	bool _IsSimulKeyPress;
@@ -30,6 +31,9 @@ public:
 	virtual void release();
 	virtual void update();
 	virtual void render();
-
+	void SetFight(bool enter) { _StageBoss = enter; }
+	void SetStageToggle(bool isEvent) { _StageToggle = isEvent; }
+	void SetStageBoss(bool isEvent) { _IsSimulKeyPress = isEvent; }
+	void SetPlayerHP(int hp) { _PlayerHP = hp; }
 };
 

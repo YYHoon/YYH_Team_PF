@@ -13,9 +13,6 @@ InGameUI::~InGameUI()
 HRESULT InGameUI::init()
 {
 
-	_BossProgressBar = new BossProgressBar;
-	_BossProgressBar->init(457, 750, 572, 43);
-	_BossProgressBar->setGauge(100, 100);
 
 	IMAGEMANAGER->findImage("KyokoIntro")->setX(_KyokoX);
 
@@ -37,24 +34,13 @@ HRESULT InGameUI::init()
 
 void InGameUI::release()
 {
-	SAFE_DELETE(_BossProgressBar);
+	
 }
 
 void InGameUI::update()
 {
-	if (_SimulationValue <= 0) _SimulationValue = 100;
-
-	if (KEYMANAGER->isStayKeyDown(VK_NUMPAD2)) _SimulationValue --;
-
-	cout << _SimulationValue << endl;
-
-	_BossProgressBar->update();
-	_BossProgressBar->setGauge(_SimulationValue, 100);
-
-
 	if (_KyokoX < -30) _KyokoX += 40.0f;
 	if (_MisuzuX > 1000) _MisuzuX -= 100.0f;
-
 }
 
 void InGameUI::render()
@@ -90,13 +76,6 @@ void InGameUI::render()
 	IMAGEMANAGER->findImage("UI_HUD_Nplayer_BG")->render(getMemDC(), 1045, 42);
 	IMAGEMANAGER->findImage("UI_RCG_HUD_portrait_Kyoko_default")->render(getMemDC(), 201, 1);
 
-	if (KEYMANAGER->isOnceKeyDown(VK_LEFT)) _PlayerHP--;
-
-	if (_PlayerHP <= 24)
-	{
-		if (KEYMANAGER->isOnceKeyDown(VK_RIGHT)) _PlayerHP += 5;
-	}
-
 	if (_PlayerHP >= 24) _PlayerHP = 24;
 
 	for (int i = 0; i < _PlayerHP; i++)
@@ -104,22 +83,13 @@ void InGameUI::render()
 		IMAGEMANAGER->findImage("UI_HUD_player_Digit")->render(getMemDC(), 13 * i + 324, 42);
 	}
 
-	if (KEYMANAGER->isToggleKey(VK_NUMPAD4))
-	{
-		_BossProgressBar->render();
-		IMAGEMANAGER->findImage("RCG_bossmeter_frame")->render(getMemDC(), 427, 737);
-		IMAGEMANAGER->findImage("MISUZU_NAME_HP_BAR")->render(getMemDC(), 665, 747);
-	}
-
-	if (KEYMANAGER->isToggleKey(VK_NUMPAD0))
+	if (_StageBoss)
 	{
 		IMAGEMANAGER->findImage("UI_FrontEnd_FileSelect_002_LETTERBOX")->render(getMemDC());
 		IMAGEMANAGER->findImage("UI_BOSS_Dialog_Alpha")->alphaRender(getMemDC(), 100);
-
-		if (KEYMANAGER->isOnceKeyDown(VK_NUMPAD8)) _IsSimulKeyPress = true;
-		if (KEYMANAGER->isOnceKeyUp(VK_NUMPAD8))_IsSimulKeyPress = false;
-
-		if (_IsSimulKeyPress)
+		_Bosscount++;
+		cout << _Bosscount << endl;
+		if (_Bosscount<=50)
 		{
 			IMAGEMANAGER->findImage("KyokoIntro")->render(getMemDC(), _KyokoX, _KyokoY);
 			IMAGEMANAGER->findImage("fx_battle_portraits_misuzu")->render(getMemDC(), _MisuzuX, _MisuzuY);
@@ -131,10 +101,13 @@ void InGameUI::render()
 			if (_BattleIntroAlphaValue >= 255) _BattleIntroAlphaValue = 255;
 		}
 
-		if (!_IsSimulKeyPress)
+		if (_Bosscount>50)
 		{
 			if (_BattleIntroAlphaValue > 0) _BattleIntroAlphaValue -= 40;
-			if (_BattleIntroAlphaValue <= 0) _BattleIntroAlphaValue = 0;
+			if (_BattleIntroAlphaValue <= 0) {
+				_BattleIntroAlphaValue = 0;
+				_StageBoss = false;
+			}
 		}
 	}
 

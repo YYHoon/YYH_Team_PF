@@ -11,7 +11,8 @@ HRESULT Stage1_1::init()
 	_LeftExit.centerSet(1270, 300, 300, 400);
 	_RightExit.centerSet(2150, 500, 200, 400);
 	_IsOnceClear = true;
-
+	if(!SOUNDMANAGER->isPlaySound("Stage_2"))
+		SOUNDMANAGER->play("Stage_2", 0.3f);
 	_Player->SetMapName("Stage1_1_Pixel");
 	_Player->SetMapY(-100);
 	ParentsObstacle* VendingMachine1 = new VendingMachine;

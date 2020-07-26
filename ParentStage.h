@@ -40,6 +40,6 @@ public:
 	virtual bool IsColRightExit();
 	virtual bool IsColLefttExit();
 	virtual bool IsInEventArea();
-
+	
 };
 

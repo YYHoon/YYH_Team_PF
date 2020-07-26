@@ -54,8 +54,8 @@ void effect::update()
 void effect::render()
 {
 	if (!_isRunning) return;
-
-	_effectImage->aniRender(getMemDC(), _x, _y, _effectAnimation);
+		CAMERAMANAGER->AniRender(getMemDC(), _effectImage, _x, _y, _effectAnimation);    
+	//_effectImage->aniRender(getMemDC(), _x, _y, _effectAnimation);
 }
 
 void effect::startEffect(int x, int y)

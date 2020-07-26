@@ -2,16 +2,22 @@
 #include "Stage1_2.h"
 #include "Player.h"
 #include "AllObstacle.h"
+#include "SchoolGirl.h"
 #include "Event.h"
 
 HRESULT Stage1_2::init()
 {
 	_Img = IMAGEMANAGER->findImage("Stage1_2");
-	_LeftExit.centerSet(50, 550, 250, 400);
+	_LeftExit.centerSet(50, 550, 350, 400);
 	_RightExit.centerSet(2710, 550, 250, 500);
 	_EventCenterSpot.x = _Img->getWidth() / 2;
 	_EventCenterSpot.y = 660;
 	_EventArea.centerSet(_EventCenterSpot.x, _EventCenterSpot.y, 1300, 500);
+
+	_SchoolGirl = new SchoolGirl;
+	_SchoolGirl->init(2000, 700, false);
+	_SchoolGirl->SetPlayerMemoryAddressLink(_Player);
+
 	_IsOnceClear = false;
 	_IsEventPlay = false;
 	_WaveCount = 0;
@@ -26,6 +32,7 @@ HRESULT Stage1_2::init()
 
 void Stage1_2::render()
 {
+	_SchoolGirl->update();
 	CAMERAMANAGER->setX(_Player->GetShadowCenterX());
 	CAMERAMANAGER->setY(_Player->GetShadowCenterY() - 200);
 	if (KEYMANAGER->isOnceKeyDown(VK_SPACE))
@@ -42,15 +49,15 @@ void Stage1_2::render()
 		CAMERAMANAGER->rectangle(getMemDC(), _EventArea);
 	}
 
-	if (!_IsEventPlay)
+	if (KEYMANAGER->isOnceKeyDown('T'))
 	{
-		//CAMERAMANAGER->setX(_Player->GetCenter().x);
-		//CAMERAMANAGER->setY(_Player->GetCenter().y);
+		_SchoolGirl->SetDeath(15);
 	}
 	for (int i = 0; i < _vObstacle.size(); i++)
 	{
 		CAMERAMANAGER->render(getMemDC(), _vObstacle[i]->GetImg(), _vObstacle[i]->GetCollision().left, _vObstacle[i]->GetCollision().top);
 	}
+	_SchoolGirl->render();
 	ZORDER->ZOrderRender();
 }
 
@@ -62,7 +69,7 @@ void Stage1_2::EventScript()
 		_Ev->EventStart(_EventCenterSpot.x, _EventCenterSpot.y);
 		
 	}
-	if (_WaveCount >= 4)
+	if (_SchoolGirl->GetEnemyState()== EnemyState::Die)
 	{
 		_IsEventPlay = false;
 		_IsOnceClear = true;

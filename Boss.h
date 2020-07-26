@@ -99,6 +99,8 @@ public:
 	BOSS_STATE GetExState() { return _ExBs; }
 	bool GetBossLeft() {	return _IsLookLeft;	}
 	MYRECT GetAttRect() { return _Attack; }
+	int GetBossHp() { return _Hp; }
+	void SetBossHp(int hp) { _Hp -= hp; }
 	float GetBossCenterX() { return _Center.x; };
 	float GetBossCenterY() { return _Center.y; };
 	void SetAni(animation* ani) { _Ani = ani; }

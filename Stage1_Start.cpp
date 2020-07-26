@@ -11,7 +11,7 @@ HRESULT Stage1_Start::init()
 	_Player->SetMapY(100);
 	_Player->SetShadowCenterX(PointFloatMake(400,500));
 	_RightExit.centerSet(1435, 350, 300, 300);
-
+	SOUNDMANAGER->play("Stage_1", 0.3f);
 
 	_IsOnceClear = true;
 

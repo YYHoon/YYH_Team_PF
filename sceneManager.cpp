@@ -71,7 +71,7 @@ HRESULT sceneManager::changeScene(string sceneName)
 
 		//현재 씬에 바꾸려는 씬을 담는다
 		_currentScene = find->second;
-
+		_NowScene = find->first;
 		return S_OK;
 	}
 

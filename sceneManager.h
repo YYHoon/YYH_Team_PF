@@ -13,7 +13,7 @@ public:
 private:
 	static gameNode* _currentScene;
 	mapSceneList _mSceneList;
-
+	string _NowScene= "";
 public:
 	sceneManager();
 	~sceneManager();
@@ -26,6 +26,6 @@ public:
 	gameNode* addScene(string sceneName, gameNode* scene);
 
 	HRESULT changeScene(string sceneName);
-
+	string GetNowScene() { return _NowScene; }
 };
 

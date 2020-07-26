@@ -4,10 +4,8 @@
 #include "Player.h"
 #include "ParentStage.h"
 #include "StageManager.h"
-#include "pixelCollsion.h"
-#include "EnemySchoolGirl.h"
-#include "AllUI.h"
 #include <iostream>
+#include "AllUI.h"
 #pragma comment(linker, "/entry:WinMainCRTStartup /subsystem:console")
 using namespace std;
 
@@ -23,8 +21,7 @@ private:
 	Player* p;
 	Boss* b;
 	StageManager* _SM;
-	pixelCollsion* _pixel;
-	EnemySchoolGirl* _en;
+	
 
 public:
 	playGround();

@@ -30,8 +30,8 @@ HRESULT playGround::init()
 	SCENEMANAGER->addScene("IntroMenuScene", new IntroMenuScene);				//3
 	SCENEMANAGER->addScene("SelectMenuScene", new SelectMenuScene);			//4
 	SCENEMANAGER->addScene("CharacterSelectScene", new CharacterSelectScene);	//5
-	
-	//SCENEMANAGER->changeScene("LoadingScene");
+
+	SCENEMANAGER->changeScene("LoadingScene");
 	
 
 	return S_OK;
@@ -48,8 +48,11 @@ void playGround::update()
 {
 	gameNode::update();
 	
-	_SM->update();
-	
+	//_SM->update();
+	SCENEMANAGER->update();
+	if(SCENEMANAGER->GetNowScene()=="Stage1_Start" || SCENEMANAGER->GetNowScene() == "Stage1_1" 
+		|| SCENEMANAGER->GetNowScene() == "Stage1_2" || SCENEMANAGER->GetNowScene() == "Stage1_Boss")
+		_SM->update();
 	KEYANIMANAGER->update();
 
 }
@@ -59,10 +62,13 @@ void playGround::render()
 {	
 	PatBlt(getMemDC(), 0, 0, WINSIZEX, WINSIZEY, BLACKNESS);
 	//=================================================
-	_SM->render();
-	
+//	_SM->render();
+	SCENEMANAGER->render();
+	if (SCENEMANAGER->GetNowScene() == "Stage1_Start" || SCENEMANAGER->GetNowScene() == "Stage1_1"
+		|| SCENEMANAGER->GetNowScene() == "Stage1_2" || SCENEMANAGER->GetNowScene() == "Stage1_Boss")
+		_SM->render();
 	TIMEMANAGER->render(getMemDC());
-	ZORDER->ZOrderRender();
+	//ZORDER->ZOrderRender();
 	//=============================================
 	_backBuffer->render(getHDC(), 0, 0);
 }
@@ -137,6 +143,22 @@ void playGround::imginit()
 	//Item
 	IMAGEMANAGER->addFrameImage("MoneyFallen", "image/Item/Money_Fallen.bmp", 78, 25, 3, 1, true, RGB(255, 0, 255));
 	IMAGEMANAGER->addImage("MoneyLand", "image/Item/Money_Land.bmp", 23, 11, true, RGB(255, 0, 255));
+	// Boss
+
+	// Enemy
+	IMAGEMANAGER->addImage("Enemy_Shadow", "image/enemy/Enemy_Shadow.bmp", 128, 38, true, RGB(255, 0, 255));
+	//여학생 걷기
+	IMAGEMANAGER->addFrameImage("SgWalk", "image/enemy/sg/sg_walk.bmp", 0, 0, 1296, 372, 12, 2, true, RGB(255, 0, 255));
+	//여학생 달리기
+	IMAGEMANAGER->addFrameImage("SgRun", "image/enemy/sg/sg_run.bmp", 0, 0, 1470, 330, 10, 2, true, RGB(255, 0, 255));
+	//여학생 다운 및 기상
+	IMAGEMANAGER->addFrameImage("SgKnockdown", "image/enemy/sg/sg_knockdown.bmp", 0, 0, 2925, 1080, 13, 6, true, RGB(255, 0, 255));
+	//여학생 일반공격
+	IMAGEMANAGER->addFrameImage("SgJab", "image/enemy/sg/sg_jab.bmp", 0, 0, 1239, 354, 7, 2, true, RGB(255, 0, 255));
+	//여학생 기본
+	IMAGEMANAGER->addFrameImage("SgIdle", "image/enemy/sg/sg_idle.bmp", 0, 0, 1170, 354, 10, 2, true, RGB(255, 0, 255));
+	//여학생 피격모션
+	IMAGEMANAGER->addFrameImage("SgGethit", "image/enemy/sg/sg_gethit.bmp", 0, 0, 1431, 360, 9, 2, true, RGB(255, 0, 255));
 }
 
 void playGround::soundinit()
@@ -147,4 +169,7 @@ void playGround::soundinit()
 	SOUNDMANAGER->addSound("MemuConfirm", "Sounds/menu_confirm.wav", false, false);
 	SOUNDMANAGER->addSound("MemuBack", "Sounds/menu_back.wav", false, false);
 	SOUNDMANAGER->addSound("MemuCursor", "Sounds/menu_cursor.wav", false, false);
+	SOUNDMANAGER->addSound("Stage_1", "Sounds/RCG_Dollar_Signs.wav", true, true);
+	SOUNDMANAGER->addSound("Stage_2", "Sounds/RCG_The_Burbs.wav", true, true);
+	SOUNDMANAGER->addSound("Stage_Boss", "Sounds/RCG_boss_misuzu.wav", true, true);
 }

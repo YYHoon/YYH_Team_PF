@@ -42,14 +42,14 @@ HRESULT StageManager::init()
 
 	_CurrentStageIndex = 0;
 
-	SCENEMANAGER->changeScene(_vStageName[_CurrentStageIndex]);
+	//SCENEMANAGER->changeScene(_vStageName[_CurrentStageIndex]);
 
 	return S_OK;
 }
 
 void StageManager::update()
 {
-	SCENEMANAGER->update();
+	
 	
 	if (KEYMANAGER->isOnceKeyDown(VK_F1))
 	{
@@ -59,11 +59,24 @@ void StageManager::update()
 	MoveStage();
 	_Player->Update();
 	_InGameUI->update();
+	if (_vStage[2]->IsInEventArea())
+	{
+		_InGameUI->SetStageToggle(false);
+	}
+	else
+	{
+		_InGameUI->SetStageToggle(true);
+	}
+	_InGameUI->SetPlayerHP(_Player->GetPlayerHp());
+	//if(KEYMANAGER->isOnceKeyDown(VK_F4))
+	//{
+	//	_Player->SetPlayerHp(5);
+	//}
 }
 
 void StageManager::render()
 {
-	SCENEMANAGER->render();
+	//SCENEMANAGER->render();
 	_InGameUI->render();
 }
 
@@ -79,7 +92,8 @@ void StageManager::MoveStage()
 
 			if (i == 0)
 			{
-				
+				if (SOUNDMANAGER->isPlaySound("Stage_1"))
+					SOUNDMANAGER->stop("Stage_1");
 				_Player->SetShadowCenterX(PointFloatMake(1270, 500));
 				break;
 			}else
@@ -90,7 +104,10 @@ void StageManager::MoveStage()
 			}else
 			if (i == 2)
 			{
+				if (SOUNDMANAGER->isPlaySound("Stage_2"))
+					SOUNDMANAGER->stop("Stage_2");
 				_Player->SetShadowCenterX(PointFloatMake(1100, 850));
+				_InGameUI->SetFight(true);
 				break;
 			}
 
@@ -101,7 +118,9 @@ void StageManager::MoveStage()
 			SCENEMANAGER->changeScene(_vStageName[_CurrentStageIndex]);
 			if (i == 1)
 			{
-				_Player->SetShadowCenterX(PointFloatMake(1370, 400));
+				if (SOUNDMANAGER->isPlaySound("Stage_2"))
+					SOUNDMANAGER->stop("Stage_2");
+				_Player->SetShadowCenterX(PointFloatMake(1370, 550));
 				break;
 			}
 			if (i == 2)

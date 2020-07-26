@@ -88,7 +88,7 @@ private:
 	int _ProbeR;
 	int _ProbeT;
 	int _ProbeB;
-	string _MapName;
+	string _MapName = "Stage1_1_Pixel";
 	float _MapX,_MapY;
 
 public:
@@ -167,8 +167,8 @@ public:
 	
 	inline void SetPlayerLevel(int level) { _Level = level; }//플레이어레벨
 	inline void SetPlayerMoney(float money) { _Money = money; }//플레이어소지금
-	inline void SetPlayerHp(float hp) { _Hp = hp; }//플레이어체력
-	inline void SetPlayerExp(float exp) { _Exp = exp; }//플레이어경험치
+	inline void SetPlayerHp(float hp) { _Hp -= hp; }//플레이어체력
+	inline void SetPlayerExp(float exp) { _Exp += exp; }//플레이어경험치
 	inline void SetAttackCount(int count) { _AttackCount += count; }//플레이어 콤보어택 카운트 피격당할때마다 1씩 넣어주세여
 	inline void SetCenterX(float x) { _Center.x += x; }
 	inline void SetCenterY(float y) { _Center.y += y; }

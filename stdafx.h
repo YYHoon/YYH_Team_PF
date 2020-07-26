@@ -31,6 +31,7 @@ using namespace std;
 #include "keyAniManager.h"
 #include "iniDataManager.h"
 #include "ObjectManager.h"
+#include "EventManager.h"
 #include "Zorder.h"
 using namespace TTYONE_UTIL;
 
@@ -56,6 +57,7 @@ using namespace TTYONE_UTIL;
 #define CAMERAMANAGER cameraManager::getSingleton()
 #define KEYANIMANAGER keyAniManager::getSingleton()
 #define OBJECTMANAGER ObjectManager::GetInstance()
+#define EVENTMANAGER EventManager::GetInstance()
 #define TXTDATA txtData::getSingleton()
 #define INIDATA iniDataManager::getSingleton()
 #define ZORDER Zorder::GetInstance()

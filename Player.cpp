@@ -166,7 +166,7 @@ HRESULT Player::Init()
 	_DAP.set(0, 0, 0, 0);
 
 	_Money = 0.0f;
-	_Hp = 100.0f;
+	_Hp = 24.0f;
 	_Exp = 0.0f;
 	_Level = 0;
 
@@ -516,7 +516,7 @@ void Player::AttackUpdate()
 				!KEYANIMANAGER->findAnimation("PlayerRightAttack3")->isPlay())
 			{
 				Attack1();
-				cout << _AttackCount << endl;
+				//cout << _AttackCount << endl;
 				_AttCountOn = true;
 				_AttackCount++;
 				_AttackRc1 = _State->GetAttRect();
