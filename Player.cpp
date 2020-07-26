@@ -548,6 +548,10 @@ void Player::AttackUpdate()
 		_MoveLR = MOVELR::NON;
 	}
 
+	if(!KEYANIMANAGER->findAnimation("PlayerLeftAttack1")->isPlay() &&!KEYANIMANAGER->findAnimation("PlayerRightAttack1")->isPlay())_AttackRc1.set(0, 0, 0, 0);
+	if(!KEYANIMANAGER->findAnimation("PlayerLeftAttack2")->isPlay() &&!KEYANIMANAGER->findAnimation("PlayerRightAttack2")->isPlay())_AttackRc2.set(0, 0, 0, 0);
+	if(!KEYANIMANAGER->findAnimation("PlayerLeftAttack3")->isPlay() &&!KEYANIMANAGER->findAnimation("PlayerRightAttack3")->isPlay())_AttackRc3.set(0, 0, 0, 0);
+
 	if (!KEYANIMANAGER->findAnimation("PlayerLeftAttack1")->isPlay() &&
 		!KEYANIMANAGER->findAnimation("PlayerRightAttack1")->isPlay() &&
 		!KEYANIMANAGER->findAnimation("PlayerLeftAttack2")->isPlay() &&
@@ -555,9 +559,6 @@ void Player::AttackUpdate()
 		!KEYANIMANAGER->findAnimation("PlayerLeftAttack3")->isPlay() &&
 		!KEYANIMANAGER->findAnimation("PlayerRightAttack3")->isPlay())
 	{
-		_AttackRc1.set(0, 0, 0, 0);
-		_AttackRc2.set(0, 0, 0, 0);
-		_AttackRc3.set(0, 0, 0, 0);
 		_AttCountOn = false;
 	}
 
