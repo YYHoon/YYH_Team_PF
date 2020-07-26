@@ -57,6 +57,9 @@ public:
 		_Center.x = XY.x;
 		_Center.y = XY.y;
 	}
+	inline void SetCenterY(float y) { _Center.y = y; }
+	inline void SetCenterX(float x) { _Center.x = x; }
+	
 	inline void SetLeft(bool left) { _Left = left; }
 	inline void SetAttRect() { _AttackRc.set(0,0,0,0) ; }
 

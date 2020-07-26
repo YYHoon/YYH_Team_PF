@@ -75,6 +75,7 @@ private:
 	bool _Down = false;
 	bool _StandUp = false;
 	bool _DashAttbool = false;
+	
 
 	//°¡µå
 	bool _LGuard = false;

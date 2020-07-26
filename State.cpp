@@ -157,7 +157,7 @@ void PlayLeftIdle::Attack1(Player* player)
 	
 	if (_PlayerAni->isPlay())
 	{
-		_AttackRc.set(_PlayerRc.left, _PlayerRc.top + 50, _PlayerRc.left + 50, _PlayerRc.bottom);
+		_AttackRc.set(_PlayerRc.left, _PlayerRc.top + 150, _PlayerRc.left + 50, _PlayerRc.bottom);
 	}
 	
 }
@@ -175,7 +175,7 @@ void PlayLeftIdle::Attack2(Player* player)
 
 	if (_PlayerAni->isPlay())
 	{
-		_AttackRc.set(_PlayerRc.left, _PlayerRc.top + 50, _PlayerRc.left + 50, _PlayerRc.bottom);
+		_AttackRc.set(_PlayerRc.left, _PlayerRc.top + 150, _PlayerRc.left + 50, _PlayerRc.bottom);
 	}
 }
 
@@ -191,7 +191,7 @@ void PlayLeftIdle::Attack3(Player* player)
 
 	if (_PlayerAni->isPlay())
 	{
-		_AttackRc.set(_PlayerRc.left, _PlayerRc.top + 50, _PlayerRc.left + 50, _PlayerRc.bottom);
+		_AttackRc.set(_PlayerRc.left, _PlayerRc.top + 150, _PlayerRc.left + 50, _PlayerRc.bottom);
 	}
 }
 
@@ -291,7 +291,7 @@ void PlayRightIdle::Attack1(Player* player)
 	
 	if (_PlayerAni->isPlay())
 	{
-		_AttackRc.set(_PlayerRc.right, _PlayerRc.top + 50, _PlayerRc.right - 50, _PlayerRc.bottom);
+		_AttackRc.set(_PlayerRc.right, _PlayerRc.top + 150, _PlayerRc.right - 50, _PlayerRc.bottom);
 	}
 }
 
@@ -307,7 +307,7 @@ void PlayRightIdle::Attack2(Player* player)
 
 	if (_PlayerAni->isPlay())
 	{
-		_AttackRc.set(_PlayerRc.right, _PlayerRc.top + 50, _PlayerRc.right - 50, _PlayerRc.bottom);
+		_AttackRc.set(_PlayerRc.right, _PlayerRc.top + 150, _PlayerRc.right - 50, _PlayerRc.bottom);
 	}
 }
 
@@ -323,7 +323,7 @@ void PlayRightIdle::Attack3(Player* player)
 
 	if (_PlayerAni->isPlay())
 	{
-		_AttackRc.set(_PlayerRc.right, _PlayerRc.top + 50, _PlayerRc.right - 50, _PlayerRc.bottom);
+		_AttackRc.set(_PlayerRc.right, _PlayerRc.top + 150, _PlayerRc.right - 50, _PlayerRc.bottom);
 	}
 }
 
@@ -340,10 +340,7 @@ void PlayRightIdle::Skill1(Player* player)
 		_Center.y);
 	_PlayerAni = KEYANIMANAGER->findAnimation("PlayerHurrKick");
 	_PlayerAni->start();
-	if (_PlayerAni->isPlay())
-	{
-		_AttackRc.set(_PlayerRc.left-30, _PlayerRc.top, _PlayerRc.right+30, _PlayerRc.bottom);
-	}
+	
 }
 
 void PlayRightIdle::Skill2(Player* player)

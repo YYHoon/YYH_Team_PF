@@ -204,7 +204,7 @@ void Player::Update()
 
 
 	if (!KEYANIMANAGER->findAnimation("PlayerHurrKick")->isPlay())_AttackRcH.set(0, 0, 0, 0);
-	if (KEYANIMANAGER->findAnimation("PlayerHurrKick")->isPlay())_AttackRcH.set(_Center.x - 150, _Center.y - 170, _Center.x + 150, _Center.y);
+	if (KEYANIMANAGER->findAnimation("PlayerHurrKick")->isPlay())_AttackRcH.set(_Center.x - 150, _Center.y-50 , _Center.x + 150, _Center.y);
 
 	
 
@@ -247,14 +247,13 @@ void Player::Update()
 	PixelCol();//픽셀충돌용함수
 	DapMove();//댑무브업데이트
 
-	if (!_Jump && !_Fall)
-	{
-		_State->SetCenterXY(_Center);
+	
+	_State->SetCenterXY(_Center);
 
-	}
+	
 	if (_Jump || _Fall)
 	{
-		_State->SetCenterXY(_DummyCen);
+		_State->SetCenterY(_DummyCen.y);
 	}
 	_ShadowRc.set(_Center.x - (_Shadow->getWidth() * 0.5f),
 		_Center.y - (_Shadow->getHeight() * 0.5f),
@@ -395,7 +394,7 @@ void Player::PlayerKeyMove()
 			if (!_Left)_State = PlayRightIdle::GetInstance();
 			_State->SetCenterXY(_Center);
 			Skill1();
-			//_AttackRcH = _State->GetAttRect();
+			
 			//cout << _AttackRcH.left << endl;
 			_MoveUD = MOVEUD::NON;
 			_MoveLR = MOVELR::NON;
@@ -619,7 +618,7 @@ void Player::DashAttUpdate()
 		{
 			if (KEYANIMANAGER->findAnimation("PlayerRightDiveAttack")->getNowAniIndex() < 10)
 			{
-				_DashAtt.set(_PlayerHitRc.right, _PlayerHitRc.top, _PlayerHitRc.right + 20, _PlayerHitRc.bottom);
+				_DashAtt.set(_PlayerHitRc.right, _PlayerHitRc.top+100, _PlayerHitRc.right + 20, _PlayerHitRc.bottom);
 				_Center.x += 7;
 			}
 			if (!KEYANIMANAGER->findAnimation("PlayerRightDiveAttack")->isPlay())
@@ -634,7 +633,7 @@ void Player::DashAttUpdate()
 		{
 			if (KEYANIMANAGER->findAnimation("PlayerLeftDiveAttack")->getNowAniIndex() < 10)
 			{
-				_DashAtt.set(_PlayerHitRc.left, _PlayerHitRc.top, _PlayerHitRc.left - 20, _PlayerHitRc.bottom);
+				_DashAtt.set(_PlayerHitRc.left, _PlayerHitRc.top+100, _PlayerHitRc.left - 20, _PlayerHitRc.bottom);
 				_Center.x -= 7;
 			}
 			if (!KEYANIMANAGER->findAnimation("PlayerLeftDiveAttack")->isPlay())
@@ -653,36 +652,39 @@ void Player::JumpUpdate()
 {
 	if (!_Hit && !_Down && !_StandUp)
 	{
-		if (_Jump || _Fall)
+		if (_Jump || _Fall )
 		{
 
 			if (KEYMANAGER->isStayKeyDown('W'))
 			{
-				_DummyCen.y -= 4;
-				_Center.y -= 4;
+				_DummyCen.y -= _Speed * 0.5f;
+				_Center.y -= _Speed * 0.5f;
 			}
 			if (KEYMANAGER->isStayKeyDown('A'))
 			{
 				_Left = true;
-				_DummyCen.x -= 6;
-				_Center.x -= 6;
+				_DummyCen.x -= _Speed;
+				_Center.x -= _Speed;
 			}
 			if (KEYMANAGER->isStayKeyDown('S'))
 			{
-				_DummyCen.y += 4;
-				_Center.y += 4;
+				_DummyCen.y += _Speed*0.5f;
+				_Center.y += _Speed * 0.5f;
 			}
 			if (KEYMANAGER->isStayKeyDown('D'))
 			{
 				_Left = false;
-				_DummyCen.x += 6;
-				_Center.x += 6;
+				_DummyCen.x += _Speed;
+				_Center.x += _Speed;
 			}
+			_MoveUD = MOVEUD::NON;
+			_MoveLR = MOVELR::NON;
 		}
 		if (_Jump && !_Hit && !_Down)
 		{
 			_DummyCen.y -= 12;
 			_JumpStack += 12;
+			
 			if (_JumpStack >= _JumpMax)
 			{
 				_JumpStack = 0;
@@ -1052,6 +1054,7 @@ void Player::PixelCol()
 	int Lb = GetBValue(colorL);
 	if (Lr == 255 && Lg == 0 && Lb == 0)
 	{
+		
 		if (_MoveLR == MOVELR::LEFT_RUN)
 		{
 			_Center.x = _Center.x + _Speed * 1.5f;
@@ -1061,12 +1064,16 @@ void Player::PixelCol()
 			_Center.x += _Speed;
 		}
 	}
+
+
+
 	COLORREF colorT = GetPixel(IMAGEMANAGER->findImage(_MapName)->getMemDC(), _Center.x - _MapX, _ShadowRc.top - _MapY);
 	int Tr = GetRValue(colorT);
 	int Tg = GetGValue(colorT);
 	int Tb = GetBValue(colorT);
 	if (Tr == 255 && Tg == 0 && Tb == 0)
 	{
+		
 		if (_MoveUD == MOVEUD::UP_RUN)
 		{
 			_Center.y = _Center.y + _Speed;
@@ -1076,12 +1083,15 @@ void Player::PixelCol()
 			_Center.y += _Speed * 0.5f;
 		}
 	}
+
+
 	COLORREF colorB = GetPixel(IMAGEMANAGER->findImage(_MapName)->getMemDC(), _Center.x - _MapX, _ShadowRc.bottom - _MapY);
 	int Br = GetRValue(colorB);
 	int Bg = GetGValue(colorB);
 	int Bb = GetBValue(colorB);
 	if (Br == 255 && Bg == 0 && Bb == 0)
 	{
+		
 		if (_MoveUD == MOVEUD::UP_RUN)
 		{
 			_Center.y = _Center.y - _Speed;
@@ -1091,12 +1101,15 @@ void Player::PixelCol()
 			_Center.y -= _Speed * 0.5f;
 		}
 	}
+	
+
 	COLORREF colorR = GetPixel(IMAGEMANAGER->findImage(_MapName)->getMemDC(), _ShadowRc.right - _MapX, _Center.y - _MapY);
 	int Rr = GetRValue(colorR);
 	int Rg = GetGValue(colorR);
 	int Rb = GetBValue(colorR);
 	if (Rr == 255 && Rg == 0 && Rb == 0)
 	{
+	
 		if (_MoveLR == MOVELR::RIGHT_RUN)
 		{
 			_Center.x = _Center.x - _Speed * 1.5f;
@@ -1115,12 +1128,12 @@ void Player::DapMove()
 
 	if (_Left&&_Dap)
 	{
-		_Center.x -= 10;
+		_Center.x -= 15;
 		_DapMax += 10;
 	}
 	if (!_Left && _Dap)
 	{
-		_Center.x += 10;
+		_Center.x += 15;
 		_DapMax += 10;
 	}
 
