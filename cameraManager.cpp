@@ -195,6 +195,13 @@ void cameraManager::KeyAniRender(HDC hdc, image* img, string KeyName, float dest
 	if (img) img->aniRender(hdc, newX, newY, ani);
 }
 
+void cameraManager::KeyAnialphaRender(HDC hdc, image* img, float destX, float destY, animation* ani, int alpha)
+{
+	float newX = getRelativeX(destX);
+	float newY = getRelativeY(destY);
+	if (img) img->alphaAniRedRender(hdc, newX, newY, ani ,alpha);
+}
+
 void cameraManager::zoom(HDC hdc, float ratio)
 {
 	if (ratio == 1) return;

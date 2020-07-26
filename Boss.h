@@ -1,7 +1,6 @@
 #pragma once
 #include "gameNode.h"
 
-//class Boss_State;
 class Player;
 
 enum class PHAZE
@@ -14,24 +13,24 @@ enum class BOSS_STATE
 {
 	IDLE,
 	WALK,
-	ATTACK,
-	SLAP,
+	ATTACK,		//내려찍기평타
+	SLAP,		//손바닥휘두르기
 	GUARD,
-	PUNCH,
-	ROAR,
+	PUNCH,		//강펀치
+	ROAR,		//로어
 	IDLE_RUSH,
-	RIGHTRUSH,
-	LEFTRUSH,
+	RIGHTRUSH,	//러쉬공격
+	LEFTRUSH,	//러쉬공격 (그림자렉트랑반응)
 	RUSHTURN,
 	JUMP,
 	UP,
 	DOWN,
-	LANDHIT,
+	LANDHIT,	//쿵쾅쿵쾅
 	HIT,
 	GROUNDHIT,
 	KNOCK,
 	SIT,
-	WAKE,
+	WAKE,		//기상 쿵쾅쿵쾅
 	TAUNT,
 	DEAD,
 	CRY
@@ -47,9 +46,11 @@ private:
 	animation* _Ani;
 	MYRECT _Hit;//히트박스
 	MYRECT _Shadow;
-	MYRECT _Rc; 
-	MYRECT _Attack;// 공격렉트
+	MYRECT _Rc; // 공격렉트
+	MYRECT _Attack;
+	MYRECT _AttackLeft;
 	POINT_FLOAT _Center;
+	POINT_FLOAT _PLCenter;
 	BOSS_STATE _Bs;
 	BOSS_STATE _ExBs;//이전 상태
 	PHAZE _Pz;
@@ -59,6 +60,7 @@ private:
 	float _Jump;
 	int _Hp;
 	int _Time;//기술 쿨타임
+	int _AttackNum;
 	int _HitNum;
 	bool _IsLookLeft;
 	
@@ -89,18 +91,23 @@ public:
 	static void LeftCRY(void* obj);
 	static void RightSIT(void* obj);
 	static void LeftSIT(void* obj);
+	static void RightWAKE(void* obj);
+	static void LeftWAKE(void* obj);
 
 	animation* GetAni() { return _Ani; }
 	BOSS_STATE GetState() { return _Bs; }
 	BOSS_STATE GetExState() { return _ExBs; }
-
-	inline MYRECT GetAttRect() { return _Attack; }//겟보스 공격렉트 
-	inline bool GetBossLeft() { return _IsLookLeft; }//겟보스 좌우값
-	inline float GetBossCenterX() { return _Center.x; }//보스그림자의 센터x값
-	
-
+	bool GetBossLeft() {	return _IsLookLeft;	}
+	MYRECT GetAttRect() { return _Attack; }
+	MYRECT GetAttRectLeft() { return _AttackLeft; }
+	MYRECT GetBossShadowRect() { return _Shadow; }
+	float GetBossCenterX() { return _Center.x; };
+	float GetBossCenterY() { return _Center.y; };
 	void SetAni(animation* ani) { _Ani = ani; }
 	void SetState(BOSS_STATE bs) { _Bs = bs; }
+	void SetPoint(POINT_FLOAT Center) { _Center = Center; }
 	void SetPlayerAddressLink(Player* player) { _Player = player; }
+
+	
 };
 

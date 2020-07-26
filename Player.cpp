@@ -4,7 +4,7 @@
 #include "Boss.h"
 Player::Player()
 {
-	
+
 	_State = BattleStart::GetInstance();
 }
 
@@ -158,12 +158,12 @@ HRESULT Player::Init()
 	_Speed = 5;
 	_MoveLR = MOVELR::NON;
 	_MoveUD = MOVEUD::NON;
+
+	_AttackRc1.set(0, 0, 0, 0);
+	_AttackRc2.set(0, 0, 0, 0);
+	_AttackRc3.set(0, 0, 0, 0);
+	_AttackRcH.set(0, 0, 0, 0);
 	
-	_AttackRc1.set(0,0,0,0);
-	_AttackRc2.set(0,0,0,0);
-	_AttackRc3.set(0,0,0,0);
-	_AttackRcH.set(0,0,0,0);
-	_DAP.set(0, 0, 0, 0);
 
 	_Money = 0.0f;
 	_Hp = 100.0f;
@@ -173,12 +173,12 @@ HRESULT Player::Init()
 	_State->SetCenterXY(_Center);
 	_State->Init();
 	Default();
-	
+
 	_ProbeL = _ShadowRc.left;
 	_ProbeR = _ShadowRc.right;
 	_ProbeT = _ShadowRc.top;
 	_ProbeB = _ShadowRc.bottom;
-	
+
 	return S_OK;
 
 }
@@ -196,21 +196,16 @@ void Player::Update()
 		AttackUpdate();
 		PlayerKeyMove();
 	}
-	
+
 	if (_State != BattleStart::GetInstance() && !_State->GetAniIsPlay())
 	{
-		if(_State != PlayLeftDown::GetInstance() && _State != PlayRightDown::GetInstance())Default();
+		if (_State != PlayLeftDown::GetInstance() && _State != PlayRightDown::GetInstance())Default();
 	}
 
-	
-	if (!KEYANIMANAGER->findAnimation("PlayerHurrKick")->isPlay())_AttackRcH.set(0, 0, 0, 0);
-	if (KEYANIMANAGER->findAnimation("PlayerHurrKick")->isPlay())_AttackRcH.set(_Center.x-150, _Center.y-170, _Center.x + 150, _Center.y);
 
-	if (KEYANIMANAGER->findAnimation("PlayerLeftDap")->isPlay())_DAP.set(0,0,WINSIZEX,WINSIZEY);
-	if (KEYANIMANAGER->findAnimation("PlayerRightDap")->isPlay())_DAP.set(0, 0, WINSIZEX, WINSIZEY);
-	
-	if (!KEYANIMANAGER->findAnimation("PlayerLeftDap")->isPlay())_DAP.set(0, 0, 0, 0);
-	if (!KEYANIMANAGER->findAnimation("PlayerRightDap")->isPlay())_DAP.set(0, 0, 0, 0);
+	if (!KEYANIMANAGER->findAnimation("PlayerHurrKick")->isPlay())_AttackRcH.set(0, 0, 0, 0);
+	if (KEYANIMANAGER->findAnimation("PlayerHurrKick")->isPlay())_AttackRcH.set(_Center.x - 150, _Center.y - 170, _Center.x + 150, _Center.y);
+
 	
 
 
@@ -225,12 +220,12 @@ void Player::Update()
 
 
 
-	
-	
+
+
 
 	if (KEYMANAGER->isOnceKeyDown('N'))_HitDmg = 10;
 	if (KEYMANAGER->isOnceKeyDown('V'))_HitDmg = 50;
-	
+
 
 	if (!_Down)
 	{
@@ -250,11 +245,12 @@ void Player::Update()
 	JumpUpdate();//플레이어 점프 업데이트
 	AttCountTimer();//어택카운트 초기화 타임
 	PixelCol();//픽셀충돌용함수
+	DapMove();//댑무브업데이트
 
 	if (!_Jump && !_Fall)
 	{
 		_State->SetCenterXY(_Center);
-		
+
 	}
 	if (_Jump || _Fall)
 	{
@@ -291,18 +287,18 @@ void Player::DebugRender()
 	CAMERAMANAGER->rectangle(getMemDC(), _AttackRcH);
 	CAMERAMANAGER->rectangle(getMemDC(), _ShadowRc);
 	CAMERAMANAGER->rectangle(getMemDC(), _DashAtt);
-	
+
 }
 
 void Player::PlayerKeyMove()
 {
-	
-	if (!KEYANIMANAGER->findAnimation("PlayerLeftAttack1")->isPlay() && !KEYANIMANAGER->findAnimation("PlayerRightAttack1")->isPlay()&&
-		!KEYANIMANAGER->findAnimation("PlayerLeftAttack2")->isPlay() && !KEYANIMANAGER->findAnimation("PlayerRightAttack2")->isPlay()&&
-		!KEYANIMANAGER->findAnimation("PlayerLeftAttack3")->isPlay() && !KEYANIMANAGER->findAnimation("PlayerRightAttack3")->isPlay()&&
-		!_Jump&&!_Fall &&!_Hit&&!_Down&&!_StandUp&&!_DashAttbool
+
+	if (!KEYANIMANAGER->findAnimation("PlayerLeftAttack1")->isPlay() && !KEYANIMANAGER->findAnimation("PlayerRightAttack1")->isPlay() &&
+		!KEYANIMANAGER->findAnimation("PlayerLeftAttack2")->isPlay() && !KEYANIMANAGER->findAnimation("PlayerRightAttack2")->isPlay() &&
+		!KEYANIMANAGER->findAnimation("PlayerLeftAttack3")->isPlay() && !KEYANIMANAGER->findAnimation("PlayerRightAttack3")->isPlay() &&
+		!_Jump && !_Fall && !_Hit && !_Down && !_StandUp && !_DashAttbool
 		&& !KEYANIMANAGER->findAnimation("PlayerHurrKick")->isPlay() && !KEYANIMANAGER->findAnimation("PlayerLeftGuard")->isPlay()
-		&& !KEYANIMANAGER->findAnimation("PlayerRightGuard")->isPlay()&& !KEYANIMANAGER->findAnimation("PlayerLeftDap")->isPlay()
+		&& !KEYANIMANAGER->findAnimation("PlayerRightGuard")->isPlay() && !KEYANIMANAGER->findAnimation("PlayerLeftDap")->isPlay()
 		&& !KEYANIMANAGER->findAnimation("PlayerRightDap")->isPlay())
 	{
 		if (KEYMANAGER->isOnceKeyDown('A'))
@@ -327,7 +323,7 @@ void Player::PlayerKeyMove()
 			_State->SetCenterXY(_Center);
 			_MoveLR = MOVELR::NON;
 			if (_MoveLR != MOVELR::LEFT_WALK && _MoveLR != MOVELR::RIGHT_WALK && _MoveUD != MOVEUD::UP_WALK && _MoveUD != MOVEUD::DOWN_WALK)Default();
-			
+
 			_LClickTime++;
 			if (_LClickTime != 2)_LClickTime = 0;
 		}
@@ -342,7 +338,7 @@ void Player::PlayerKeyMove()
 				_Left = false;
 				_MoveLR = MOVELR::RIGHT_WALK;
 				_RRun = true;
-				_RClickTime++; 
+				_RClickTime++;
 			}
 		}
 		if (KEYMANAGER->isOnceKeyUp('D'))
@@ -374,7 +370,7 @@ void Player::PlayerKeyMove()
 		{
 			_MoveUD = MOVEUD::NON;
 			if (_MoveLR != MOVELR::LEFT_WALK && _MoveLR != MOVELR::RIGHT_WALK && _MoveUD != MOVEUD::UP_WALK && _MoveUD != MOVEUD::DOWN_WALK)Default();
-			
+
 		}
 		if (KEYMANAGER->isOnceKeyDown('S'))
 		{
@@ -391,7 +387,7 @@ void Player::PlayerKeyMove()
 		{
 			_MoveUD = MOVEUD::NON;
 			if (_MoveLR != MOVELR::LEFT_WALK && _MoveLR != MOVELR::RIGHT_WALK && _MoveUD != MOVEUD::UP_WALK && _MoveUD != MOVEUD::DOWN_WALK)Default();
-			
+
 		}
 		if (KEYMANAGER->isOnceKeyDown('Y'))
 		{
@@ -417,8 +413,8 @@ void Player::PlayerKeyMove()
 				_State = PlayRightIdle::GetInstance();
 			}
 			_State->SetCenterXY(_Center);
-			
-			
+
+
 			Guard();
 			_MoveUD = MOVEUD::NON;
 			_MoveLR = MOVELR::NON;
@@ -445,6 +441,7 @@ void Player::PlayerKeyMove()
 		}
 		if (KEYMANAGER->isOnceKeyDown(VK_RETURN))
 		{
+			_Dap = true;
 			if (_Left)_State = PlayLeftIdle::GetInstance();
 			if (!_Left)_State = PlayRightIdle::GetInstance();
 			_State->SetCenterXY(_Center);
@@ -468,10 +465,10 @@ void Player::MoveUpdate()
 		_Center.x += _Speed;
 		break;
 	case MOVELR::LEFT_RUN:
-		_Center.x -= _Speed*1.5f;
+		_Center.x -= _Speed * 1.5f;
 		break;
 	case MOVELR::RIGHT_RUN:
-		_Center.x += _Speed*1.5f;
+		_Center.x += _Speed * 1.5f;
 		break;
 	case MOVELR::NON:
 		break;
@@ -497,8 +494,8 @@ void Player::MoveUpdate()
 
 void Player::AttackUpdate()
 {
-	
-	if (KEYMANAGER->isOnceKeyDown('H')&&!_DashAttbool)
+
+	if (KEYMANAGER->isOnceKeyDown('H') && !_DashAttbool)
 	{
 		if (_State == PlayRightRun::GetInstance())
 		{
@@ -521,8 +518,8 @@ void Player::AttackUpdate()
 				_AttackCount++;
 				_AttackRc1 = _State->GetAttRect();
 				_State->SetAttRect();
-				
-				
+
+
 			}
 			if (_AttackCount == 1 && !KEYANIMANAGER->findAnimation("PlayerLeftAttack1")->isPlay() &&
 				!KEYANIMANAGER->findAnimation("PlayerRightAttack1")->isPlay())
@@ -533,7 +530,7 @@ void Player::AttackUpdate()
 				_AttackCount++;
 				_AttackRc2 = _State->GetAttRect();
 				_State->SetAttRect();
-				
+
 			}
 
 			if (_AttackCount == 2 && !KEYANIMANAGER->findAnimation("PlayerLeftAttack2")->isPlay() &&
@@ -545,13 +542,13 @@ void Player::AttackUpdate()
 				_AttackCount++;
 				_AttackRc3 = _State->GetAttRect();
 				_State->SetAttRect();
-				
+
 			}
 		}
 		_MoveUD = MOVEUD::NON;
 		_MoveLR = MOVELR::NON;
 	}
-	
+
 	if (!KEYANIMANAGER->findAnimation("PlayerLeftAttack1")->isPlay() &&
 		!KEYANIMANAGER->findAnimation("PlayerRightAttack1")->isPlay() &&
 		!KEYANIMANAGER->findAnimation("PlayerLeftAttack2")->isPlay() &&
@@ -578,7 +575,7 @@ void Player::DashUpdate()
 			_State->SetCenterXY(_Center);
 			Default();
 			_MoveLR = MOVELR::RIGHT_RUN;
-		
+
 			_RClickTime = 0;
 			_RTime = 0;
 			_RRun = false;
@@ -599,7 +596,7 @@ void Player::DashUpdate()
 			_State->SetCenterXY(_Center);
 			Default();
 			_MoveLR = MOVELR::LEFT_RUN;
-		
+
 			_LClickTime = 0;
 			_LTime = 0;
 			_LRun = false;
@@ -630,7 +627,7 @@ void Player::DashAttUpdate()
 				_State = PlayRightIdle::GetInstance();
 				_State->SetCenterXY(_Center);
 				_DashAttbool = false;
-				
+
 			}
 		}
 		if (_State == PlayLeftRun::GetInstance())
@@ -645,7 +642,7 @@ void Player::DashAttUpdate()
 				_State = PlayLeftIdle::GetInstance();
 				_State->SetCenterXY(_Center);
 				_DashAttbool = false;
-				
+
 			}
 		}
 	}
@@ -738,8 +735,8 @@ void Player::JumpUpdate()
 
 void Player::HitUpdate()
 {
-	
-	if (!_Boss->GetBossLeft() && _Hit)
+
+	if (_State == PlayLeftHit::GetInstance() && _Hit)
 	{
 		_Center.x += 2;
 		_HitStack += 2;
@@ -755,7 +752,7 @@ void Player::HitUpdate()
 		_MoveUD = MOVEUD::NON;
 		_MoveLR = MOVELR::NON;
 	}
-	if (_Boss->GetBossLeft() && _Hit)
+	if (_State == PlayRightHit::GetInstance() && _Hit)
 	{
 		_Center.x -= 2;
 		_HitStack += 2;
@@ -772,7 +769,7 @@ void Player::HitUpdate()
 		_MoveLR = MOVELR::NON;
 	}
 
-	
+
 }
 
 
@@ -810,9 +807,9 @@ void Player::DownUpdate()
 				}
 			}
 		}
-		
 
-		if(!_Left)
+
+		if (!_Left)
 		{
 			if (KEYANIMANAGER->findAnimation("PlayerRightDown")->getNowAniIndex() < 15)_Center.x -= 3;
 			if (_Jump || _Fall)
@@ -840,10 +837,10 @@ void Player::DownUpdate()
 				}
 			}
 		}
-	
+
 	}
-	
-	
+
+
 }
 
 void Player::StandUpUpdate()
@@ -859,7 +856,7 @@ void Player::StandUpUpdate()
 			Default();
 			_StandUp = false;
 		}
-	
+
 		if (!_Left && !KEYANIMANAGER->findAnimation("PlayerRightStandUp")->isPlay())
 		{
 			_State = PlayRightIdle::GetInstance();
@@ -867,7 +864,7 @@ void Player::StandUpUpdate()
 			Default();
 			_StandUp = false;
 		}
-	
+
 	}
 
 
@@ -875,32 +872,109 @@ void Player::StandUpUpdate()
 
 void Player::BossAndPlayerCol()
 {
-	if (isCollision(_PlayerHitRc, _Boss->GetAttRect()))
+	//보스공격렉트와충돌
+	if (isCollision(_PlayerHitRc, _Boss->GetAttRect()) && !_Dap)
 	{
-		//보스의 왼쪽펀지
-		if (_Boss->GetState() == BOSS_STATE::ATTACK && _Boss->GetBossLeft()&&!_RGuard)
-		{
-			RightHitReaction();
-		}
-
-		//보스의 오른쪽펀치
-		if (_Boss->GetState() == BOSS_STATE::ATTACK && !_Boss->GetBossLeft()&&!_LGuard)
-		{
-			LeftHitReaction();
-		}
-		
-
-		//보스의 왼쪽에서 땅찍기 맞을때
+		//보스의 오른쪽에서 땅찍기 맞을때
 		if (_Boss->GetState() == BOSS_STATE::LANDHIT && _Boss->GetBossCenterX() <= _Center.x)
 		{
 			LeftDownReaction();
 		}
 
-		//보스의 오른쪽에서 땅찍기 맞을때	
+		//보스의 왼쪽에서 땅찍기 맞을때	
 		if (_Boss->GetState() == BOSS_STATE::LANDHIT && _Boss->GetBossCenterX() > _Center.x)
 		{
 			RightDownReaction();
 		}
+
+		//보스의 오른쪽에서 로어맞을때
+		if (_Boss->GetState() == BOSS_STATE::ROAR && _Boss->GetBossCenterX() <= _Center.x)
+		{
+			LeftDownReaction();
+		}
+
+		//보스의 왼쪽에서 로어맞을때
+		if (_Boss->GetState() == BOSS_STATE::ROAR && _Boss->GetBossCenterX() > _Center.x)
+		{
+			RightDownReaction();
+		}
+
+		//보스의 기상쿵쾅 오른쪽에서 맞을때
+		if (_Boss->GetState() == BOSS_STATE::WAKE && _Boss->GetBossCenterX() <= _Center.x)
+		{
+			LeftDownReaction();
+		}
+
+		//보스의 기상쿵쾅 왼쪽에서 맞을때
+		if (_Boss->GetState() == BOSS_STATE::WAKE && _Boss->GetBossCenterX() > _Center.x)
+		{
+			RightDownReaction();
+		}
+	/////////////////////////////위는 좌우렉트따로 없음///////////////
+
+
+		//보스의 오른쪽펀치
+		if (_Boss->GetState() == BOSS_STATE::ATTACK && _Boss->GetBossCenterX() <= _Center.x)
+		{
+			LeftHitReaction();
+		}
+
+
+
+		//보스 오른쪽 손바닥 휘두르기
+		if (_Boss->GetState() == BOSS_STATE::SLAP && _Boss->GetBossCenterX() <= _Center.x)
+		{
+			LeftHitReaction();
+		}
+
+		//보스 오른쪽강펀치
+		if (_Boss->GetState() == BOSS_STATE::PUNCH && _Boss->GetBossCenterX() <= _Center.x)
+		{
+			LeftDownReaction();
+		}
+	}
+
+	//보스왼쪽공격렉트와 충돌
+	if (isCollision(_PlayerHitRc, _Boss->GetAttRectLeft()) && !_Dap)
+	{
+		//보스의 왼쪽펀지
+		if (_Boss->GetState() == BOSS_STATE::ATTACK && _Boss->GetBossLeft() && !_RGuard)
+		{
+			RightHitReaction();
+		}
+
+		//보스 왼쪽 손바닥치기
+		if (_Boss->GetState() == BOSS_STATE::SLAP && _Boss->GetBossCenterX() > _Center.x)
+		{
+			RightHitReaction();
+		}
+
+		//보스 왼쪽강펀치
+		if (_Boss->GetState() == BOSS_STATE::PUNCH && _Boss->GetBossCenterX() > _Center.x)
+		{
+			RightDownReaction();
+		}
+
+	}
+
+	//보스 그림자렉트와 충돌
+	if (isCollision(_PlayerHitRc, _Boss->GetBossShadowRect()) && !_Dap)
+	{
+		if (_Boss->GetState() == BOSS_STATE::RIGHTRUSH && _Boss->GetBossCenterX() <= _Center.x)
+		{
+			LeftDownReaction();
+		}if (_Boss->GetState() == BOSS_STATE::RIGHTRUSH && _Boss->GetBossCenterX() > _Center.x)
+		{
+			RightDownReaction();
+		}
+		if (_Boss->GetState() == BOSS_STATE::LEFTRUSH && _Boss->GetBossCenterX() <= _Center.x)
+		{
+			LeftDownReaction();
+		}if (_Boss->GetState() == BOSS_STATE::LEFTRUSH && _Boss->GetBossCenterX() > _Center.x)
+		{
+			RightDownReaction();
+		}
+
 	}
 }
 
@@ -971,8 +1045,8 @@ void Player::PixelCol()
 	_ProbeT = _ShadowRc.top;
 	_ProbeB = _ShadowRc.bottom;
 
-	
-	COLORREF colorL = GetPixel(IMAGEMANAGER->findImage(_MapName)->getMemDC(), _ShadowRc.left, _Center.y);
+
+	COLORREF colorL = GetPixel(IMAGEMANAGER->findImage(_MapName)->getMemDC(), _ShadowRc.left - _MapX, _Center.y-_MapY);
 	int Lr = GetRValue(colorL);
 	int Lg = GetGValue(colorL);
 	int Lb = GetBValue(colorL);
@@ -987,7 +1061,7 @@ void Player::PixelCol()
 			_Center.x += _Speed;
 		}
 	}
-	COLORREF colorT = GetPixel(IMAGEMANAGER->findImage(_MapName)->getMemDC(), _Center.x, _ShadowRc.top);
+	COLORREF colorT = GetPixel(IMAGEMANAGER->findImage(_MapName)->getMemDC(), _Center.x - _MapX, _ShadowRc.top - _MapY);
 	int Tr = GetRValue(colorT);
 	int Tg = GetGValue(colorT);
 	int Tb = GetBValue(colorT);
@@ -1002,7 +1076,7 @@ void Player::PixelCol()
 			_Center.y += _Speed * 0.5f;
 		}
 	}
-	COLORREF colorB = GetPixel(IMAGEMANAGER->findImage(_MapName)->getMemDC(), _Center.x, _ShadowRc.bottom);
+	COLORREF colorB = GetPixel(IMAGEMANAGER->findImage(_MapName)->getMemDC(), _Center.x - _MapX, _ShadowRc.bottom - _MapY);
 	int Br = GetRValue(colorB);
 	int Bg = GetGValue(colorB);
 	int Bb = GetBValue(colorB);
@@ -1017,7 +1091,7 @@ void Player::PixelCol()
 			_Center.y -= _Speed * 0.5f;
 		}
 	}
-	COLORREF colorR = GetPixel(IMAGEMANAGER->findImage(_MapName)->getMemDC(), _ShadowRc.right, _Center.y);
+	COLORREF colorR = GetPixel(IMAGEMANAGER->findImage(_MapName)->getMemDC(), _ShadowRc.right - _MapX, _Center.y - _MapY);
 	int Rr = GetRValue(colorR);
 	int Rg = GetGValue(colorR);
 	int Rb = GetBValue(colorR);
@@ -1033,7 +1107,30 @@ void Player::PixelCol()
 		}
 	}
 
+
+}
+
+void Player::DapMove()
+{
+
+	if (_Left&&_Dap)
+	{
+		_Center.x -= 10;
+		_DapMax += 10;
+	}
+	if (!_Left && _Dap)
+	{
+		_Center.x += 10;
+		_DapMax += 10;
+	}
+
 	
+	if (_DapMax >= 200)
+	{
+		_DapMax = 0;
+		_Dap = false;
+	}
+
 }
 
 

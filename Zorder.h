@@ -7,6 +7,7 @@ enum class RenderType
 	ANIRENDER,
 	ALPHARENDER,
 	KEYANIRENDER,
+	KEYANIALPHARENDER,
 	END
 };
 
@@ -23,6 +24,7 @@ struct TagZOrder
 	float ShadowZ;
 	float SourX, SourY;
 	float SourWidth, SourHeight;
+	int alpha;
 };
 
 class Zorder
@@ -35,6 +37,7 @@ public:
 	void ZOrderPush(HDC hdc, RenderType type, image* img, float DestX, float DestY, int FrameX, int FrameY, float ShadowZ);
 	void ZOrderPush(HDC hdc, RenderType type, image* img, float DestX, float DestY,animation* ani, float ShadowZ);
 	void ZOrderPush(HDC hdc, RenderType type, image* img, float DestX, float DestY, animation* ani,string KeyName, float ShadowZ);
+	void ZOrderPush(HDC hdc, RenderType type, image* img, float DestX, float DestY, animation* ani, float ShadowZ, int alpha);
 	void MergeZOrder(vector<TagZOrder>& vMerge, int left, int right);
 	void MergeSortZOrder(vector<TagZOrder>& vMerge,int left,int right, int mid);
 	void ZOrderRender();

@@ -41,7 +41,8 @@ private:
 	MYRECT _AttackRc2;
 	MYRECT _AttackRc3;
 	MYRECT _AttackRcH;
-	MYRECT _DAP;
+	bool _Dap = false;
+	int _DapMax = 0;
 	MYRECT _DashAtt;
 
 	float _Money = 0;
@@ -89,7 +90,7 @@ private:
 	int _ProbeT;
 	int _ProbeB;
 	string _MapName;
-
+	float _MapX,_MapY;
 
 public:
 
@@ -122,6 +123,7 @@ public:
 	virtual void RightDownReaction();
 	virtual void LeftDownReaction();
 	virtual void PixelCol();
+	virtual void DapMove();
 
 
 	virtual void Walk();
@@ -149,8 +151,7 @@ public:
 	inline MYRECT GetAttackRC2() { return _AttackRc2; }//콤보평타2번렉트
 	inline MYRECT GetAttackRC3() { return _AttackRc3; }//콤보평타3번렉트
 	inline MYRECT GetAttackRCH() { return _AttackRcH; }//허리케인킥렉트
-	inline MYRECT GetAttackRCDAP() { return _DAP; }//댑렉트
-	inline MYRECT GetAttackRCDash() { return _DashAtt; }//댑렉트
+	inline MYRECT GetAttackRCDash() { return _DashAtt; }//대쉬어택렉트
 	//충돌처리용//
 
 
@@ -172,6 +173,9 @@ public:
 	inline void SetAttackCount(int count) { _AttackCount += count; }//플레이어 콤보어택 카운트 피격당할때마다 1씩 넣어주세여
 	inline void SetCenterX(float x) { _Center.x += x; }
 	inline void SetCenterY(float y) { _Center.y += y; }
+	inline void SetCenterX1(float x) { _Center.x = x; }
+	inline void SetCenterY1(float y) { _Center.y = y; }
+
 	inline void SetShadowCenterX(POINTFLOAT XY) {
 		_Center.x = XY.x;
 		_Center.y = XY.y;
@@ -180,6 +184,7 @@ public:
 	
 	//픽셀충돌용 이미지 넣는거
 	inline void SetMapName(string mapname) { _MapName = mapname; }
-
+	void SetMapX(float x) { _MapY = x; }
+	void SetMapY(float y) { _MapY = y; }
 	void SetState(State* state);
 };
