@@ -23,7 +23,7 @@ HRESULT Stage1_2::init()
 	_WaveCount = 0;
 	_Player->SetMapName("Stage1_2_Pixel");
 	_Player->SetMapY(00);
-
+	_Player->SetEnemyMemoryAddressLink(_SchoolGirl);
 	_Ev = new StopCamera;
 
 	CAMERAMANAGER->setConfig(0, -100, WINSIZEX, WINSIZEY, 0, 0, 2860-WINSIZEX, 1040-WINSIZEY-00);

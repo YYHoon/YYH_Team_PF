@@ -2,6 +2,7 @@
 #include "player.h"
 #include "State.h"
 #include "Boss.h"
+#include"Enemy.h"
 Player::Player()
 {
 
@@ -1016,29 +1017,25 @@ void Player::BossAndPlayerCol()
 		}
 	}
 
-	////보스왼쪽공격렉트와 충돌
-	//if (isCollision(_PlayerHitRc, _Boss->GetAttRectLeft()) && !_Dap)
-	//{
-	//	//보스의 왼쪽펀지
-	//	if (_Boss->GetState() == BOSS_STATE::ATTACK && _Boss->GetBossLeft() && !_RGuard)
-	//	{
-	//		RightHitReaction();
-	//	}
-	//
-	//	//보스 왼쪽 손바닥치기
-	//	if (_Boss->GetState() == BOSS_STATE::SLAP && _Boss->GetBossCenterX() > _Center.x)
-	//	{
-	//		RightHitReaction();
-	//	}
-	//
-	//	//보스 왼쪽강펀치
-	//	if (_Boss->GetState() == BOSS_STATE::PUNCH && _Boss->GetBossCenterX() > _Center.x)
-	//	{
-	//		RightDownReaction();
-	//	}
-	//
-	//}
-
+	//에너미와 충돌
+	if (isCollision(_PlayerHitRc, _Enemy->GetCollision()) && !_Dap && !_HitD)
+	{
+		if (_Enemy->GetEnemyState() == EnemyState::Attack && _Enemy->GetCenterX() <= _Center.x)
+		{
+			_Hp -= 1;
+			SOUNDMANAGER->play("PlayerHit3", 0.3f);
+			
+			LeftHitReaction();
+			_HitD = true;
+		}
+		if (_Enemy->GetEnemyState() == EnemyState::Attack && _Enemy->GetCenterX() > _Center.x)
+		{
+			_Hp -= 1;
+			SOUNDMANAGER->play("PlayerHit1", 0.3f);
+			RightHitReaction();
+			_HitD = true;
+		}
+	}
 
 }
 

@@ -65,6 +65,7 @@ public:
 	virtual void SetState(EnemyState state) { _State = state; }
 	virtual void SetDeath(int isDeath) { _DeathIsComing += isDeath; }
 
+	virtual float GetCenterX() { return _Center.x; }
 	virtual animation* GetAnim() { return _Anim; }
 	virtual string GetName() {return _Name; }
 	virtual EnemyType GetEnemyType() { return _Type; }

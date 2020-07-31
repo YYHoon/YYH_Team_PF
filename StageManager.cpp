@@ -10,6 +10,8 @@ HRESULT StageManager::init()
 	_InGameUI = new InGameUI;
 	_InGameUI->init();
 	_Boss = new Boss;
+	_Enemy = new SchoolGirl;
+	_Player->SetEnemyMemoryAddressLink(_Enemy);
 	_Player->SetBossMemoryAddressLink(_Boss);
 	ParentStage* _Stage1_Start = new Stage1_Start;
 	_Stage1_Start->SetPlayerMemoryAddressLink(_Player);
@@ -78,6 +80,7 @@ void StageManager::render()
 {
 	//SCENEMANAGER->render();
 	EFFECTMANAGER->render();
+	_Player->Render();
 	_InGameUI->render();
 }
 

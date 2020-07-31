@@ -18,6 +18,7 @@ enum class MOVEUD
 };
 class State;
 class Boss;
+class Enemy;
 class Player : public gameNode
 {
 private:
@@ -25,6 +26,7 @@ private:
 
 	State* _State;//순가함 상태
 	Boss* _Boss; //보스와충돌 통신용
+	Enemy* _Enemy;
 
 	POINTFLOAT _DummyCen;//상태전환시 좌표저장용(점프)
 	POINTFLOAT _DummyCenHit;//상태전환용 좌표(피격)
@@ -184,6 +186,7 @@ public:
 		_Center.y = XY.y;
 	}
 	inline void SetBossMemoryAddressLink(Boss* b) { _Boss = b; }
+	inline void SetEnemyMemoryAddressLink(Enemy* e) { _Enemy = e; }
 	
 	//픽셀충돌용 이미지 넣는거
 	inline void SetMapName(string mapname) { _MapName = mapname; }

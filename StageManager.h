@@ -1,6 +1,7 @@
 #pragma once
 #include "gameNode.h"
 #include "Boss.h"
+#include "SchoolGirl.h"
 #include "InGameUI.h"
 #include <vector>
 
@@ -18,6 +19,7 @@ private:
 
 	EventManager* _EM;
 	Boss* _Boss;
+	SchoolGirl* _Enemy;
 	InGameUI* _InGameUI;
 	int _CurrentStageIndex;
 	Player* _Player;
